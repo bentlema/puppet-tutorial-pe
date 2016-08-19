@@ -76,7 +76,9 @@ Note:  We name our network using what looks like a domain name because docker
 will use the network name in the FQDN of the container.  Docker's internal
 DNS server will take the short hostname and append the network name when doing
 reverse-lookups (PTR records) so we do this little hack to make sure the
-forward and reverse lookups match.
+forward and reverse lookups match.  With this said, I've seen inconsistant
+behavior with Docker's internal DNS, and sometimes reverse lookups just dont work.
+No matter, we push on!
 
 
 ### Setup ENV variable with your BASEDIR ###
@@ -94,25 +96,27 @@ repo, and then just type this:
 
 Then validate that BASEDIR is set to what you want:
 
+```
    echo $BASEDIR
+```
 
 And you should see something like this:
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Bitbucket/puppet-training] (master)*$ pwd
+$ pwd
 /Users/mbentle8/Documents/Git/Bitbucket/puppet-training
 
-mbp-mark:[/Users/mbentle8/Documents/Git/Bitbucket/puppet-training] (master)*$ export BASEDIR=$(pwd)
+$ export BASEDIR=$(pwd)
 
-mbp-mark:[/Users/mbentle8/Documents/Git/Bitbucket/puppet-training] (master)*$ echo $BASEDIR
+$ echo $BASEDIR
 /Users/mbentle8/Documents/Git/Bitbucket/puppet-training
 
 ```
 
-Now, as you'll see in the following sections, we will use ${BASEDIR} in the docker
+Now, as you'll see in the following sections, we will use **${BASEDIR}** in the docker
 command when specifying the absolute path to our volumes.  If you dont specify the
-absolute path, the volume mapping will not work as expected, so make sure you dont
-ignore this part.
+absolute path, the volume mapping will not work as expected.  So, rather than having
+to type out the entire path each time, we save it in BASEDIR.
 
 
 ### Create and run your Puppet Master Container ###
@@ -136,7 +140,7 @@ To start up the container for the Puppet Master:
       --network-alias=puppet             \
       --network-alias=puppet.example.com \
       --volume ${BASEDIR}/share:/share   \
-      bentlema/centos6-puppet            \
+      bentlema/centos6-puppet-nocm       \
       /sbin/init
 ```
 
@@ -176,14 +180,14 @@ The default password is:  *foobar23*
       --network-alias=agent             \
       --network-alias=agent.example.com \
       --volume ${BASEDIR}/share:/share  \
-      bentlema/centos6-puppet           \
+      bentlema/centos6-puppet-nocm      \
       /sbin/init
 ```
 
 ### Create and run GitLab container ###
 
 Notice that the container image we're using is from *gitlab* itself.  That's
-the nice thing about Docker.  There are many pre-built container images 
+the nice thing about Docker.  There are many pre-built container images
 that we can just use, and instantly have a nice piece of software up and
 running without any fuss.
 
