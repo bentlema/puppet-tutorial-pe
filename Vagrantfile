@@ -55,7 +55,5 @@ Vagrant.configure("2") do |config|
     gitlab.vm.network "forwarded_port", guest:  443, host: 24443 # GitLab Web GUI (HTTPS)
   end
 
-
 end
-
 
