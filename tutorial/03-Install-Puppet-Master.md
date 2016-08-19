@@ -20,10 +20,29 @@ In this lab we will install Puppet Enterprise 3.8.X
 
 Now let's un-compress/de-archive the PE installation tarball, and install...
 
+Change into the directory with the PE software:
+
 ```shell
-cd /share/software/puppet-enterprise
-tar xzvf puppet-enterprise-3.8.?-el-?-x86_64.tar.gz
-cd puppet-enterprise-3.8.?-el-?-x86_64
+cd /share/software/puppet
+```
+Note:  There are two different installation tarballs.  One for EL6 and one for EL7.
+
+* If following the Docker track, use the EL6 tarball
+
+```
+tar xzvf puppet-enterprise-3.8.5-el-6-x86_64.tar.gz
+cd puppet-enterprise-3.8.5-el-6-x86_64
+```
+
+* If following the Vagrant track, use the EL7 tarball
+```
+tar xzvf puppet-enterprise-3.8.5-el-7-x86_64.tar.gz
+cd puppet-enterprise-3.8.5-el-7-x86_64
+```
+
+Then run the installer:
+
+```
 sudo ./puppet-enterprise-installer
 ```
 

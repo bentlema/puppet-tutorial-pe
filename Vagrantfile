@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
   # config.vm.box = "centos/7"
   config.vm.box = "puppetlabs/centos-7.2-64-nocm"
   config.vm.synced_folder ".", "/home/vagrant/sync", disabled: true
-  config.vm.synced_folder "share", "/vagrant", disabled: false
+  config.vm.synced_folder "share", "/share", disabled: false
   config.vm.provider "virtualbox" do |vb|
     vb.gui = false
     vb.memory = "512"
