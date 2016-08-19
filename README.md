@@ -1,7 +1,7 @@
 # README.md #
 
-This is a Puppet Enterprise + Git training class / Tutorial.
-We will also use Vagrant and/or Docker to provision our training environment.
+This is a **Puppet Enterprise** and **Git** training tutorial.
+We will also use **Vagrant** and/or **Docker** to provision our training environment.
 
 In this tutorial you will learn:
 
@@ -24,7 +24,7 @@ In this tutorial you will learn:
 
      `cd puppet-training`
 
-* Begin following the Labs/Tutorials (links below)
+* Begin following the Labs (links below)
 
 ### Navigating This Tutorial ###
 
@@ -36,15 +36,18 @@ click the [bentlema/puppet-training](https://github.com/bentlema/puppet-training
 
 ### Minimum Requirements ##
 
-* You will need the ability to install software on your workstation (Admin / Super-User Privs).
+* You will need the ability to install software on your workstation (Admin / Super-User privileges).
     - Git
     - VirtualBox
     - Vagrant or Docker
+
 * Disk space:
     - 2GB of free disk space to acomodate software and VM/Container images
+
 * Memory:
     - 8GB of RAM if using Docker Containers
     - 12GB of RAM if using VirtualBox VMs
+
 * Note: You will use either Vagrant to spin up VM's or Docker to spin up Containers
     - We will not use both, so choose one, and you're good to go
     - Although Vagrant is capable of spinning up Docker containers, we will

@@ -1,4 +1,4 @@
-# Puppet + Git Training #
+<-- [Back](../README.md)
 
 ---
 
