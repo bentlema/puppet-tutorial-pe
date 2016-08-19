@@ -1,8 +1,7 @@
-# Puppet + Git Training #
 
 ---
 
-### Lab #4 - Get Familiar with Puppet Config Files, Code, and CLI  ###
+### Lab #5 - Get Familiar with Puppet Config Files, Code, and CLI  ###
 
 ---
 

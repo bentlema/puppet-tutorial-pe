@@ -1,9 +1,9 @@
 
-Puppet + Git Training
-=====================
+---
 
 Lab #12 - Git Workflow
-======================
+
+---
 
 ## Overview ##
 

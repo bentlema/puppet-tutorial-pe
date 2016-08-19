@@ -1,9 +1,9 @@
 
-Puppet + Git Training
-=====================
+---
 
 Lab #11 - Git Basics
-=====================
+
+---
 
 ### Overview ###
 

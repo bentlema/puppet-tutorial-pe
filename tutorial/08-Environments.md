@@ -1,10 +1,8 @@
+---
 
-Puppet + Git Training
-=====================
+Lab #8 - Environments
 
-Lab #7 - Environments
-=====================
-
+---
 
 ### Overview ###
 
@@ -181,7 +179,7 @@ Stg, and Stg into Prod, and you will not like it.
 
 ---
 
-Continue on to **Lab #8** --> [Install GitLab](08-Install-GitLab.md)
+Continue on to **Lab #9** --> [Install GitLab](09-Install-GitLab.md)
 
 ---
 

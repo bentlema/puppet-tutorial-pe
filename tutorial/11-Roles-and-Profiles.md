@@ -1,9 +1,9 @@
 
-Puppet + Git Training
-=====================
+---
 
 Lab #10 - Roles and Profiles
-============================
+
+---
 
 ### Overview ###
 

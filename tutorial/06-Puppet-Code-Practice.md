@@ -1,8 +1,7 @@
-# Puppet + Git Training #
 
 ---
 
-### Lab #5 - Some More Puppet Code Practice ###
+### Lab #6 - Some More Puppet Code Practice ###
 
 ---
 
@@ -481,7 +480,7 @@ be a global default for packages.  Pretty cool, huh?
 
 ---
 
-Continue to **Lab #6** --> [Config Hiera](/tutorial/06-Config-Hiera.md)
+Continue to **Lab #7** --> [Config Hiera](/tutorial/07-Config-Hiera.md)
 
 ---
 

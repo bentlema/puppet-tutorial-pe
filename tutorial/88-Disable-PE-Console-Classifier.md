@@ -1,4 +1,3 @@
-# Puppet + Git Training #
 
 ---
 
