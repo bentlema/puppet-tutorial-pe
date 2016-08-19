@@ -1,5 +1,5 @@
 
-# Puppet + Git Training #
+<-- [Back](/tutorial/01v-Provision-Training-VMs.md)
 
 ---
 
