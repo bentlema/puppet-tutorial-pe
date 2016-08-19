@@ -3,7 +3,7 @@
 
 ---
 
-### Lab #2-A - Install Puppet Enterprise on the **puppet** VM ###
+### Lab #2-V - Install Puppet Enterprise on the **puppet** VM ###
 
 ---
 
