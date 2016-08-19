@@ -481,7 +481,7 @@ be a global default for packages.  Pretty cool, huh?
 
 ---
 
-Continue to **Lab #6** --> [Config Hiera](/share/06-Config-Hiera.md)
+Continue to **Lab #6** --> [Config Hiera](/tutorial/06-Config-Hiera.md)
 
 ---
 

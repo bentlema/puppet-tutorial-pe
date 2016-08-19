@@ -116,7 +116,7 @@ If you login to the [PE Console](https://127.0.0.1:22443/nodes), you should see 
 
 ---
 
-Continue to **Lab #5** --> [Get familiar with puppet config files, and puppet code, and CLI](/share/05-Puppet-Config-and-Code.md)
+Continue to **Lab #5** --> [Get familiar with puppet config files, and puppet code, and CLI](/tutorial/05-Puppet-Config-and-Code.md)
 
 ---
 

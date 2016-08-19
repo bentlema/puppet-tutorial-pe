@@ -307,7 +307,7 @@ include puppet_enterprise::profile::master
 
 ---
 
-Continue to **Lab #5** --> [Practice doing some puppet code, and puppet runs](/share/05-Puppet-Code-Practice.md)
+Continue to **Lab #5** --> [Practice doing some puppet code, and puppet runs](/tutorial/05-Puppet-Code-Practice.md)
 
 ---
 

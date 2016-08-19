@@ -1609,7 +1609,7 @@ So, to summarize, we can use the hiera() lookup function and facter to do
 the same thing, the difference being where the data is hosted--on the agent side,
 or on the puppet master side.
 
-Continue to **Lab #7** --> [Environments](/share/07-Environments.md)
+Continue to **Lab #7** --> [Environments](/tutorial/07-Environments.md)
 
 ---
 
