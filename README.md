@@ -75,8 +75,8 @@ We will work through some Labs/Tutorials to get hands-on experience...
 
 Choose one of the following paths to setup your training environment (NOT Both):
 
-*  [Vagrant to deploy 3 training VMs](/tutorial/01v-Provision-Training-VMs.md)
-*  [Docker to deploy 3 training Containers](/tutorial/01c-Provision-Training-Containers.md)
+* Lab 01-V  [Vagrant to deploy 3 training VMs](/tutorial/01v-Provision-Training-VMs.md)
+* Lab 01-C  [Docker to deploy 3 training Containers](/tutorial/01c-Provision-Training-Containers.md)
 
 Then choose one of the following to make sure your training environment is all
 up and running and ready to start taking software.  If you're continuing straight
@@ -84,28 +84,25 @@ away from Lab #1, you should already be good to go.  If you're coming back to th
 tutorial after a break, these will help you get your training environment started
 back up, and walk you through any other preparation steps.
 
-*  [Prepare to Install Puppet Enterprise on VMs](/tutorial/02v-Prep-to-Install-Puppet-Master.md)
-*  [Prepare to Install Puppet Enterprise on Containers](/tutorial/02c-Prep-to-Install-Puppet-Master.md)
-
-# NOTICE:  This tutorial is under active development, and is not finished yet. #
-#          There may be broken links in the following files. #
+* Lab 02-V  [Prepare to Install Puppet Enterprise on VMs](/tutorial/02v-Prep-to-Install-Puppet-Master.md)
+* Lab 02-C  [Prepare to Install Puppet Enterprise on Containers](/tutorial/02c-Prep-to-Install-Puppet-Master.md)
 
 Once your training environment is setup, and you're comfortable with
 either Vagrant+Virtualbox of Docker, continue with the remaining labs...
 
-1.  [Install Puppet Master](/tutorial/03-Install-Puppet-Master.md)
-2.  [Install Puppet Agent](/tutorial/04-Install-Puppet-Agent.md)
-3.  [Get familiar with puppet config files, and puppet code, and CLI](/tutorial/05-Puppet-Config-and-Code.md)
-4.  [Practice doing some puppet code, and puppet runs](/tutorial/06-Puppet-Code-Practice.md)
-5.  [Configure Hiera](/tutorial/07-Config-Hiera.md)
-6.  [More about Environments](/tutorial/08-Environments.md)
-7.  [Install GitLab on the gitlab VM](/tutorial/09-Install-GitLab.md)
-8.  [Move Puppet Code under Git Control](/tutorial/10-Move-Puppet-Code-to-GitLab.md)
-10. [Modules, Roles & Profiles, and the environment.conf](/tutorial/11-Roles-and-Profiles.md)
-11. [Git Basics](/tutorial/12-Git-Basics.md)
-12. [Git Workflow](/tutorial/13-Git-Workflow.md)
-88. [Practice doing some puppet code, and puppet runs]
-99. [Further Reading](/tutorial/YY-Further-Reading.md)
+ * Lab 03 [Install Puppet Master](/tutorial/03-Install-Puppet-Master.md)
+ * Lab 04 [Install Puppet Agent](/tutorial/04-Install-Puppet-Agent.md)
+ * Lab 05 [Get familiar with puppet config files, and puppet code, and CLI](/tutorial/05-Puppet-Config-and-Code.md)
+ * Lab 06 [Practice doing some puppet code, and puppet runs](/tutorial/06-Puppet-Code-Practice.md)
+ * Lab 07 [Configure Hiera](/tutorial/07-Config-Hiera.md)
+ * Lab 08 [More about Environments](/tutorial/08-Environments.md)
+ * Lab 09 [Install GitLab on the gitlab VM](/tutorial/09-Install-GitLab.md)
+ * Lab 10 [Move Puppet Code under Git Control](/tutorial/10-Move-Puppet-Code-to-GitLab.md)
+ * Lab 11 [Modules, Roles & Profiles, and the environment.conf](/tutorial/11-Roles-and-Profiles.md)
+ * Lab 12 [Git Basics](/tutorial/12-Git-Basics.md)
+ * Lab 13 [Git Workflow](/tutorial/13-Git-Workflow.md)
+ * Lab 14 [Practice doing some puppet code, and puppet runs]
+ * Lab 15 [Further Reading](/tutorial/YY-Further-Reading.md)
 
 
 
