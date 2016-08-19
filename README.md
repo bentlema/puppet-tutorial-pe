@@ -84,6 +84,9 @@ back up, and walk you through any other preparation steps.
 *  [Prepare to Install Puppet Enterprise on VMs](/tutorial/02v-Prep-to-Install-Puppet-Master.md)
 *  [Prepare to Install Puppet Enterprise on Containers](/tutorial/02c-Prep-to-Install-Puppet-Master.md)
 
+# NOTICE:  This tutorial is under active development, and is not finished yet. #
+#          There may be broken links in the following files. #
+
 Once your training environment is setup, and you're comfortable with
 either Vagrant+Virtualbox of Docker, continue with the remaining labs...
 
