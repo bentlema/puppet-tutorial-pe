@@ -1,5 +1,5 @@
 
-# A whole mess of links to further reading... #
+# A whole mess of links for further reading... #
 
 # Puppet-Related Links #
 
