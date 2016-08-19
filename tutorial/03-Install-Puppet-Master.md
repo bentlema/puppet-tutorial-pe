@@ -16,6 +16,11 @@ In this lab we will install Puppet Enterprise 3.8.X
 
 ---
 
+### Get logged in to your puppet VM or Container ###
+
+We are about to install Puppet Enterprise, and make sure you're
+logged into our puppet master host, as root...
+
 ### Run The Installer ###
 
 Now let's un-compress/de-archive the PE installation tarball, and install...
