@@ -1,0 +1,46 @@
+
+These values come from the [main] section of the puppet.conf on the master:
+
+[root@puppet]# puppet config print basemodulepath
+/etc/puppetlabs/puppet/modules:/opt/puppet/share/puppet/modules
+
+[root@puppet]# puppet config print environmentpath
+/etc/puppetlabs/puppet/environments
+
+
+[root@puppet]# puppet config print modulepath
+/etc/puppetlabs/puppet/environments/production/modules:/etc/puppetlabs/puppet/modules:/opt/puppet/share/puppet/modules
+
+[root@puppet production]# pwd
+/etc/puppetlabs/puppet/environments/production
+
+[root@puppet]# vi environment.conf # and add the modulepath line as follows...
+
+[root@puppet production]# cat environment.conf
+modulepath = site:modules:$basemodulepath
+
+#
+# Now let's look at the modulepath again...
+#
+
+[root@puppet]# puppet config print modulepath
+/etc/puppetlabs/puppet/environments/production/site:/etc/puppetlabs/puppet/environments/production/modules:/etc/puppetlabs/puppet/modules:/opt/puppet/share/puppet/modules
+
+#
+# See how we now have an extra path element which will look in the production
+# environment directory, and site sub-directory?
+#
+
+This will be useful later on because it allows us to look in multiple places for modules.
+
+We could then configure things like this:
+
+/etc/puppetlabs/puppet/environments/production/site    - holds modules NOT managed by R10K
+/etc/puppetlabs/puppet/environments/production/modules - holds modules pulled down by R10K
+/etc/puppetlabs/puppet/modules                         - holds modules common to all envs
+/opt/puppet/share/puppet/modules                       - modules that ship with PE
+
+This will allow us to keep role and profile modules in the control repo, without R10K
+overwriting them
+
+

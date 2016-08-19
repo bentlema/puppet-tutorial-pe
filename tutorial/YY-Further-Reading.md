@@ -1,0 +1,87 @@
+
+# A whole mess of links to further reading... #
+
+# Puppet-Related Links #
+
+## Misc Links ##
+- [Puppet Lunch](http://puppetlunch.com/contents/)
+- [Designing Puppet – Roles and Profiles](http://www.craigdunn.org/2012/05/239/)
+- [Puppet Cookbook](http://www.puppetcookbook.com/)
+- [Adrien Thebo Blog](http://somethingsinistral.net/blog/)
+- [R.I. Pienaar Blog - Author of Hiera and MCollective](https://www.devco.net/)
+
+## RNELSON0 Blog ##
+- [Puppet for vSphere Admins - Table of Contents](http://rnelson0.com/puppet-for-vsphere-admins/)
+- [Puppet and Git, 101: Git Basics](http://rnelson0.com/2014/05/05/puppet-and-git-101-git-basics/)
+- [Puppet and Git, 102: Feature Branches](http://rnelson0.com/2014/05/12/puppet-and-git-102-feature-branches/)
+- [Puppet and Git, 201: r10k Setup – Installation](http://rnelson0.com/2014/05/19/puppet-and-git-201-r10k-setup-installation/)
+- [Puppet and Git, 202: r10k Setup – Conversion, Deployment](http://rnelson0.com/2014/05/26/puppet-and-git-202-r10k-setup-conversion-deployment/)
+- [Puppet and Git, 203: r10k Workflow for New Module](http://rnelson0.com/2014/06/02/puppet-and-git-203-r10k-workflow-new-module/)
+- [Puppet and Git, 204: r10k Workflow for Existing Module](http://rnelson0.com/2014/06/09/puppet-and-git-204-r10k-workflow-for-existing-module/)
+- [Intro to Roles and Profiles with Puppet and Hiera](http://rnelson0.com/2014/07/14/intro-to-roles-and-profiles-with-puppet-and-hiera/)
+- [Hiera, R10K, and the end of manifests as we know them](http://rnelson0.com/2014/07/21/hiera-r10k-and-the-end-of-manifests-as-we-know-them/)
+- [Improved r10k deployment patterns](http://rnelson0.com/2015/04/15/improved-r10k-deployment-patterns/)
+
+## Gary Larizza ##
+- [Shit Gary Says Blog - Table of Contents](http://garylarizza.com/blog/categories/puppet/)
+- [Fun With Puppet Providers - Part 1 of Whatever](http://garylarizza.com/blog/2013/11/25/fun-with-providers/)
+- [Who Abstracted My Ruby?](http://garylarizza.com/blog/2013/11/26/fun-with-providers-part-2/)
+- [Seriously, What Is This Provider Doing?](http://garylarizza.com/blog/2013/12/15/seriously-what-is-this-provider-doing/)
+- [Building a Functional Puppet Workflow Part 1: Module Structure](http://garylarizza.com/blog/2014/02/17/puppet-workflow-part-1/)
+- [Building a Functional Puppet Workflow Part 2: Roles and Profiles](http://garylarizza.com/blog/2014/02/17/puppet-workflow-part-2/)
+- [Building a Functional Puppet Workflow Part 3: Dynamic Environments With R10k](http://garylarizza.com/blog/2014/02/18/puppet-workflow-part-3/)
+- [Building a Functional Puppet Workflow Part 3b: More R10k Madness](http://garylarizza.com/blog/2014/03/07/puppet-workflow-part-3b/)
+- [On R10k and 'Environments'](http://garylarizza.com/blog/2014/03/26/random-r10k-workflow-ideas/)
+- [R10k + Directory Environments](http://garylarizza.com/blog/2014/08/31/r10k-plus-directory-environments/)
+- [On Dependencies and Order](http://garylarizza.com/blog/2014/10/19/on-dependencies-and-order/)
+- [Puppetconf 2014 Talk - the Refactor Dance](http://garylarizza.com/blog/2014/10/23/puppetconf-2014-talk/)
+- [Puppet Workflows 4: Using Hiera in Anger](http://garylarizza.com/blog/2014/10/24/puppet-workflows-4-using-hiera-in-anger/)
+- [Workflows Evolved: Even Besterer Practices](http://garylarizza.com/blog/2015/11/16/workflows-evolved-even-besterer-practices/)
+
+## PuppetLabs Videos and Presentations ##
+- [Killer R10K Workflow - Phil Zimmerman, Time Warner Cable](https://puppetlabs.com/presentations/killer-r10k-workflow-phil-zimmerman-time-warner-cable)
+- [Git Workflow Best Practices & Deploying with r10k](https://puppetlabs.com/webinars/git-workflow-best-practices-deploying-r10k)
+- [PuppetConf 2015 Videos and Presentations](https://puppetlabs.com/puppetconf-2015-videos-and-presentations)
+- [PuppetConf 2014 Videos and Presentations](https://puppetlabs.com/puppetconf-2014-videos-and-presentations)
+- [PuppetConf 2013 Videos and Presentations](https://puppetlabs.com/resources/puppetconf-2013)
+- [PuppetConf 2012 Videos on YouTube](https://www.youtube.com/playlist?list=PLV86BgbREluVFB73Wwqp_tCbw5Z9TMLX1)
+- [Other PuppetLabs Playlists on YouTube](https://www.youtube.com/user/PuppetLabsInc/playlists)
+- [Git Workflow and Puppet Environments](https://puppetlabs.com/blog/git-workflow-and-puppet-environments)
+- [Git Workflows with Puppet and r10k](https://puppetlabs.com/blog/git-workflows-puppet-and-r10k)
+- [Refactor Your Monolithic Code Repo To Deploy with r10k](https://puppetlabs.com/blog/refactor-your-monolithic-code-repo-to-deploy-with-r10k)
+- [Puppet Enterprise 3.8 Upgrade Series ](https://puppetlabs.com/puppet/whats-new/puppet-enterprise-3.8-upgrade-series)
+
+---
+
+# Git-Related Links #
+
+- [Try Git @ Code School](http://try.github.io/)
+- [Git HowTo](https://githowto.com/) - Guided Tour of Git Usage
+- [Git Real @ Code School](http://gitreal.codeschool.com/) - Interactive Git Tutorial
+- [Git Home](https://git-scm.com/) - The Official Git Home Page
+- [Git Downloads](https://git-scm.com/downloads) - Get the Git client
+- [Git Tutorial](https://git-scm.com/docs/gittutorial) - Official Git Tutorial
+- [Git Documentation](https://git-scm.com/docs) - The Official Git Documentation
+- [Pro Git Book](https://git-scm.com/book/) - Read the *Pro Git* Book (Download or Read Online *FREE*)
+- [Git Video Tutorials](https://git-scm.com/videos) - Some video tutorials
+- [More Links](https://git-scm.com/doc/ext) - More links to Git Books, Tutorials, and Videos
+- [Git Reference by GitHub Team](http://gitref.org/)
+- [Git Immersion](http://gitimmersion.com/)
+- [Ry’s Git Tutorial](http://rypress.com/tutorials/git/)
+- [Intro to Git Video](https://youtu.be/ZDR433b0HJY) - Introduction to Git with Scott Chacon of GitHub
+- [Visual Git Guide](http://marklodato.github.io/visual-git-guide/index-en.html)
+- [Lars Vogel Git Tutorial](http://www.vogella.com/tutorials/Git/article.html)
+- [Git Tower - Learn Git Tutorial](https://www.git-tower.com/learn/)
+- [Git in the Trenches Book](http://cbx33.github.io/gitt/intro.html) - Read online or download PDF
+- [GitHub's Cheatsheet](https://training.github.com/kit/downloads/github-git-cheat-sheet.pdf)
+- [GitHub's Help](https://help.github.com/) - Has a ton of Git info, not just about GitHub
+- [Git Magic Book](http://www-cs-students.stanford.edu/~blynn/gitmagic/)
+- [Git Beginner's Guide for Dummies](http://backlogtool.com/git-guide/en/)
+- [Atlassian Advanced Git Tutorials](https://www.atlassian.com/git/tutorials/advanced-overview)
+- [The Git Guys Blog](http://www.gitguys.com/)
+
+
+---
+
+<-- [Back to Contents](/README.md)
+

@@ -1,0 +1,1 @@
+stop on runlevel [S0123456]
