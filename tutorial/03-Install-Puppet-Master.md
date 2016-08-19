@@ -1,6 +1,4 @@
 
-# Puppet + Git Training #
-
 ---
 
 ### Lab #3 - Install Puppet Enterprise ###
