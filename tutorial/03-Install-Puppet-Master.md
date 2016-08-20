@@ -1,8 +1,8 @@
+<-- [Back](../README.md#labs)
 
 ---
-
-### Lab #3 - Install Puppet Enterprise ###
-
+# Lab 3 #
+### Install Puppet Enterprise ###
 ---
 
 ### Overview ###

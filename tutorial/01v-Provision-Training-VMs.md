@@ -145,7 +145,7 @@ timeout trying, and then power off the VM.
 
 ---
 
-Continue on to **Lab #2** --> [Prepare to Install Puppet Enterprise](02v-Prep-to-Install-Puppet-Master.md)
+Continue on to **Lab #2** --> [Prepare to Install Puppet Enterprise](02v-Prep-to-Install-Puppet-Master.md#lab-2-v)
 
 ---
 

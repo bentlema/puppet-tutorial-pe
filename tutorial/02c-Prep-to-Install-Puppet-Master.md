@@ -1,10 +1,9 @@
 
-<-- [Back](/tutorial/01c-Provision-Training-Containers.md)
+<-- [Back](/tutorial/01c-Provision-Training-Containers.md#labs)
 
 ---
-
-### Lab #2-C - Prepare to Install Puppet Enterprise on the **puppet** Container ###
-
+# Lab 2-C #
+### Prepare to Install Puppet Enterprise on the **puppet** Container ###
 ---
 
 ### Overview ###
@@ -59,7 +58,7 @@ an exec to get into the container if you want to look around.
 
 ---
 
-Continue to **Lab #3** --> [Install Puppet Master](03-Install-Puppet-Master.md)
+Continue to **Lab #3** --> [Install Puppet Master](03-Install-Puppet-Master.md#lab-3)
 
 ---
 

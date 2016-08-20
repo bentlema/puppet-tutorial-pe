@@ -1,10 +1,9 @@
 
-<-- [Back](/tutorial/01v-Provision-Training-VMs.md)
+<-- [Back](/tutorial/01v-Provision-Training-VMs.md#start-here)
 
 ---
-
-### Lab #2-V - Install Puppet Enterprise on the **puppet** VM ###
-
+# Lab 2-V #
+### Install Puppet Enterprise on the **puppet** VM ###
 ---
 
 ### Overview ###
@@ -105,7 +104,7 @@ Okay, now we're ready to run the Puppet Enterprise Installer...
 
 ---
 
-Continue to **Lab #3** --> [Install Puppet Master](03-Install-Puppet-Master.md)
+Continue to **Lab #3** --> [Install Puppet Master](03-Install-Puppet-Master.md#lab-3)
 
 ---
 

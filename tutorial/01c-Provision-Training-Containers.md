@@ -40,8 +40,11 @@ After running the **download-all.sh** Find the appropriate installer for
 Mac or Windows in the **share/software/docker** folder.
 
 ```
-cd share/software/docker
+cd docker
+ls -l
 ```
+
+Open up a new Finder window (on Mac) or an Explorer window (on Windows) and navigate to the **share/software/docker** directory, and...
 
 * On Mac OS X, double-click the Docker.dmg, and then double-click the installer
 * On Windows double-click the .msi file to launch the installer
@@ -63,11 +66,7 @@ cd share/software/docker
 
 ### Creating A Private Docker Network ###
 
-Create Docker Network which will be used by the 3 containers we will create
-  - Each of the 3 containers will be able to communicate with eachother over
-    this private-internal-to-docker network
-  - Example: Puppet agents will talk to the Puppet master over this network
-  - Example: R10K will pull code from the GitLab server over this network
+Create a Docker Network.  It will be used by the 3 containers we create to communicate with eachother.
 
 ```
 docker network create --subnet=192.168.198.0/24 example.com
@@ -78,7 +77,7 @@ will use the network name in the FQDN of the container.  Docker's internal
 DNS server will take the short hostname and append the network name when doing
 reverse-lookups (PTR records) so we do this little hack to make sure the
 forward and reverse lookups match.  With this said, I've seen inconsistant
-behavior with Docker's internal DNS, and sometimes reverse lookups just dont work.
+behavior with Docker's internal DNS, and sometimes reverse lookups just dont work at all.
 No matter, we push on!
 
 
@@ -218,7 +217,7 @@ At this point, all 3 of your Containers should be up and running.  Woot.
 
 ---
 
-Continue on to **Lab #2** --> [Prepare to Install Puppet Enterprise](02c-Prep-to-Install-Puppet-Master.md)
+Continue on to **Lab #2** --> [Prepare to Install Puppet Enterprise](02c-Prep-to-Install-Puppet-Master.md#lab-2-c)
 
 ---
 
