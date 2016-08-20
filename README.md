@@ -22,15 +22,19 @@ What will we do in this training tutorial?
 
 * Download and install the Git client on your workstation
 
-     Link:  ( https://git-scm.com/downloads )
+     - Link:  https://git-scm.com/downloads
 
 * Clone this repo
 
+```
      `git clone https://github.com/bentlema/puppet-training`
+```
 
 * Change directory to...
 
+```
      `cd puppet-training`
+```
 
 * Begin following the Labs (links below)
 
