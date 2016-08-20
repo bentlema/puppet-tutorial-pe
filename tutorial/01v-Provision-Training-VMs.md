@@ -1,9 +1,8 @@
-<-- [Back](../README.md)
+<-- [Back](../README.md#start-here)
 
 ---
-
-### Lab #1-V - Install software, and use Vagrant to deploy 3 training VMs ###
-
+## Lab 1-V ##
+### Install software, and use Vagrant to deploy 3 training VMs ###
 ---
 
 ### Overview ###
