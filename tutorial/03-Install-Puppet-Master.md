@@ -19,7 +19,28 @@ In this lab we will install Puppet Enterprise 3.8.X
 ### Get logged in to your puppet VM or Container ###
 
 We are about to install Puppet Enterprise, and make sure you're
-logged into our puppet master host, as root...
+logged into our puppet master host.
+
+### Note about root ###
+
+If you're using Docker, and getting in to your container with an exec of bash,
+you will already be the root user.  If you're using Vagrant to deploy your VMs,
+you may or may not be root, as the **vagrant ssh** command drops you into the
+vagrant user account.
+
+In order to simplify the commands we run in the following sections, I will assume
+you know how to use sudo, and when to use it.  All puppet commands need to be run
+as root, so the easiet thing to do would just to become root.  We're in a training
+environment after all, and if you mess something up, you can just delete it and
+start over.
+
+So, if you're already root, Great!
+
+If you're not the root user yet, then become root, and be happy!
+
+```
+sudo su -
+```
 
 ### Run The Installer ###
 
@@ -48,7 +69,7 @@ cd puppet-enterprise-3.8.5-el-7-x86_64
 Then run the installer:
 
 ```
-sudo ./puppet-enterprise-installer
+./puppet-enterprise-installer
 ```
 
 The installer will prompt you:
@@ -110,7 +131,7 @@ Login as **admin** and enter the admin password you chose during the install.
 
 If you forgot (or not sure what you typed) you can find the password in the answers file:
 
-     sudo grep q_puppet_enterpriseconsole_auth_password /opt/puppet/share/installer/answers/*.answers
+     grep q_puppet_enterpriseconsole_auth_password /opt/puppet/share/installer/answers/*.answers
 
 Probabbly a good idea to **change it**...!
 
@@ -126,16 +147,9 @@ Look around the PE console.  You should see 1 agent is registered called puppet.
 To change the 'admin' account password, click on 'admin' in the top right corner, and select 'My Account'.  You should
 find a 'Reset password' link near the top/right of that page.
 
-Test your PE install from the shell prompt run puppet with sudo, or become root and run it:
+Test your PE install from the shell prompt by running the agent manually like this:
 
 ```
-     sudo puppet agent -t
-```
-
-or
-
-```
-     sudo su -
      puppet agent -t
 ```
 
@@ -167,7 +181,7 @@ would show up in RED text.
 
 ---
 
-Continue to **Lab #4** --> [Install Puppet Agent on agent VM, and do test puppet run](04-Install-Puppet-Agent.md)
+Continue to **Lab #4** --> [Install Puppet Agent on agent VM, and do test puppet run](04-Install-Puppet-Agent.md#lab-4)
 
 ---
 
