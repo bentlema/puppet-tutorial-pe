@@ -1,7 +1,7 @@
 <-- [Back](../README.md#labs)
 
 ---
-## Lab 1-V ##
+# Lab 1-V #
 ### Install software, and use Vagrant to deploy 3 training VMs ###
 ---
 
