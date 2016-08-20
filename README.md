@@ -3,18 +3,26 @@
 This is a **Puppet Enterprise** and **Git** training tutorial.
 We will also use **Vagrant** and/or **Docker** to provision our training environment.
 
-In this tutorial you will learn:
+### Training Overview ###
 
-* How to Install Puppet Enterprise v3.8
-* How to Configure Puppet Enterprise to use Hiera for Node Classification
-* How to Use a Git Hosting server such as GitLab to host your Puppet Code
-* Basic Puppet Coding
-* Basic Git usage
-* Basic Vagrant and/or Docker usage
+What will we do in this training tutorial?
+
+* Deploy your own training environment using either Docker or Vagrant + VirtualBox
+* Install Puppet Enterprise (Monolithic Install), GitLab, and one additional training VM/Container
+* Learn the basics of Puppet Enterprise (Config, CLI, Environments, Code, etc.)
+* Learn how to use Hiera for...
+    - Node classification
+    - Auto-lookup of class parameters
+    - Hierarchical data lookup
+* Learn how to install and Setup GitLab, and how to use it to host your Puppet code
+* Learn how to setup R10K to automate code deployment
+* Learn basic Puppet Coding, Git usage, and Vagrant & Docker usage
 
 ### How to use this repo? ###
 
-* Download and install Git client on your workstation ( https://git-scm.com/downloads )
+* Download and install the Git client on your workstation
+
+     Link:  ( https://git-scm.com/downloads )
 
 * Clone this repo
 
@@ -34,7 +42,7 @@ Make sure you're comfortable navigating this code repo before you start.
 At any time, if you wish to return to this main README.md file, you can
 click the bentlema/[puppet-training](https://github.com/bentlema/puppet-training#start-here) link at the top of the page.
 
-### Minimum Requirements ##
+### Minimum System Requirements ##
 
 * You will need the ability to install software on your workstation (Admin / Super-User privileges).
     - Git
@@ -53,25 +61,7 @@ click the bentlema/[puppet-training](https://github.com/bentlema/puppet-training
     - Although Vagrant is capable of spinning up Docker containers, we will
       not use this capability
 
-### Training Overview ###
-
-What will we do in this training?
-
-* Use Vagrant + VirtualBox (or Docker) to deploy your own training environment
-* Install Puppet Enterprise (Monolithic Install), GitLab, and one additional training VM
-* Learn the basics of Puppet Enterprise (Config, CLI, Environments, Code, etc.)
-* Learn how to use Hiera for...
-    - Node classification
-    - Auto-lookup of class parameters
-    - Hierarchical data lookup
-* Learn how to install and Setup GitLab, and how to use it to host your Puppet code
-* Learn how to setup R10K to automate code deployment
-
-
-We will work through some Labs/Tutorials to get hands-on experience...
-
-
-### Labs / Tutorials ###
+### Labs ###
 
 Choose one of the following paths to setup your training environment (NOT Both):
 
@@ -103,6 +93,4 @@ either Vagrant+Virtualbox of Docker, continue with the remaining labs...
  * **Lab 13** - [Git Workflow](/tutorial/13-Git-Workflow.md)
  * **Lab 14** - [Practice doing some puppet code, and puppet runs]
  * **Lab 15** - [Further Reading](/tutorial/YY-Further-Reading.md)
-
-
 
