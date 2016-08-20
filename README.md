@@ -78,8 +78,8 @@ away from Lab #1, you should already be good to go.  If you're coming back to th
 tutorial after a break, these will help you get your training environment started
 back up, and walk you through any other preparation steps.
 
-* **Lab 02-V** - [Prepare to Install Puppet Enterprise on VMs](/tutorial/02v-Prep-to-Install-Puppet-Master.md)
-* **Lab 02-C** - [Prepare to Install Puppet Enterprise on Containers](/tutorial/02c-Prep-to-Install-Puppet-Master.md)
+* **Lab 02-V** - [Prepare to Install Puppet Enterprise on VMs](/tutorial/02v-Prep-to-Install-Puppet-Master.md#lab-2-v)
+* **Lab 02-C** - [Prepare to Install Puppet Enterprise on Containers](/tutorial/02c-Prep-to-Install-Puppet-Master.md#lab-2-c)
 
 Once your training environment is setup, and you're comfortable with
 either Vagrant+Virtualbox of Docker, continue with the remaining labs...
