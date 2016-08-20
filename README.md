@@ -69,8 +69,8 @@ click the bentlema/[puppet-training](https://github.com/bentlema/puppet-training
 
 Choose one of the following paths to setup your training environment (NOT Both):
 
-* **Lab 01-V** - [Vagrant to deploy 3 training VMs](/tutorial/01v-Provision-Training-VMs.md)
-* **Lab 01-C** - [Docker to deploy 3 training Containers](/tutorial/01c-Provision-Training-Containers.md)
+* **Lab 01-V** - [Vagrant to deploy 3 training VMs](/tutorial/01v-Provision-Training-VMs.md#lab-1-v)
+* **Lab 01-C** - [Docker to deploy 3 training Containers](/tutorial/01c-Provision-Training-Containers.md#lab-1-c)
 
 Then choose one of the following to make sure your training environment is all
 up and running and ready to start taking software.  If you're continuing straight
