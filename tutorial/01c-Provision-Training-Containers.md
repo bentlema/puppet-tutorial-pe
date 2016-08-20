@@ -2,7 +2,8 @@
 
 ---
 
-### Lab #1-C - Install software, and use Docker to deploy 3 training Containers ###
+## Lab 1-C ##
+### Install software, and use Docker to deploy 3 training Containers ###
 
 ---
 
