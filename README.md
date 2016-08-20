@@ -32,7 +32,7 @@ This entire tutorial is of course a Git repository!  All of the tutorial
 files are written in [Markdown](https://en.wikipedia.org/wiki/Markdown).
 Make sure you're comfortable navigating this code repo before you start.
 At any time, if you wish to return to this main README.md file, you can
-click the [bentlema/puppet-training](https://github.com/bentlema/puppet-training) link at the top of the page.
+click the bentlema/[puppet-training](https://github.com/bentlema/puppet-training#start-here) link at the top of the page.
 
 ### Minimum Requirements ##
 
