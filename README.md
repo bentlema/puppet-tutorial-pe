@@ -27,13 +27,13 @@ What will we do in this training tutorial?
 * Clone this repo
 
 ```
-     `git clone https://github.com/bentlema/puppet-training`
+     git clone https://github.com/bentlema/puppet-training
 ```
 
 * Change directory to...
 
 ```
-     `cd puppet-training`
+     cd puppet-training
 ```
 
 * Begin following the Labs (links below)
@@ -57,8 +57,8 @@ click the bentlema/[puppet-training](https://github.com/bentlema/puppet-training
     - 2GB of free disk space to acomodate software and VM/Container images
 
 * Memory:
-    - 8GB of RAM if using Docker Containers
-    - 12GB of RAM if using VirtualBox VMs
+    - minimum 8GB of RAM if using Docker Containers
+    - minimum 12GB of RAM if using VirtualBox VMs
 
 * Note: You will use either Vagrant to spin up VM's or Docker to spin up Containers
     - We will not use both, so choose one, and you're good to go
