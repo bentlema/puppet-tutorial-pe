@@ -1,4 +1,4 @@
-# README.md #
+# Start Here #
 
 This is a **Puppet Enterprise** and **Git** training tutorial.
 We will also use **Vagrant** and/or **Docker** to provision our training environment.
