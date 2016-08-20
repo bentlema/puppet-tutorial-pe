@@ -43,13 +43,16 @@ Make sure your 3 training containers are up and running, and if not, start them:
    docker start gitlab
 ```
 
-Remember that you can connect to your VM's with the exec command like this:
+Remember that you can connect to your VM's with the exec command of /bin/bash like this:
 
 ```
    docker exec -it puppet /bin/bash
-   docker exec -it agent  /bin/bash
-   docker exec -it gitlab /bin/bash
 ```
+
+So do that!  Get connected to your puppet container, and then proceed to the
+next lab where we will do the actual install of Puppet Enterprise.
+
+---
 
 Note:  The puppet and agent containers have been configured from a centos6
 image, and sshd has been configured to allow root to login.  The GitLab image,
