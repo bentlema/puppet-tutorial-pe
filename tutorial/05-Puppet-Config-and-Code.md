@@ -1,8 +1,8 @@
+<-- Back to [Install Puppet Agent](04-Install-Puppet-Agent.md#lab-4)
 
 ---
-
-### Lab #5 - Get Familiar with Puppet Config Files, Code, and CLI  ###
-
+# Lab 5 #
+### Get Familiar with Puppet Config Files, Code, and CLI  ###
 ---
 
 ### Overview ###

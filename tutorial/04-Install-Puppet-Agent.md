@@ -1,8 +1,8 @@
+<-- Back to [Install Puppet Master](03-Install-Puppet-Master.md#lab-3)
 
 ---
-
-### Lab #4 - Install the Puppet Agent ###
-
+# Lab 4 #
+### Install the Puppet Agent ###
 ---
 
 ### Overview ###
@@ -15,10 +15,26 @@ In this lab we will:
 
 ### Pre-installation Steps ###
 
-Again, use vagrant to start your VM, and connect to it via ssh:
+Make sure your **agent** VM or container is started, and get logged in.
 
+If using Vagrant, start your VM, and connect to it via ssh:
+
+```
      vagrant up agent
      vagrant ssh agent
+```
+
+If using Docker, start your Container, and connect with an exec of bash:
+
+```
+     docker start agent
+     docker exec -it agent /bin/bash
+```
+### Edit the hosts file ###
+
+Note:  This is not necessary if using Docker, as we are using Docker's built in DNS server.
+
+If you're using Vagrant, go ahead and make the following edit:
 
 Edit /etc/hosts and make sure it looks like this:
 
@@ -27,7 +43,7 @@ Edit /etc/hosts and make sure it looks like this:
     192.168.198.11 gitlab.example.com gitlab
     192.168.198.12 agent.example.com  agent
 
-Later on we will write the puppet code to maintain these, but for now we add them manually.
+In a later lab we will write the puppet code to maintain these, but for now we add them manually.
 
 ### Install the Agent ###
 
@@ -39,13 +55,13 @@ installer script and then pipe it through bash.
 * To use **wget**
 
 ```
-wget --no-check-certificate --secure-protocol=TLSv1 -O - https://puppet:8140/packages/current/install.bash | sudo bash
+wget --no-check-certificate --secure-protocol=TLSv1 -O - https://puppet:8140/packages/current/install.bash | bash
 ```
 
 * To use **curl**
 
 ```
-curl -k --tlsv1 https://puppet:8140/packages/current/install.bash | sudo bash
+curl -k --tlsv1 https://puppet:8140/packages/current/install.bash | bash
 ```
 
 If you'd like to browse what else is accessible via that web server, try
@@ -68,8 +84,6 @@ Exiting; no certificate found and waitforcert is disabled
 
 We need to sign the agent's cert on the master, so switch to your **puppet**
 window and issue the following commands on the puppet master as root:
-
-Note:  Going forward, I'm not going to call out whether you should be root or use sudo.  By now you should realize that all puppet commands need to be run as root, so just take your pick...
 
 ```
 puppet cert list
@@ -103,20 +117,20 @@ occur before you're able to do a manual run.  In that case, you should see a lit
 as in the second puppet run (no changes made.)
 
 For brevity, I've not included the output on this page, but it's available for viewing
-here: [03-Puppet-Agent-Run-Output.md](03-Puppet-Agent-Run-Output.md)
+here: [04-Puppet-Agent-Run-Output.md](04-Puppet-Agent-Run-Output.md)
 
 ---
 
 At this point we have:
 
-- a Puppet Master VM (hostname 'puppet.example.com') that also runs an agent to configure itself
-- a Puppet Agent VM (hostnamne 'agent.example.com') that runs an agent, and where we will test code and learn more about PE
+- a Puppet Master node (hostname 'puppet.example.com') that also runs an agent to configure itself
+- a Puppet Agent node (hostnamne 'agent.example.com') that runs an agent, and where we will test code and learn more about PE
 
 If you login to the [PE Console](https://127.0.0.1:22443/nodes), you should see these two agents on the 'Nodes' page
 
 ---
 
-Continue to **Lab #5** --> [Get familiar with puppet config files, and puppet code, and CLI](/tutorial/05-Puppet-Config-and-Code.md)
+Continue to **Lab #5** --> [Get familiar with puppet config files, and puppet code, and CLI](/tutorial/05-Puppet-Config-and-Code.md#lab-5)
 
 ---
 
