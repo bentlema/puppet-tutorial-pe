@@ -2,7 +2,7 @@
 
 ---
 # Lab 5 #
-## Get Familiar with Puppet Config Files, Code, and CLI  ##
+### Get Familiar with Puppet Config Files, Code, and CLI  ###
 ---
 
 ### Overview ###
@@ -389,8 +389,8 @@ what we want.  We want our /etc/hosts to have the following 4 lines:
 ```
 127.0.0.1      localhost localhost.localdomain
 192.168.198.10 puppet.example.com puppet
-192.168.198.11 gitlab.example.com gitlab
-192.168.198.12 agent.example.com  agent
+192.168.198.11 agent.example.com  agent
+192.168.198.12 gitlab.example.com gitlab
 ```
 
 The default /etc/hosts also has the IPv6 localhost entry, which we will
@@ -436,8 +436,8 @@ node default {
   }
 
   host { 'puppet.example.com': ip => '192.168.198.10', host_aliases => [ 'puppet' ] }
-  host { 'gitlab.example.com': ip => '192.168.198.11', host_aliases => [ 'gitlab' ] }
-  host { 'agent.example.com':  ip => '192.168.198.12', host_aliases => [ 'agent' ] }
+  host { 'agent.example.com':  ip => '192.168.198.11', host_aliases => [ 'agent' ] }
+  host { 'gitlab.example.com': ip => '192.168.198.12', host_aliases => [ 'gitlab' ] }
 
 }
 ```
@@ -479,15 +479,15 @@ puppet resource host
 ...and you'd see something like this:
 
 ```
-host { 'agent.example.com':
-  ensure       => 'present',
-  host_aliases => ['agent'],
-  ip           => '192.168.198.12',
-  target       => '/etc/hosts',
-}
 host { 'gitlab.example.com':
   ensure       => 'present',
   host_aliases => ['gitlab'],
+  ip           => '192.168.198.12',
+  target       => '/etc/hosts',
+}
+host { 'agent.example.com':
+  ensure       => 'present',
+  host_aliases => ['agent'],
   ip           => '192.168.198.11',
   target       => '/etc/hosts',
 }
@@ -649,8 +649,8 @@ And we should see something like this...
      # HEADER: by puppet.  While it can still be managed manually, it
      # HEADER: is definitely not recommended.
      192.168.198.10  puppet.example.com  puppet
-     192.168.198.11  gitlab.example.com  gitlab
-     192.168.198.12  agent.example.com agent
+     192.168.198.11  agent.example.com   agent
+     192.168.198.12  gitlab.example.com  gitlab
      127.0.0.1 localhost localhost.localdomain
 ```
 
