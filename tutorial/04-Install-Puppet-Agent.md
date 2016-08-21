@@ -32,16 +32,12 @@ If using Docker, start your Container, and connect with an exec of bash:
 ```
 ### Edit the hosts file ###
 
-Note:  This is not necessary if using Docker, as we are using Docker's built in DNS server.
-
-If you're using Vagrant, go ahead and make the following edit:
-
-Edit /etc/hosts and make sure it looks like this:
+Edit /etc/hosts and make sure it looks exactly like this (delete any other lines):
 
     127.0.0.1      localhost
     192.168.198.10 puppet.example.com puppet
-    192.168.198.11 gitlab.example.com gitlab
-    192.168.198.12 agent.example.com  agent
+    192.168.198.11 agent.example.com  agent
+    192.168.198.12 gitlab.example.com gitlab
 
 In a later lab we will write the puppet code to maintain these, but for now we add them manually.
 
