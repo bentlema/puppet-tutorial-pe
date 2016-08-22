@@ -16,7 +16,7 @@ In this lab, we will familiarize ourselves with:
 - Puppet code basics
 - Tieing code to a node (**Node Classification**)
 
-In the previous labs we deployed a Puppet Master and another VM with a
+In the previous labs we deployed a Puppet Master node and another with a
 Puppet Agent.  Now what can we do with them?  Let's start by looking at
 where puppet got installed, how we can use puppet to make a config change
 on an agent system, and then we'll dig into puppet config and coding in
@@ -56,11 +56,12 @@ Here are the files and directories we will start looking at.
      │       └── modules
      ├── puppet.conf
 
-The **site.pp** is the **main manifest** (also called the **site manifest**) that puppet reads first.
-It's the first bit of code that puppet parses, and every other bit of code "hangs off" of the site.pp
-We will talk more about what things you can put in the site.pp in the next lab.
-
-Also, Out-of-the-Box you'll find some pre-created empty directories at the "top level" /etc/puppetlabs/puppet
+The **site.pp** is the **main manifest** (also called the **site manifest**)
+that puppet reads first.  It's the first bit of code that puppet parses, or
+the point of entry into our Puppet codebase.  Every other bit of code "hangs off"
+of the site.pp.  We will talk more about what things you can put in the site.pp
+in the next lab.  Also, Out-of-the-Box you'll find some pre-created empty
+directories at the "top level" /etc/puppetlabs/puppet
 
      /etc/puppetlabs/puppet
      ├── files
@@ -78,7 +79,17 @@ is well defined, and you shouldn't just use them for whatever you want:
 * **modules** - any puppet modules you use go here, including site-developed modules
 * **templates** - similar to the files dir, but holds marked-up files in ERB format
 
-Each environment gets its own directory within the **environments** directory,
+### The environments directory ###
+
+Did you notice the environments directory?  Out-of-the-box, PE comes with a single
+environment setup, called the **production** environment.   Environments are useful
+for containing different sets of modules and code.  It's possible, for example, to
+test a newer version of a module, or some puppet code you're actively developing,
+in a different environment, totally seprate from the **production** environment.
+This way, you can make changes to your code, test it on a test system, all without
+ever having to worry about affecting production systems.  We will come back to
+this topic in more depth in a subsequent lab...For now, just know this: Each
+environment gets its own directory within the **environments** directory,
 and each environment contains it's own set of manifests, modules, files
 and templates.
 
@@ -94,16 +105,54 @@ module.
 Let's start to look at some of the things we might want to do from the
 command line with respect to modules...
 
+### List Installed Modules ###
+
+Puppet Enterprise comes with some modules pre-installed.  To see what's installed,
+run the `puppet module list` command as follows:
+
+```
+     puppet module list
+```
+
+And you should see something like this:
+
+```
+[root@puppet ~]# puppet module list
+/etc/puppetlabs/puppet/environments/production/modules (no modules installed)
+/etc/puppetlabs/puppet/modules (no modules installed)
+/opt/puppet/share/puppet/modules
+├── puppetlabs-pe_accounts (v2.0.2-8-g8acc04e)
+├── puppetlabs-pe_concat (v1.1.2-7-g77ec55b)
+├── puppetlabs-pe_console_prune (v0.1.1-4-g293f45b)
+├── puppetlabs-pe_inifile (v1.1.4-16-gcb39966)
+├── puppetlabs-pe_java_ks (v1.2.4-35-g44fbb26)
+├── puppetlabs-pe_postgresql (v3.4.4-15-g32e56ed)
+├── puppetlabs-pe_razor (v0.2.1-28-g7f0be6d)
+├── puppetlabs-pe_repo (v3.8.5)
+├── puppetlabs-pe_staging (v3.8.3)
+└── puppetlabs-puppet_enterprise (v3.8.5)
+```
+
+
+### Install a Puppet Module ###
+
 What if you want to install a Puppet Module from the Puppet Forge?
 (Follow along, and go ahead and run each command as we talk about them...)
 
 ```shell
-# puppet module install puppetlabs/stdlib
+[root@puppet ~]# puppet module install puppetlabs/stdlib
 Notice: Preparing to install into /etc/puppetlabs/puppet/environments/production/modules ...
 Notice: Downloading from https://forgeapi.puppetlabs.com ...
 Notice: Installing -- do not interrupt ...
 /etc/puppetlabs/puppet/environments/production/modules
-└── puppetlabs-stdlib (v4.11.0)
+└── puppetlabs-stdlib (v4.12.0)
+```
+
+Now look at your installed modules again, and you should see it in the list:
+
+
+```
+     puppet module list
 ```
 
 Notice that when you install a Puppet Module, it is automatically
@@ -153,11 +202,11 @@ environments/
 
 # grep '"version":' environments/*/modules/stdlib/metadata.json
 development/modules/stdlib/metadata.json:  "version": "4.9.1",
-production/modules/stdlib/metadata.json:  "version": "4.11.0",
+production/modules/stdlib/metadata.json:  "version": "4.12.0",
 ```
 
 * The development environment has v4.9.1
-* The production environment has v4.11.0
+* The production environment has v4.12.0
 
 What if we want to install a module in the "site modules" directory at /etc/puppetlabs/puppet/modules ?
 
@@ -180,11 +229,12 @@ Notice: Installing -- do not interrupt ...
 
 [root@puppet puppet]# grep -r '"version":' .
 ./modules/stdlib/metadata.json:  "version": "4.10.0",
-./environments/production/modules/stdlib/metadata.json:  "version": "4.11.0",
+./environments/production/modules/stdlib/metadata.json:  "version": "4.12.0",
 ./environments/development/modules/stdlib/metadata.json:  "version": "4.9.1",
 ```
 
-You can also use the **puppet module list** command to see what modules are installed, and their versions:
+You can also use the **puppet module list** command to see what modules are
+installed for a particular environment, and their versions:
 
 ```shell
 puppet module list --environment=production
@@ -199,7 +249,7 @@ We will learn more about how to use different environments later.  For now let's
 just use the default 'production' environment.
 
 before we move on to the next section, let's do a manual puppet run again on
-both the puppet master and the agent VM.
+both the puppet master and the agent node.
 
 ```shell
 puppet agent -t
@@ -375,7 +425,7 @@ more about troubleshooting and tracing puppet runs later...
 
 ---
 
-## The Lab ... ##
+### Okay, Let's get our hands dirty... ###
 
 ---
 
@@ -384,7 +434,15 @@ more about troubleshooting and tracing puppet runs later...
 One annoying thing about Vagrant is that if you configure the VM with a hostname,
 Vagrant will automatically edit /etc/hosts to make sure the hostname entry is in
 there, but it adds the hostname to the '127.0.0.1 localhost' line.  That's not
-what we want.  We want our /etc/hosts to have the following 4 lines:
+what we want.  And every time we stop and start the with Vagrant, it re-writes
+the hosts file this way!
+
+Docker doesn't have this issue, and we've used some extra command-line options
+to set the hostname correctly.  Docker's internal DNS server also let's every
+container attached to the private network we created automatically "know about"
+every other container.
+
+We want our /etc/hosts to have the following 4 lines:
 
 ```
 127.0.0.1      localhost localhost.localdomain
@@ -420,25 +478,14 @@ Edit the **site.pp** and add the following at the end of the file in the **node 
 ```
 node default {
 
-  host { $::hostname:
-    ensure => 'absent',
-  } ->
-  host { 'localhost4':
-    ensure => 'absent',
-  } ->
-  host { 'localhost6':
-    ensure => 'absent',
-  } ->
-  host { 'localhost':
-    ensure => 'present',
-    ip => '127.0.0.1',
-    host_aliases => [ 'localhost.localdomain', ]
-  }
+  # remove all unmanaged resources
+  resources { 'host': purge => true }
 
+  # add some host entries
+  host { 'localhost':          ip => '127.0.0.1' }
   host { 'puppet.example.com': ip => '192.168.198.10', host_aliases => [ 'puppet' ] }
   host { 'agent.example.com':  ip => '192.168.198.11', host_aliases => [ 'agent' ] }
   host { 'gitlab.example.com': ip => '192.168.198.12', host_aliases => [ 'gitlab' ] }
-
 }
 ```
 
@@ -618,25 +665,7 @@ attributes are two different things.
 Note that the 'host_aliases' attribute accepts an array (enclosed in square brackets [ ]),
 while the 'ensure' and 'ip' attributes accept a string.
 
-The code to deal with the localhost entry is a bit more complicated because what we
-are saying is:
-
-  1. first remove any host line containing the hostname (because vagrant adds the hostname to the localhost line.
-  2. second remove any host line containing 'localhost4'
-  3. and third, remove any host line containing 'localhost6' (at this point, both the localhost4 and localhost6 lines should be removed)
-  4. add a simple localhost line containing only '127.0.0.1 localhost localhost.localdomain'
-
-The arrow thingy **->** is what enforces the order that the resources are applied.
-Without it, puppet could apply those host resources in any order, and we could
-potentially get a different result every time. We want to ensure the resources with
-the 'absent' are applied before the one with the 'present'.
-
-Let's test halting our VM, and restarting it, running puppet again, and
-make sure the hosts file looks like we want....
-
-After doing a 'vagrant halt' and 'vagrant up' on both the puppet and agent VM's,
-log back in, become root, and run 'puppet agent -t' again, then check /etc/hosts,
-and what you should see is this:
+If you haven't already, take a look at the contents of the /etc/hosts file:
 
 ```
 cat /etc/hosts
@@ -648,38 +677,27 @@ And we should see something like this...
      # HEADER: This file was autogenerated at 2016-01-19 18:25:19 +0000
      # HEADER: by puppet.  While it can still be managed manually, it
      # HEADER: is definitely not recommended.
+     127.0.0.1       localhost
      192.168.198.10  puppet.example.com  puppet
      192.168.198.11  agent.example.com   agent
      192.168.198.12  gitlab.example.com  gitlab
-     127.0.0.1 localhost localhost.localdomain
 ```
-
 
 At this point, every existing line in /etc/hosts is managed by puppet.
 The host resource type manages each line individually, and we've added
-each of the existing lines with puppet code.  In other words, we now
-have a fully-managed /etc/hosts file.
+each of the existing lines with puppet code.
 
-Even so, Puppet's host resource isn't perfect...or maybe a better way
-of stating it is it's not super-smart.  If you hand edit any of those
-lines, and re-run puppet, it will likely add a new line to enforce the
-puppet code.  Rather than hand-editing /etc/hosts, you should update
-the puppet code to do what you want, otherwise you could end up with
-both new and stale data across multiple-lines.  If the stale data
-happens to come first in the hosts file, it will be used instead of the
-new data.
+Also, remember that we added the following bit of code to remove
+any host entry that isn't managed by puppt:
+```
+  resources { 'host': purge => true }
+```
+...in other words, we now have a fully-managed /etc/hosts file.  If
+someone comes along and adds a line to the /etc/hosts file without
+realizing Puppet is managing it, the next time Puppet runs, they
+will be in for a surprise!
 
-For lines in /etc/hosts that are not managed by puppet, it is of
-course safe to edit those. Puppet keys off of the first hostname
-entry right after the IP, so that is the bit puppet uses to
-recognize if a line exists in the correct state or not.
-
-In theory, you could add additional host aliases, even for a line
-that puppet manages, and be safe... Still feels un-safe to me though,
-and I would not recommend that.  In fact, there is a way that we
-can enforce managing the entire /etc/hosts file with puppet, and
-puppet only. (So any lines added manually would be removed by
-puppet.)   I'll cover this in a later lab.
+---
 
 Let's re-visit what our goals were in this section:
 
