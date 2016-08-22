@@ -445,7 +445,7 @@ every other container.
 We want our /etc/hosts to have the following 4 lines:
 
 ```
-127.0.0.1      localhost localhost.localdomain
+127.0.0.1      localhost
 192.168.198.10 puppet.example.com puppet
 192.168.198.11 agent.example.com  agent
 192.168.198.12 gitlab.example.com gitlab
