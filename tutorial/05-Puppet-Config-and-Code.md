@@ -434,7 +434,7 @@ more about troubleshooting and tracing puppet runs later...
 One annoying thing about Vagrant is that if you configure the VM with a hostname,
 Vagrant will automatically edit /etc/hosts to make sure the hostname entry is in
 there, but it adds the hostname to the '127.0.0.1 localhost' line.  That's not
-what we want.  And every time we stop and start the with Vagrant, it re-writes
+what we want.  And every time we stop and start the VM with Vagrant, it re-writes
 the hosts file this way!
 
 Docker doesn't have this issue, and we've used some extra command-line options
