@@ -193,27 +193,47 @@ running without any fuss.
 
 
 ```
-   docker run -d                                      \
-      --memory 2G                                     \
-      --net example.com                               \
-      --ip 192.168.198.12                             \
-      -p 24022:22                                     \
-      -p 24080:80                                     \
-      -p 24443:443                                    \
-      --name gitlab                                   \
-      --hostname gitlab.example.com                   \
-      --dns-search example.com                        \
-      --network-alias gitlab                          \
-      --network-alias gitlab.example.com              \
-      --restart always                                \
-      --volume ${BASEDIR}/gitlab/config:/etc/gitlab   \
-      --volume ${BASEDIR}/gitlab/logs:/var/log/gitlab \
-      --volume ${BASEDIR}/gitlab/data:/var/opt/gitlab \
-      --volume ${BASEDIR}/share:/share                \
-      gitlab/gitlab-ce
+   docker run --detach                          \
+      --net example.com                         \
+      --ip 192.168.198.12                       \
+      --publish 24022:22                        \
+      --publish 24080:80                        \
+      --publish 24443:443                       \
+      --name gitlab                             \
+      --hostname gitlab.example.com             \
+      --dns-search example.com                  \
+      --network-alias gitlab                    \
+      --network-alias gitlab.example.com        \
+      --restart always                          \
+      --env GITLAB_DATABASE_POOL="2;"           \
+      --volume /tmp/gitlab/config:/etc/gitlab   \
+      --volume /tmp/gitlab/logs:/var/log/gitlab \
+      --volume /tmp/gitlab/data:/var/opt/gitlab \
+      --env GITLAB_OMNIBUS_CONFIG="gitlab_rails['db_pool'] = 2" \
+      gitlab/gitlab-ce:latest
+
 ```
 
 At this point, all 3 of your Containers should be up and running.  Woot.
+
+---
+
+**BUG ALERT**
+
+Initially I used ${BASEDIR} at the front of my volume paths, but ran into a bug
+where GitLab was failing to start due to an error 'filename too long'.  After
+changing to a shorter pathname under /tmp, everything worked fine.
+
+The specific error I observed was found in /var/log/gitlab/unicorn/unicorn_stderr.log
+
+```
+I, [2016-08-23T02:40:03.851012 #586]  INFO -- : listening on addr=127.0.0.1:8080 fd=13
+F, [2016-08-23T02:40:03.855662 #586] FATAL -- : error adding listener addr=/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket
+Errno::ENAMETOOLONG: File name too long - connect(2) for /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket
+[snip]
+bundler: failed to load command: unicorn (/opt/gitlab/embedded/service/gem/ruby/2.3.0/bin/unicorn)
+2016-08-23_02:40:04.89988 failed to start a new unicorn master
+```
 
 ---
 
