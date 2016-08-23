@@ -235,6 +235,9 @@ bundler: failed to load command: unicorn (/opt/gitlab/embedded/service/gem/ruby/
 2016-08-23_02:40:04.89988 failed to start a new unicorn master
 ```
 
+I tested this with GitLab 8.8.8, 8.9.x, 8.10.x, and 8.11.x, and all exhibit this issue.
+TODO:  Google a bit and see if I can find an already open bug report on this.
+
 ---
 
 Continue on to **Lab #2** --> [Prepare to Install Puppet Enterprise](02c-Prep-to-Install-Puppet-Master.md#lab-2-c)
