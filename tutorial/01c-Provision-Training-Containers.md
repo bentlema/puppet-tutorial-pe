@@ -216,6 +216,16 @@ At this point, all 3 of your Containers should be up and running.  Woot.
 
 **BUG ALERT**
 
+For this training, we will simply **NOT** use volumes to keep the important data outside
+of the container.  If you were going to run GitLab for real (in production) using the
+official Docker container, you would want to use a few volume mappings like this:
+
+```
+--volume "${BASEDIR}/gitlab/config:/etc/gitlab"   \
+--volume "${BASEDIR}/gitlab/logs:/var/log/gitlab" \
+--volume "${BASEDIR}/gitlab/data:/var/opt/gitlab" \
+```
+
 Initially I used ${BASEDIR} at the front of my volume paths, but ran into a bug
 where GitLab was failing to start due to an error 'filename too long'.  After
 changing to a shorter pathname under /tmp, everything worked fine.
@@ -232,20 +242,13 @@ bundler: failed to load command: unicorn (/opt/gitlab/embedded/service/gem/ruby/
 ```
 
 I tested this with GitLab 8.8.8, 8.9.x, 8.10.x, and 8.11.x, and all exhibit this issue.
+
 TODO:  Google a bit and see if I can find an already open bug report on this.
 I'm not sure if the issue is related to the entire length of the docker command, or just
 the length of the absolute paths used in the **--volume** options.  I did read that there
-is some 252 character limit somewhere, but need to do a little more research.
-
-For this training, we will simply **NOT** use volumes to keep the important data outside
-of the container.  If you were going to run GitLab for real using the official Docker
-container, you would want to use a few volume mappings like this:
-
-```
---volume "${BASEDIR}/gitlab/config:/etc/gitlab"   \
---volume "${BASEDIR}/gitlab/logs:/var/log/gitlab" \
---volume "${BASEDIR}/gitlab/data:/var/opt/gitlab" \
-```
+is some 252 character limit somewhere, but need to do a little more research. All of the
+space characters between the **backslashes** could as chars in the command line, so if
+that's the issue, we could lose our nice straight column of backslashes to save chars.
 
 
 ---
