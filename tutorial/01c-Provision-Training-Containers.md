@@ -193,23 +193,19 @@ running without any fuss.
 
 
 ```
-   docker run --detach                          \
-      --net example.com                         \
-      --ip 192.168.198.12                       \
-      --publish 24022:22                        \
-      --publish 24080:80                        \
-      --publish 24443:443                       \
-      --name gitlab                             \
-      --hostname gitlab.example.com             \
-      --dns-search example.com                  \
-      --network-alias gitlab                    \
-      --network-alias gitlab.example.com        \
-      --restart always                          \
-      --env GITLAB_DATABASE_POOL="2;"           \
-      --volume /tmp/gitlab/config:/etc/gitlab   \
-      --volume /tmp/gitlab/logs:/var/log/gitlab \
-      --volume /tmp/gitlab/data:/var/opt/gitlab \
-      --env GITLAB_OMNIBUS_CONFIG="gitlab_rails['db_pool'] = 2" \
+   docker run --detach                   \
+      --net example.com                  \
+      --ip 192.168.198.12                \
+      --publish 24022:22                 \
+      --publish 24080:80                 \
+      --publish 24443:443                \
+      --name gitlab                      \
+      --hostname gitlab.example.com      \
+      --dns-search example.com           \
+      --network-alias gitlab             \
+      --network-alias gitlab.example.com \
+      --env GITLAB_DATABASE_POOL="3;"    \
+      --env GITLAB_OMNIBUS_CONFIG="gitlab_rails['db_pool'] = 3" \
       gitlab/gitlab-ce:latest
 
 ```
@@ -237,6 +233,20 @@ bundler: failed to load command: unicorn (/opt/gitlab/embedded/service/gem/ruby/
 
 I tested this with GitLab 8.8.8, 8.9.x, 8.10.x, and 8.11.x, and all exhibit this issue.
 TODO:  Google a bit and see if I can find an already open bug report on this.
+I'm not sure if the issue is related to the entire length of the docker command, or just
+the length of the absolute paths used in the **--volume** options.  I did read that there
+is some 252 character limit somewhere, but need to do a little more research.
+
+For this training, we will simply **NOT** use volumes to keep the important data outside
+of the container.  If you were going to run GitLab for real using the official Docker
+container, you would want to use a few volume mappings like this:
+
+```
+--volume "${BASEDIR}/gitlab/config:/etc/gitlab"   \
+--volume "${BASEDIR}/gitlab/logs:/var/log/gitlab" \
+--volume "${BASEDIR}/gitlab/data:/var/opt/gitlab" \
+```
+
 
 ---
 
