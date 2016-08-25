@@ -247,7 +247,7 @@ TODO:  Google a bit and see if I can find an already open bug report on this.
 I'm not sure if the issue is related to the entire length of the docker command, or just
 the length of the absolute paths used in the **--volume** options.  I did read that there
 is some 252 character limit somewhere, but need to do a little more research. All of the
-space characters between the **backslashes** could as chars in the command line, so if
+space characters between the **backslashes** count as chars in the command line, so if
 that's the issue, we could lose our nice straight column of backslashes to save chars.
 
 
