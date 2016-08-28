@@ -54,10 +54,12 @@ next lab where we will do the actual install of Puppet Enterprise.
 
 ---
 
-Note:  The puppet and agent containers have been configured from a centos6
+Note:  The **puppet** and **agent** containers have been configured from a centos6
 image, and sshd has been configured to allow root to login.  The GitLab image,
 however, doesn't allow root login with PasswordAuth, so you will need to use
-an exec to get into the container if you want to look around.
+an exec to get into the container if you want to look around.  There's really no
+need to use ssh to connect as we work through this tutorial, but I've configured it
+just to show that it's possible.
 
 ---
 
