@@ -113,6 +113,14 @@ its certificate being signed, there is a small chance that the first puppet run 
 occur before you're able to do a manual run.  In that case, you should see a little output
 as in the second puppet run (no changes made.)
 
+Run puppet a second time, and you should get a clean run with no changes.
+
+```
+     puppet agent -t
+```
+
+![Puppet Agent Clean Run](images/Puppet-Agent-Clean-Run.png)
+
 For brevity, I've not included the output on this page, but it's available for viewing
 here: [04-Puppet-Agent-Run-Output.md](04-Puppet-Agent-Run-Output.md)
 
