@@ -30,8 +30,8 @@ In this lab you will install the following software:
 * Download the needed software for this training...
 
 ```
-[puppet-training/share]$ cd software
-[puppet-training/share/software]$ ./download-all.sh
+     [puppet-training/share]$ cd software
+     [puppet-training/share/software]$ ./download-all.sh
 ```
 
 ### Installing Docker ###
@@ -40,8 +40,8 @@ After running the **download-all.sh** Find the appropriate installer for
 Mac or Windows in the **share/software/docker** folder.
 
 ```
-cd docker
-ls -l
+     cd docker
+     ls -l
 ```
 
 Open up a new Finder window (on Mac) or an Explorer window (on Windows) and navigate to the **share/software/docker** directory, and...
@@ -54,14 +54,14 @@ Open up a new Finder window (on Mac) or an Explorer window (on Windows) and navi
 ### Some Docker Basics ###
 
 ```
-   docker help   # see help page
-   docker ps     # see running containers
-   docker ps -a  # See all containers
-   docker images # show local docker images
-   docker rmi    # remove an image
-   docker run    # create and run a container
-   docker stop   # stop a container
-   docker rm     # remove a stopped container
+     docker help   # see help page
+     docker ps     # see running containers
+     docker ps -a  # See all containers
+     docker images # show local docker images
+     docker rmi    # remove an image
+     docker run    # create and run a container
+     docker stop   # stop a container
+     docker rm     # remove a stopped container
 ```
 
 ### Creating A Private Docker Network ###
@@ -69,7 +69,7 @@ Open up a new Finder window (on Mac) or an Explorer window (on Windows) and navi
 Create a Docker Network.  It will be used by the 3 containers we create to communicate with eachother.
 
 ```
-docker network create --subnet=192.168.198.0/24 example.com
+     docker network create --subnet=192.168.198.0/24 example.com
 ```
 
 Note:  We name our network using what looks like a domain name because docker
@@ -91,25 +91,25 @@ Make sure your current working directory is the top level of the puppet-training
 repo, and then just type this:
 
 ```
-   export BASEDIR=$(pwd)
+     export BASEDIR=$(pwd)
 ```
 
 Then validate that BASEDIR is set to what you want:
 
 ```
-   echo $BASEDIR
+     echo $BASEDIR
 ```
 
 And you should see something like this:
 
 ```
-$ pwd
-/Users/bentlema/Documents/Git/Bitbucket/puppet-training
+     $ pwd
+     /Users/bentlema/Documents/Git/Bitbucket/puppet-training
 
-$ export BASEDIR=$(pwd)
+     $ export BASEDIR=$(pwd)
 
-$ echo $BASEDIR
-/Users/bentlema/Documents/Git/Bitbucket/puppet-training
+     $ echo $BASEDIR
+     /Users/bentlema/Documents/Git/Bitbucket/puppet-training
 
 ```
 
@@ -149,20 +149,21 @@ You've just started up your **puppet** container, and left it running in the bac
 To see your running containers do:
 
 ```
-   docker ps
+     docker ps
 ```
 
 ### Login to the puppet container ###
 
 ```
-docker exec -it puppet /bin/bash
+     docker exec -it puppet /bin/bash
 ```
 
 *OR*
 
 ```
-ssh -l root localhost -p 22022
+     ssh -l root localhost -p 22022
 ```
+
 The default password is:  *foobar23*
 
 
@@ -189,19 +190,19 @@ You've just started up your **agent** container, and left it running in the back
 To see your running containers do:
 
 ```
-   docker ps
+     docker ps
 ```
 
 ### Login to the agent container ###
 
 ```
-docker exec -it agent /bin/bash
+     docker exec -it agent /bin/bash
 ```
 
 *OR*
 
 ```
-ssh -l root localhost -p 23022
+     ssh -l root localhost -p 23022
 ```
 
 The default password is:  *foobar23*
@@ -243,9 +244,9 @@ of the container.  If you were going to run GitLab for real (in production) usin
 official Docker container, you would want to use a few volume mappings like this:
 
 ```
---volume "${BASEDIR}/gitlab/config:/etc/gitlab"   \
---volume "${BASEDIR}/gitlab/logs:/var/log/gitlab" \
---volume "${BASEDIR}/gitlab/data:/var/opt/gitlab" \
+     --volume "${BASEDIR}/gitlab/config:/etc/gitlab"   \
+     --volume "${BASEDIR}/gitlab/logs:/var/log/gitlab" \
+     --volume "${BASEDIR}/gitlab/data:/var/opt/gitlab" \
 ```
 
 Initially I used ${BASEDIR} at the front of my volume paths, but ran into a bug
@@ -255,12 +256,12 @@ changing to a shorter pathname under just /opt, everything worked fine.
 The specific error I observed was found in /var/log/gitlab/unicorn/unicorn_stderr.log
 
 ```
-I, [2016-08-23T02:40:03.851012 #586]  INFO -- : listening on addr=127.0.0.1:8080 fd=13
-F, [2016-08-23T02:40:03.855662 #586] FATAL -- : error adding listener addr=/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket
-Errno::ENAMETOOLONG: File name too long - connect(2) for /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket
-[snip]
-bundler: failed to load command: unicorn (/opt/gitlab/embedded/service/gem/ruby/2.3.0/bin/unicorn)
-2016-08-23_02:40:04.89988 failed to start a new unicorn master
+     I, [2016-08-23T02:40:03.851012 #586]  INFO -- : listening on addr=127.0.0.1:8080 fd=13
+     F, [2016-08-23T02:40:03.855662 #586] FATAL -- : error adding listener addr=/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket
+     Errno::ENAMETOOLONG: File name too long - connect(2) for /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket
+     [snip]
+     bundler: failed to load command: unicorn (/opt/gitlab/embedded/service/gem/ruby/2.3.0/bin/unicorn)
+     2016-08-23_02:40:04.89988 failed to start a new unicorn master
 ```
 
 I tested this with GitLab 8.8.8, 8.9.x, 8.10.x, and 8.11.x, and all exhibit this issue.
