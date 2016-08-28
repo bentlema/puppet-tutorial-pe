@@ -128,6 +128,8 @@ During the installation process you may click on 'Log view' to see what is
 happening behind the scenes, and then click 'Summary View' to return back to
 the overview.
 
+![PE Install Finished](images/PE-Install-Finished.png)
+
 Note:  Once the installation completes, clicking the 'Start Using Puppet
 Enterprise' button will ***not** work, as we are port-forwarding from a
 VM/Container to our localhost.
