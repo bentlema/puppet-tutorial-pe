@@ -352,7 +352,7 @@ Notice that when the ping command reports the hostname of the thing it's pinging
 How did that happen?
 
 The containers are configured to use Docker's internal DNS server, and it configures itself with
-both "**A**"-records (forward) and "**PTR**"-records (reverse) for all containers that have been created.
+both **A**-records (forward) and **PTR**-records (reverse) for all containers that have been created.
 
 Notice that the **/etc/resolv.conf** is configured with the following:
 
@@ -366,7 +366,7 @@ Notice that the **/etc/resolv.conf** is configured with the following:
 
 This tells the resolver library to use **127.0.0.11** as the nameserver, which is Docker's internal DNS server.
 
-Try doing some forward lookups to get the **A** records:
+Try doing some forward lookups to get the **A**-records:
 
 ```
      [root@puppet /]# dig puppet.example.com +short
@@ -379,7 +379,7 @@ Try doing some forward lookups to get the **A** records:
      192.168.198.12
 ```
 
-Try doing some reverse lookups to get the **PTR** records:
+Try doing some reverse lookups to get the **PTR**-records:
 
 ```
      [root@puppet /]# dig -x 192.168.198.10 +short
