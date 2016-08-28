@@ -108,7 +108,7 @@ command line with respect to modules...
 ### List Installed Modules ###
 
 Puppet Enterprise comes with some modules pre-installed.  To see what's installed,
-run the `puppet module list` command as follows:
+run the `puppet module list` command as follows on your puppet node (The "Puppet Master"):
 
 ```
      puppet module list
@@ -133,6 +133,15 @@ And you should see something like this:
 └── puppetlabs-puppet_enterprise (v3.8.5)
 ```
 
+Notice that there are 3 different directories that puppet is looking for modules in:
+
+* /etc/puppetlabs/puppet/environments/production/modules
+* /etc/puppetlabs/puppet/modules
+* /opt/puppet/share/puppet/modules   <-- Modules used by PE itself are installed here
+
+Since Puppet Enterprise uses itself to configure itself (e.g. Installing MCollective,
+installing the PostgreSQL instance that sits behind PuppetDB, setup of the agent
+installer repo, etc.), it makes sense that it would come with modules to help it do that.
 
 ### Install a Puppet Module ###
 
