@@ -140,8 +140,8 @@ here:
 
 At this point we have:
 
-- a Puppet Master node (hostname 'puppet.example.com') that also runs an agent to configure itself
-- a Puppet Agent node (hostnamne 'agent.example.com') that runs an agent, and where we will test code and learn more about PE
+- a **Puppet Master node** (hostname **puppet.example.com**) that also runs an agent to configure itself
+- a **Puppet Agent node** (hostnamne **agent.example.com**) that runs an agent, and where we will test code and learn more about PE
 
 If you login to the [PE Console](https://127.0.0.1:22443/nodes), you should see these two agents on the 'Nodes' page
 
