@@ -143,34 +143,57 @@ Since Puppet Enterprise uses itself to configure itself (e.g. Installing MCollec
 installing the PostgreSQL instance that sits behind PuppetDB, setup of the agent
 installer repo, etc.), it makes sense that it would come with modules to help it do that.
 
+If you're really curious, take a look at the installer log, and you'll see where
+the puppet installer is using puppet to install and configure other components:
+
+```
+     more /var/log/pe-installer/installer.log
+```
+
+
 ### Install a Puppet Module ###
 
 What if you want to install a Puppet Module from the Puppet Forge?
 (Follow along, and go ahead and run each command as we talk about them...)
 
 ```shell
-[root@puppet ~]# puppet module install puppetlabs/stdlib
-Notice: Preparing to install into /etc/puppetlabs/puppet/environments/production/modules ...
-Notice: Downloading from https://forgeapi.puppetlabs.com ...
-Notice: Installing -- do not interrupt ...
-/etc/puppetlabs/puppet/environments/production/modules
-└── puppetlabs-stdlib (v4.12.0)
+     [root@puppet ~]# puppet module install puppetlabs/stdlib
+     Notice: Preparing to install into /etc/puppetlabs/puppet/environments/production/modules ...
+     Notice: Downloading from https://forgeapi.puppetlabs.com ...
+     Notice: Installing -- do not interrupt ...
+     /etc/puppetlabs/puppet/environments/production/modules
+     └── puppetlabs-stdlib (v4.12.0)
 ```
 
 Now look at your installed modules again, and you should see it in the list:
 
 
 ```
-     puppet module list
+     [root@puppet ~]# puppet module list
+     /etc/puppetlabs/puppet/environments/production/modules
+     └── puppetlabs-stdlib (v4.12.0)
+     /etc/puppetlabs/puppet/modules (no modules installed)
+     /opt/puppet/share/puppet/modules
+     ├── puppetlabs-pe_accounts (v2.0.2-8-g8acc04e)
+     ├── puppetlabs-pe_concat (v1.1.2-7-g77ec55b)
+     ├── puppetlabs-pe_console_prune (v0.1.1-4-g293f45b)
+     ├── puppetlabs-pe_inifile (v1.1.4-16-gcb39966)
+     ├── puppetlabs-pe_java_ks (v1.2.4-35-g44fbb26)
+     ├── puppetlabs-pe_postgresql (v3.4.4-15-g32e56ed)
+     ├── puppetlabs-pe_razor (v0.2.1-28-g7f0be6d)
+     ├── puppetlabs-pe_repo (v3.8.5)
+     ├── puppetlabs-pe_staging (v3.8.3)
+     └── puppetlabs-puppet_enterprise (v3.8.5)
+
 ```
 
-Notice that when you install a Puppet Module, it is automatically
-installed within the production environemnt.  By default the module
-gets installed in the first element of the modulepath:
+Notice that when you installed the Puppet Module, it was automatically
+installed within the *production* environemnt.  By default modules
+get installed in to the *first element of the modulepath*:
 
 ```shell
-# puppet config print modulepath
-/etc/puppetlabs/puppet/environments/production/modules:/etc/puppetlabs/puppet/modules:/opt/puppet/share/puppet/modules
+     [root@puppet ~]# puppet config print modulepath
+     /etc/puppetlabs/puppet/environments/production/modules:/etc/puppetlabs/puppet/modules:/opt/puppet/share/puppet/modules
 ```
 
 The modulepath contains colon-separated absolute paths to the locations where
@@ -183,72 +206,87 @@ What if you want to use that same module in a different environment? And a
 different version?
 
 ```shell
-# cd /etc/puppetlabs/puppet
-# mkdir -p environments/development/modules
-# puppet module install --environment development puppetlabs/stdlib --version 4.9.1
-Notice: Preparing to install into /etc/puppetlabs/puppet/environments/development/modules ...
-Notice: Downloading from https://forgeapi.puppetlabs.com ...
-Notice: Installing -- do not interrupt ...
-/etc/puppetlabs/puppet/environments/development/modules
-└── puppetlabs-stdlib (v4.9.1)
+     [root@puppet ~]# cd /etc/puppetlabs/puppet
+     [root@puppet ~]# mkdir -p environments/development/modules
+     [root@puppet ~]# puppet module install --environment development puppetlabs/stdlib --version 4.9.1
+     Notice: Preparing to install into /etc/puppetlabs/puppet/environments/development/modules ...
+     Notice: Downloading from https://forgeapi.puppetlabs.com ...
+     Notice: Installing -- do not interrupt ...
+     /etc/puppetlabs/puppet/environments/development/modules
+     └── puppetlabs-stdlib (v4.9.1)
 ```
 
-Notice now there are two environment directories (development and production), and
-we've installed two different versions of the 'stdlib' module.
+Notice now there are two environment directories (**development** and **production**), and
+we've installed two different versions of the **stdlib** module.
 
 ```shell
-# yum install -y --quiet tree
-# tree -L 3 environments
-environments/
-├── development
-│   └── modules
-│       └── stdlib
-└── production
-    ├── manifests
-    │   └── site.pp
-    └── modules
-        └── stdlib
+     # yum install -y --quiet tree
+     # tree -L 3 environments
+     environments/
+     ├── development
+     │   └── modules
+     │       └── stdlib
+     └── production
+         ├── manifests
+         │   └── site.pp
+         └── modules
+             └── stdlib
 
-# grep '"version":' environments/*/modules/stdlib/metadata.json
-development/modules/stdlib/metadata.json:  "version": "4.9.1",
-production/modules/stdlib/metadata.json:  "version": "4.12.0",
+     # grep '"version":' environments/*/modules/stdlib/metadata.json
+     development/modules/stdlib/metadata.json:  "version": "4.9.1",
+     production/modules/stdlib/metadata.json:  "version": "4.12.0",
 ```
 
 * The development environment has v4.9.1
 * The production environment has v4.12.0
 
 What if we want to install a module in the "site modules" directory at /etc/puppetlabs/puppet/modules ?
+Modules installed here would/could be used by any/every agent, regardless of environment.  It's like 
+a **common** or **global** modules repository.  Just remember that because puppet will search the
+modulepath, if an environment's modules directory contains the same module, that will be used instead
+of those found further down the module search path, such as in this case.
 
 ```shell
-[root@puppet puppet]# cd /etc/puppetlabs/puppet
+     [root@puppet puppet]# cd /etc/puppetlabs/puppet
 
-[root@puppet puppet]# puppet module install --target-dir /etc/puppetlabs/puppet/modules puppetlabs/stdlib --version 4.10.0
-Notice: Preparing to install into /etc/puppetlabs/puppet/modules ...
-Error: Could not install module 'puppetlabs-stdlib' (v4.10.0)
-  Module 'puppetlabs-stdlib' (v4.11.0) is already installed
-    Use `puppet module upgrade` to install a different version
-    Use `puppet module install --force` to re-install only this module
+     [root@puppet puppet]# puppet module install --target-dir /etc/puppetlabs/puppet/modules puppetlabs/stdlib --version 4.10.0
+     Notice: Preparing to install into /etc/puppetlabs/puppet/modules ...
+     Error: Could not install module 'puppetlabs-stdlib' (v4.10.0)
+       Module 'puppetlabs-stdlib' (v4.11.0) is already installed
+         Use `puppet module upgrade` to install a different version
+         Use `puppet module install --force` to re-install only this module
+```
 
-[root@puppet puppet]# puppet module install --target-dir /etc/puppetlabs/puppet/modules puppetlabs/stdlib --version 4.10.0 --force
-Notice: Preparing to install into /etc/puppetlabs/puppet/modules ...
-Notice: Downloading from https://forgeapi.puppetlabs.com ...
-Notice: Installing -- do not interrupt ...
-/etc/puppetlabs/puppet/modules
-└── puppetlabs-stdlib (v4.10.0)
+Oops.  Puppet warns you that you're trying to install a module that is already installed and is newer.  Let's force the install...
 
-[root@puppet puppet]# grep -r '"version":' .
-./modules/stdlib/metadata.json:  "version": "4.10.0",
-./environments/production/modules/stdlib/metadata.json:  "version": "4.12.0",
-./environments/development/modules/stdlib/metadata.json:  "version": "4.9.1",
+```
+     [root@puppet puppet]# puppet module install --target-dir /etc/puppetlabs/puppet/modules puppetlabs/stdlib --version 4.10.0 --force
+     Notice: Preparing to install into /etc/puppetlabs/puppet/modules ...
+     Notice: Downloading from https://forgeapi.puppetlabs.com ...
+     Notice: Installing -- do not interrupt ...
+     /etc/puppetlabs/puppet/modules
+     └── puppetlabs-stdlib (v4.10.0)
+```
+
+Now, let's grep recursively through the files starting at our current-working-dir
+and look for the string **"version"**.  This is a quick and easy way to see the
+versions of all of the installed modules (every module should have a metadata.json
+file with this string.)
+
+```
+     [root@puppet puppet]# grep -r '"version":' .
+     ./modules/stdlib/metadata.json:  "version": "4.10.0",
+     ./environments/production/modules/stdlib/metadata.json:  "version": "4.12.0",
+     ./environments/development/modules/stdlib/metadata.json:  "version": "4.9.1",
 ```
 
 You can also use the **puppet module list** command to see what modules are
 installed for a particular environment, and their versions:
 
 ```shell
-puppet module list --environment=production
-puppet module list --environment=development
-puppet help module
+     puppet module list --environment=production
+     puppet module list --environment=development
+     puppet help module
 ```
 
 We've just seen how to install a module manually.  Later on we will look at how
@@ -261,10 +299,10 @@ before we move on to the next section, let's do a manual puppet run again on
 both the puppet master and the agent node.
 
 ```shell
-puppet agent -t
+     puppet agent -t
 ```
 
-Notice that after installing a module, the during the puppet run a whole bunch
+Notice that after installing a module, that during the puppet run a whole bunch
 of Ruby files are downloaded and cached on the host.  Some of these are the
 ruby code for custom facter facts, and others are ruby code for custom types
 and providers that were implemented in the module.  Even before using the module,
@@ -278,10 +316,6 @@ in production.  You could test on a test host to make sure any changes are corre
 before promoting the module to the production environment.  This practice of
 testing code on a test host and in a test environment will be covered in a later
 lab.
-
-
-
-
 
 
 ---
@@ -317,12 +351,12 @@ Let's look at the **puppet.conf** a bit... Here's what a minimal agent-side
 puppet.conf would look like:
 
 ```
-[main]
-   server = puppet
+     [main]
+        server = puppet.example.com
 
-[agent]
-   environment = production
-   certname = agent.example.com
+     [agent]
+        environment = production
+        certname = agent.example.com
 ```
 
 When you run puppet from the command line, how does it know what master
@@ -341,8 +375,8 @@ Rather than depend on the default behavior, we can explicitly set the
 server name in the puppet.conf as follows:
 
 ```
-[main]
-server = puppet
+     [main]
+     server = puppet.example.com
 ```
 
 Another important config item in the puppet.conf is the **certname**.
@@ -350,8 +384,8 @@ The certname typically corresponds to the FQDN of the host, but
 you can choose to set it to whatever you like.
 
 ```
-[agent]
-certname = agent.example.com
+     [agent]
+     certname = agent.example.com
 ```
 
 The certname is what would be used when the agent contacts the master
@@ -360,29 +394,54 @@ SSL cert.  It's the name that would show up when you run a puppet
 cert list on the master as follows:
 
 ```
-puppet cert list --all
+     puppet cert list --all
 ```
 
-By default, the agent will specify an environment of 'production' as
-well, but it's good practice to explicitly set the environment in the
-puppet.conf so that it's clear what environment a host belongs to.
-To specify the environment, not surprisingly, you'd have this in your
-puppet.conf:
+By default, the agent will run in the 'production' environment. In
+Puppet Enterprise, the environment is communicated to the agent by
+the PE Console, which functions as an ENC (External Node Classifier).
+
+The environment can be overridden in the puppet.conf as well, though
+additional steps are necessary to disable the PE Console ENC.  We will
+cover this process in a later lab.  If the PE Console ENC is disabled,
+we would then be able to specify the environment on the agent-side
+in it's /etc/puppetlabs/puppet/puppet.conf as follows:
 
 ```
-[agent]
-environment = production
+     [agent]
+     environment = production
 ```
 
-Note:  The Puppet Enterprise Console controls what environment is assigned
-to a node/agent "Out of the Box".  If you try to set the environment to 
+Again, the Puppet Enterprise Console controls what environment is assigned
+to a node/agent "Out of the Box".  If you try to set the environment to
 something other than what is set in the PE Console, the next puppet run
-will cause the environemnt to be set back to what is configured by the 
-PE Console.  In a later lab we will cover how we can change the environment
-via the PE Console, as well as by editing the puppet.conf.  This will
-include disabling the PE Console from doing node classification.
+will cause the environemnt to be set back to what is configured by the
+PE Console. For example, setting the environment to **development** as 
+follows would not work:
 
-Note:  the main, master, and agent sections control where a setting
+```
+     [agent]
+     environment = development
+```
+
+Give it a try.  Edit the puppet.conf on the agent node, adding a new
+line to the **[agent]** section setting **environment = development**
+and then do a manual puppet run.  Here's what you'll see:
+
+```
+Warning: Local environment: "development" doesn't match server specified node environment "production", switching agent to "production".
+```
+
+In a later lab we will cover how we can change the environment
+via the PE Console, as well as by editing the puppet.conf.  This will
+include disabling the PE Console from doing node classification (which
+is comonly done in a real production deployment, as the PE Console is not
+fast enough to handle more than 500 agents.  It becomes a bottleneck
+and agent runs would begin to fail.)
+
+### Sections of the puppet.conf ###
+
+The main, master, and agent sections control where a setting
 is applicable.  The **[agent]** section applies to any puppet agent,
 including the agent running on the master.  However, many of the settings
 you typically find in the [agent] section on an agent, can also be
