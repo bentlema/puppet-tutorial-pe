@@ -140,7 +140,7 @@ VM/Container to our localhost.  Use the link below instead.
 
 We've forwarded port 443 from our puppet VM/Container to port 22443 on our hosting workstation, so you should be able to connect to the PE Console via the URL:
 
-     PE Console:  **<https://127.0.0.1:22443/>**
+     * PE Console URL:  **<https://127.0.0.1:22443/>**
 
 Login as **admin** and enter the admin password you chose during the install.
 
