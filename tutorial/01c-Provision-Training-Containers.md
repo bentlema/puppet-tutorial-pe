@@ -84,13 +84,13 @@ Create a Docker Network.  It will be used by the 3 containers we create to commu
      docker network create --subnet=192.168.198.0/24 example.com
 ```
 
-Note:  We name our network using what looks like a domain name because docker
-will use the network name in the FQDN of the container.  Docker's internal
-DNS server will take the short hostname and append the network name when doing
-reverse-lookups (PTR records) so we do this little hack to make sure the
-forward and reverse lookups match.  With this said, I've seen inconsistant
-behavior with Docker's internal DNS, and sometimes reverse lookups just dont work at all.
-No matter, we push on!
+Note:  We name our network using what looks like a domain name because Docker
+will use the network name in the **Fully-Qualified Domain Name** (FQDN) of the
+container.  Docker's internal DNS server will take the short hostname and
+append the network name when doing reverse-lookups (PTR records) so we do
+this little hack to make sure the forward and reverse lookups match.  With
+this said, I've seen inconsistant behavior with Docker's internal DNS, and
+sometimes reverse lookups just dont work at all.  No matter, we push on!
 
 
 ### Setup environment variable with your BASEDIR ###
@@ -324,6 +324,7 @@ You should see something like this:
      4 packets transmitted, 4 received, 0% packet loss, time 3352ms
      rtt min/avg/max/mdev = 0.093/0.117/0.140/0.016 ms
 ```
+Press **Control-C** to abort the continuous ping.
 
 From the **agent** container, ping the **puppet** container using the short name:
 
@@ -345,12 +346,13 @@ You should see something like this:
      4 packets transmitted, 4 received, 0% packet loss, time 3276ms
      rtt min/avg/max/mdev = 0.103/0.137/0.195/0.036 ms
 ```
+Press **Control-C** to abort the continuous ping.
 
 Notice that when the ping command reports the hostname of the thing it's pinging, it shows the FQDN.
 How did that happen?
 
 The containers are configured to use Docker's internal DNS server, and it configures itself with
-both **A** records and **PTR** records for all containers that have been created.
+both "**A**"-records (forward) and "**PTR**"-records (reverse) for all containers that have been created.
 
 Notice that the **/etc/resolv.conf** is configured with the following:
 
@@ -362,7 +364,7 @@ Notice that the **/etc/resolv.conf** is configured with the following:
 
 ```
 
-This tells the resolver library to use 127.0.0.11 as the nameserver, which is Docker's internal DNS server.
+This tells the resolver library to use **127.0.0.11** as the nameserver, which is Docker's internal DNS server.
 
 Try doing some forward lookups to get the **A** records:
 
