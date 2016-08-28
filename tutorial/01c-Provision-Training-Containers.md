@@ -40,29 +40,41 @@ After running the **download-all.sh** Find the appropriate installer for
 Mac or Windows in the **share/software/docker** folder.
 
 ```
-     cd docker
-     ls -l
+     [puppet-training/share/software]$ cd docker
+     [puppet-training/share/software/docker]$ ls -l
+
+     total 426328
+     -rw-r--r--  1 bentlema  staff  115214630 Aug 20 16:08 Docker.dmg
+     -rw-r--r--  1 bentlema  staff  103059456 Aug 20 16:09 InstallDocker.msi
+     -rwxr-xr-x  1 bentlema  staff        305 Aug 19 12:07 download-docker.sh
+
 ```
 
 Open up a new Finder window (on Mac) or an Explorer window (on Windows) and navigate to the **share/software/docker** directory, and...
 
-* On Mac OS X, double-click the Docker.dmg, and then double-click the installer
-* On Windows double-click the .msi file to launch the installer
-* If you're running Linux, Docker runs natively, so you just need to install the docker-engine package.
+* On Mac OS X, double-click the **Docker.dmg**, and then double-click the installer
+* On Windows double-click the **InstallDocker.msi** file to launch the installer
+* If you're running Linux, Docker runs natively, so you just need to install the **docker-engine** package.
   See:  <https://docs.docker.com/engine/installation/linux/>
 
 ### Some Docker Basics ###
 
+Here are some of the Docker commands you will be using.
+
 ```
-     docker help   # see help page
-     docker ps     # see running containers
-     docker ps -a  # See all containers
-     docker images # show local docker images
-     docker rmi    # remove an image
-     docker run    # create and run a container
-     docker stop   # stop a container
-     docker rm     # remove a stopped container
+     docker help     # see help page
+     docker ps       # see running containers
+     docker ps -a    # See all containers
+     docker images   # show local docker images
+     docker rmi      # remove an image
+     docker run      # create and run a container
+     docker exec     # run a command within an already running container
+     docker stop     # stop a container
+     docker rm       # remove a stopped container
+     docker network  # create/destroy/list Docker networks
 ```
+
+We will learn about these as we go along...
 
 ### Creating A Private Docker Network ###
 
@@ -81,14 +93,21 @@ behavior with Docker's internal DNS, and sometimes reverse lookups just dont wor
 No matter, we push on!
 
 
-### Setup ENV variable with your BASEDIR ###
+### Setup environment variable with your BASEDIR ###
 
 I don't know where you've cloned this puppet-training repo to on your
-workstation.  So, let's make our lives simpler, and set an ENV variable
+workstation.  So, let's make our lives simpler, and set an environment variable
 to contain the absolute path to your working tree (top level of the repo)
 
 Make sure your current working directory is the top level of the puppet-training
 repo, and then just type this:
+
+If using Windows:
+
+   * Need to put instructions here for Windows users (but I dont own a Windows system to test on)
+   * For now, if using Windows, you'll just have to type out the full absolute path where you see **${BASEDIR}** referenced below.
+
+If using a bash shell (Linux or Mac OS X):
 
 ```
      export BASEDIR=$(pwd)
@@ -372,6 +391,14 @@ Try doing some reverse lookups to get the **PTR** records:
 ```
 
 If you get the same responses, you can be assured that DNS is working properly.
+
+Note:  Testing these DNS lookups from a single container is sufficient, as
+we're just querying the internal DNS server.  If it works from one container,
+it will work the same from the others.
+
+---
+
+Okay, our training environment is all setup, and we're ready to start installing software...
 
 ---
 
