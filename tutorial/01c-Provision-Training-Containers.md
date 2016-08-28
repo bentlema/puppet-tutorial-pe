@@ -144,7 +144,7 @@ To start up the container for the Puppet Master:
       /sbin/init
 ```
 
-You've just started up your puppet container, and left it running in the background.
+You've just started up your **puppet** container, and left it running in the background.
 
 To see your running containers do:
 
@@ -184,6 +184,28 @@ The default password is:  *foobar23*
       /sbin/init
 ```
 
+You've just started up your **agent** container, and left it running in the background.
+
+To see your running containers do:
+
+```
+   docker ps
+```
+
+### Login to the agent container ###
+
+```
+docker exec -it agent /bin/bash
+```
+
+*OR*
+
+```
+ssh -l root localhost -p 23022
+```
+
+The default password is:  *foobar23*
+
 ### Create and run GitLab container ###
 
 Notice that the container image we're using is from *gitlab* itself.  That's
@@ -216,7 +238,7 @@ At this point, all 3 of your Containers should be up and running.  Woot.
 
 **BUG ALERT**
 
-For this training, we will simply **NOT** use volumes to keep the important data outside
+For this training, we will simply **NOT** use volumes to keep GitLab's important data outside
 of the container.  If you were going to run GitLab for real (in production) using the
 official Docker container, you would want to use a few volume mappings like this:
 
@@ -228,7 +250,7 @@ official Docker container, you would want to use a few volume mappings like this
 
 Initially I used ${BASEDIR} at the front of my volume paths, but ran into a bug
 where GitLab was failing to start due to an error 'filename too long'.  After
-changing to a shorter pathname under /tmp, everything worked fine.
+changing to a shorter pathname under just /opt, everything worked fine.
 
 The specific error I observed was found in /var/log/gitlab/unicorn/unicorn_stderr.log
 
@@ -250,6 +272,105 @@ is some 252 character limit somewhere, but need to do a little more research. Al
 space characters between the **backslashes** count as chars in the command line, so if
 that's the issue, we could lose our nice straight column of backslashes to save chars.
 
+### Test network connectivity and name resolution between your containers ###
+
+Before we continue, let's make sure we can communicate over the internal
+Docker network we've created to/from each container.
+
+Connect to your puppet and agent containers in 2 different terminal windows:
+
+- `docker exec -it puppet /bin/bash`
+- `docker exec -it agent /bin/bash`
+
+From each, test that you can ping the other by name:
+
+From the **puppet** container, ping the **agent** container using the short name:
+
+```
+     ping agent
+```
+
+You should see something like this:
+
+```
+     [root@puppet /]# ping agent
+     PING agent (192.168.198.11) 56(84) bytes of data.
+     64 bytes from agent.example.com (192.168.198.11): icmp_seq=1 ttl=64 time=0.140 ms
+     64 bytes from agent.example.com (192.168.198.11): icmp_seq=2 ttl=64 time=0.118 ms
+     64 bytes from agent.example.com (192.168.198.11): icmp_seq=3 ttl=64 time=0.093 ms
+     64 bytes from agent.example.com (192.168.198.11): icmp_seq=4 ttl=64 time=0.117 ms
+     ^C
+     --- agent ping statistics ---
+     4 packets transmitted, 4 received, 0% packet loss, time 3352ms
+     rtt min/avg/max/mdev = 0.093/0.117/0.140/0.016 ms
+```
+
+From the **agent** container, ping the **puppet** container using the short name:
+
+```
+     ping puppet
+```
+
+You should see something like this:
+
+```
+     [root@agent /]# ping puppet
+     PING puppet (192.168.198.10) 56(84) bytes of data.
+     64 bytes from puppet.example.com (192.168.198.10): icmp_seq=1 ttl=64 time=0.103 ms
+     64 bytes from puppet.example.com (192.168.198.10): icmp_seq=2 ttl=64 time=0.137 ms
+     64 bytes from puppet.example.com (192.168.198.10): icmp_seq=3 ttl=64 time=0.195 ms
+     64 bytes from puppet.example.com (192.168.198.10): icmp_seq=4 ttl=64 time=0.114 ms
+     ^C
+     --- puppet ping statistics ---
+     4 packets transmitted, 4 received, 0% packet loss, time 3276ms
+     rtt min/avg/max/mdev = 0.103/0.137/0.195/0.036 ms
+```
+
+Notice that when the ping command reports the hostname of the thing it's pinging, it shows the FQDN.
+How did that happen?
+
+The containers are configured to use Docker's internal DNS server, and it configures itself with
+both **A** records and **PTR** records for all containers that have been created.
+
+Notice that the **/etc/resolv.conf** is configured with the following:
+
+```
+     [root@puppet /]# cat /etc/resolv.conf
+     search example.com
+     nameserver 127.0.0.11
+     options ndots:0
+
+```
+
+This tells the resolver library to use 127.0.0.11 as the nameserver, which is Docker's internal DNS server.
+
+Try doing some forward lookups to get the **A** records:
+
+```
+     [root@puppet /]# dig puppet.example.com +short
+     192.168.198.10
+
+     [root@puppet /]# dig agent.example.com +short
+     192.168.198.11
+
+     [root@puppet /]# dig gitlab.example.com +short
+     192.168.198.12
+```
+
+Try doing some reverse lookups to get the **PTR** records:
+
+```
+     [root@puppet /]# dig -x 192.168.198.10 +short
+     puppet.example.com.
+
+     [root@puppet /]# dig -x 192.168.198.11 +short
+     agent.example.com.
+
+     [root@puppet /]# dig -x 192.168.198.12 +short
+     gitlab.example.com.
+```
+
+If you get the same responses, you can be assured that DNS is working properly.
 
 ---
 

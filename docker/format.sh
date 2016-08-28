@@ -20,4 +20,4 @@ Container ID: {{.ID}}
      Ports: {{.Ports}}
 "
 
-alias dockerps="docker ps --format \"$FORMAT\""
+alias dps="docker ps -a --format \"$FORMAT\""
