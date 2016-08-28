@@ -286,7 +286,7 @@ Info: Applying configuration version '1453845260'
 Notice: Finished catalog run in 0.30 seconds
 ```
 
-Back to **Lab #4** --> [Install Puppet Agent](04-Install-Puppet-Agent.md#lab-4)
+Back to **Lab #4** --> [Install Puppet Agent](04-Install-Puppet-Agent.md#run-the-puppet-agent-again)
 
 Continue to **Lab #5** --> [Get familiar with puppet config files, and puppet code, and CLI](/tutorial/05-Puppet-Config-and-Code.md#lab-5)
 

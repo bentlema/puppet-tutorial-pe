@@ -69,7 +69,7 @@ opening <https://localhost:22140/packages> in your workstation's web browser.
 Go ahead an install the agent if you haven't already done so, and then
 try running the puppet agent...
 
-### Run the Agent ###
+### Run the Puppet Agent ###
 
 Run the puppet agent manually.  This will cause an SSL certificate request
 to be generated and sent to the puppetmaster.
@@ -121,6 +121,8 @@ its certificate being signed, there is a small chance that the first puppet run 
 occur before you're able to do a manual run.  In that case, you should see a little output
 as in the second puppet run (no changes made.)
 
+### Run the Puppet Agent Again ###
+
 Run puppet a second time, and you should get a clean run with no changes.
 
 ```
@@ -130,7 +132,9 @@ Run puppet a second time, and you should get a clean run with no changes.
 ![Puppet Agent Clean Run](images/Puppet-Agent-Clean-Run.png)
 
 For brevity, I've not included the output on this page, but it's available for viewing
-here: [04-Puppet-Agent-Run-Output.md](04-Puppet-Agent-Run-Output.md)
+here: 
+
+* Puppet Run Output:  [04-Puppet-Agent-Run-Output.md](04-Puppet-Agent-Run-Output.md)
 
 ---
 
