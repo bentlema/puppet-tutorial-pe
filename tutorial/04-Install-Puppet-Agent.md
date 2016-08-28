@@ -69,6 +69,11 @@ opening <https://localhost:22140/packages> in your workstation's web browser.
 Go ahead an install the agent if you haven't already done so, and then
 try running the puppet agent...
 
+### Run the Agent ###
+
+Run the puppet agent manually.  This will cause an SSL certificate request
+to be generated and sent to the puppetmaster.
+
 ```
      [root@agent ~]# puppet agent -t
      Info: Creating a new SSL key for agent.example.com
@@ -77,6 +82,8 @@ try running the puppet agent...
      Info: Caching certificate for ca
      Exiting; no certificate found and waitforcert is disabled
 ```
+
+### Sign the Certificate ###
 
 Next, We need to sign the agent's cert on the master, so switch to your **puppet**
 window/terminal and issue the following commands on the puppet master as root:
@@ -108,6 +115,7 @@ Now, back on the agent node:  Let's run puppet again (be sure you're running as 
 ```
 
 You should see a lot of output to the screen showing the changes that are being applied.
+(Puppet is installing and configuring MCollective on the agent.)
 However, because puppet runs automatically in the background every 5 minutes prior to
 its certificate being signed, there is a small chance that the first puppet run will
 occur before you're able to do a manual run.  In that case, you should see a little output
