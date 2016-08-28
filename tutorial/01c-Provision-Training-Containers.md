@@ -104,12 +104,12 @@ And you should see something like this:
 
 ```
 $ pwd
-/Users/mbentle8/Documents/Git/Bitbucket/puppet-training
+/Users/bentlema/Documents/Git/Bitbucket/puppet-training
 
 $ export BASEDIR=$(pwd)
 
 $ echo $BASEDIR
-/Users/mbentle8/Documents/Git/Bitbucket/puppet-training
+/Users/bentlema/Documents/Git/Bitbucket/puppet-training
 
 ```
 
