@@ -39,7 +39,7 @@ So, if you're already root, Great!
 If you're not the root user yet, then become root, and be happy!
 
 ```
-sudo su -
+     sudo su -
 ```
 
 ### Run The Installer ###
@@ -49,41 +49,41 @@ Now let's un-compress/de-archive the PE installation tarball, and install...
 Change into the directory with the PE software:
 
 ```shell
-cd /share/software/puppet
+     cd /share/software/puppet
 ```
 Note:  There are two different installation tarballs.  One for EL6 and one for EL7.
 
 * If following the Docker track, use the EL6 tarball
 
 ```
-tar xzvf puppet-enterprise-3.8.5-el-6-x86_64.tar.gz
-cd puppet-enterprise-3.8.5-el-6-x86_64
+     tar xzvf puppet-enterprise-3.8.5-el-6-x86_64.tar.gz
+     cd puppet-enterprise-3.8.5-el-6-x86_64
 ```
 
 * If following the Vagrant track, use the EL7 tarball
 ```
-tar xzvf puppet-enterprise-3.8.5-el-7-x86_64.tar.gz
-cd puppet-enterprise-3.8.5-el-7-x86_64
+     tar xzvf puppet-enterprise-3.8.5-el-7-x86_64.tar.gz
+     cd puppet-enterprise-3.8.5-el-7-x86_64
 ```
 
 Then run the installer:
 
 ```
-./puppet-enterprise-installer
+     ./puppet-enterprise-installer
 ```
 
 The installer will prompt you:
 
 ```
-    ?? Install packages and perform a guided install? [Y/n]
+     ?? Install packages and perform a guided install? [Y/n]
 ```
 
 Press Enter to accept the default 'Y' and then you'll see:
 
 ```
-    Installing setup packages.
-    Please go to https://puppet.example.com:3000 in your browser to continue installation.
-    Be sure to use https:// and that port 3000 is reachable through the firewall.
+     Installing setup packages.
+     Please go to https://puppet.example.com:3000 in your browser to continue installation.
+     Be sure to use https:// and that port 3000 is reachable through the firewall.
 ```
 
 Remember that we have **forwarded port 3000 to 22000** on our workstation, so...
@@ -102,26 +102,26 @@ Remember that we have **forwarded port 3000 to 22000** on our workstation, so...
 You will see this:
 
 ```
-    We're checking to make sure the installation will work correctly
-    Verify that 127.0.0.1 can resolve puppet.
-    Verify root access on puppet.
-    Verify that DNS is properly configured for puppet.
-    Verify that your hardware meets requirements on puppet.
-    [puppet] We found 3,792 MB RAM. We recommend at least 6,144 MB.
-    Verify that 127.0.0.1 has a PE installer that matches puppet's OS.
-    Verify that '/opt' and '/var' contain enough free space on puppet.
-    [puppet] Insufficient space in '/opt' (16 GB); we recommend at least 100 GB for a production environment.
+     We're checking to make sure the installation will work correctly
+     Verify that 127.0.0.1 can resolve puppet.
+     Verify root access on puppet.
+     Verify that DNS is properly configured for puppet.
+     Verify that your hardware meets requirements on puppet.
+     [puppet] We found 3,792 MB RAM. We recommend at least 6,144 MB.
+     Verify that 127.0.0.1 has a PE installer that matches puppet's OS.
+     Verify that '/opt' and '/var' contain enough free space on puppet.
+     [puppet] Insufficient space in '/opt' (16 GB); we recommend at least 100 GB for a production environment.
 ```
 
 Click **Deploy Now**
 
 ```
-    Intalling your deployment
-    Install Puppet Enterprise on puppet.
-    Verify that Puppet Enterprise is functioning on puppet.
-    [puppet] The puppet agent ran successfully.
-    Verify that MCollective is functioning on puppet.
-    Backup installer log files to puppet.
+     Intalling your deployment
+     Install Puppet Enterprise on puppet.
+     Verify that Puppet Enterprise is functioning on puppet.
+     [puppet] The puppet agent ran successfully.
+     Verify that MCollective is functioning on puppet.
+     Backup installer log files to puppet.
 ```
 
 During the installation process you may click on 'Log view' to see what is
