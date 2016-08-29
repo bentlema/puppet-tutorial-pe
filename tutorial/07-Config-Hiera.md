@@ -62,7 +62,7 @@ first, we need to configure the main Hiera config file:
      /etc/puppetlabs/puppet/hiera.yaml
 ```
 
-Puppet comes with an example hiera.yaml as follows:
+Puppet comes with an example **hiera.yaml** as follows:
 
 ```
      [root@puppet ~]# cd /etc/puppetlabs/puppet
@@ -85,13 +85,13 @@ Puppet comes with an example hiera.yaml as follows:
        :datadir:
 ```
 
-In addition to the 'yaml' backend option, you can use 'json' if you like.
+In addition to the **'yaml'** backend option, you can use **'json'** if you like.
 See Also:  [Hiera Data Sources](https://docs.puppetlabs.com/hiera/1/data_sources.html#yaml)
 
 The **hiera.yaml** provided is actually fully usable as-is except for that lack of **datadir** definition.  Let's define that, and make some other minor changes as follows:
 
 1. Change 'global' to 'common' ... just my own personal preference
-2. Delete 'defaults' as we wont use it
+2. Delete 'defaults' and '%{environment}' as we wont use them
 3. Tweak the **clientcert** line to look for the yaml in a **node/** directory
 4. Set the **datadir** to the `%{environment}/data` directory as we will eventually have multiple environments
 5. Lets also add a couple other levels to our hierarchy for **role** and **location**
@@ -117,7 +117,12 @@ will look like this:
   :datadir: "/etc/puppetlabs/puppet/environments/%{environment}/data"
 ```
 
-Notice that there is just one hiera.yaml for all of our puppet environments,
+Go ahead and edit your hiera.yaml if you haven't already.
+
+
+### There's just one hiera.yaml ###
+
+Notice that there is just one **hiera.yaml** for all of our puppet environments,
 **NOT** separate hiera.yaml files per-environment.  This is important to
 realize, because in a later lab we will move our hiera.yaml under Git control,
 and it will be sitting within the production environment.  This could become
@@ -134,6 +139,12 @@ is indeed the case.  For now don't worry about it... just remember that there's
 just one hiera.yaml, and the same one is used by every puppet run reguardless
 of the environment.
 
+**Key Point:**
+
+- Puppet uses just one hiera.yaml for all environments
+- Each environment has its own unique Hiera Data
+
+
 
 ### Setup the Hiera Data directory(s) ###
 
@@ -141,23 +152,26 @@ We've configured our hiera.yaml, but we still need to create the **datadir** as
 we've defined it within the hiera.yaml.  This is where Hiera will look for
 data when we make use of any of the hiera functions calls within our puppet code.
 
+Make sure you're still sitting in **/etc/puppetlabs/puppet** and make the following directories:
+
 ```
-[root@puppet puppet]# mkdir environments/production/data
-[root@puppet puppet]# mkdir environments/production/data/node
-[root@puppet puppet]# mkdir environments/production/data/role
-[root@puppet puppet]# mkdir environments/production/data/location
-[root@puppet puppet]# tree environments
-environments
-└── production
-    ├── data
-    │   ├── location
-    │   ├── node
-    │   └── role
-    ├── manifests
-    │   ├── common_hosts.pp
-    │   ├── common_packages.pp
-    │   └── site.pp
-    └── modules
+     [root@puppet puppet]# mkdir environments/production/data
+     [root@puppet puppet]# mkdir environments/production/data/node
+     [root@puppet puppet]# mkdir environments/production/data/role
+     [root@puppet puppet]# mkdir environments/production/data/location
+     [root@puppet puppet]# tree environments
+     environments
+     └── production
+         ├── data
+         │   ├── location
+         │   ├── node
+         │   └── role
+         ├── manifests
+         │   ├── common_hosts.pp
+         │   ├── common_packages.pp
+         │   └── site.pp
+         └── modules
+     [snip]
 
 ```
 
@@ -202,6 +216,14 @@ Master does not.  It reads it only once when it starts, and keeps that snapshot
 of the config it memory for fast access.
 
 
+If you're on CentOS/RHEL6:
+
+```
+service pe-puppetserver restart
+```
+
+Or if you're on CentOS/RHEL7:
+
 ```
 systemctl restart pe-puppetserver
 ```
@@ -209,17 +231,17 @@ systemctl restart pe-puppetserver
 
 ### So are we ready to use Hiera yet? ###
 
-Yes!   Here's what we've done to get to this point:
+**Yes!**   Here's what we've done to get to this point:
 
 1. Created a **hiera.yaml**
 2. Created a **data/** directory within the existing production environment directory
 3. Created a few hiera data sub-directories to align with our hiera.yaml
-4. Updated the puppet.conf with the **hiera_config** option and value
-5. Restarted the Puppet Master to that it would re-read the puppet.conf and hiera.yaml
+4. Updated the **puppet.conf** with the **hiera_config** option and value
+5. **Restarted** the Puppet Master to that it would re-read the puppet.conf and hiera.yaml
 
 ### Using Hiera in your Puppet Code ###
 
-There are 3 ways we can use Hiera:
+Again, there are 3 ways we can use Hiera:
 
 1. Classify a node
 2. Pass class params in to a class (also called automatic parameter lookup)
@@ -247,11 +269,11 @@ applied on a per-node basis, as well as many other levels (or groupings).  For
 example, you could specify a particular class be declared for all Linux systems,
 or all Solaris systems, or all systems at a particular location, or that are a part
 of a particular department.  The call to hiera_include('classes') will build up
-a list of classes to apply for a node, but it can assembly this list of classes from
+a list of classes to apply for a node, but it can assemble this list of classes from
 all levels throughout your hierarchy if you've declared classes at multiple levels.
 
 With your Hiera config (hiera.yaml) already setup, you'd need to put somewhere within
-your hierarchy a yaml file containing:
+your hierarchy a yaml file containing such as the following:
 
 ```yaml
 ---
