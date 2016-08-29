@@ -13,8 +13,7 @@ Note:  The following sections are still be heavily edited/expanded.
 
 Time to complete:  60 minutes
 
-The goal of this section is NOT to learn how to code.  We will practice
-a little bit writing some basic code, but the GOAL is to learn:
+The goal of this section is **NOT** to learn how to code.  We will write some puppet code, but the primary **GOAL** of this lab is to learn:
 
  - More about tieing code to a node (**Node Classification**)
  - Where do you put your code on the master?
@@ -27,43 +26,63 @@ a little bit writing some basic code, but the GOAL is to learn:
 
 ---
 
+### Node Classification ###
+
+Remember from Lab 5, we talked about **classes** and **node classification**?
+
+To review:
+
+  - a class is simply a named block of puppet code that we can refer to by the class name.
+  - we "tie" a class to a node through **node classification**, which simply says "apply this **class** to this **node**"
+
 ### Defining Classes and Declaring Classes ###
 
-Defining Classes
+First, we need to understand the difference between **defining** a class and **declaring** a class.
+
+**Defining Classes**
 
  - named blocks of Puppet code that are usually stored in modules for later use
  - are NOT applied until they are invoked by name (declared)
  - they can be added to a node’s catalog by either declaring them in your manifests
  - or assigning them from an ENC (external node classifier.)
 
-Note:  Hiera, though not technically an ENC, can be used like one.  We will
+Hiera, though not technically an ENC, can be used like one.  We will
 learn more about Hiera in a later lab.  For now, we will use node definitions
 along with the include or resource-style class declaration (with params)
 
-Note:  Also, the PE Console comes configured OOTB as an ENC.  In a later lab
+Also, the PE Console comes configured OOTB as an ENC.  In a later lab
 we will cover how this works, and we'll also disable this functionality in
 order to enable Hiera to be used like an ENC.
 
-Declaring a class in a Puppet manifest
+**Declaring a class in a Puppet manifest**
 
    - adds all of its resources to the catalog.
 
 You can declare classes
 
    - in node definitions at top scope in the site manifest (site.pp)
-   - in other classes (profile classes when using the Roles & Profiles paradigm)
+   - in other classes (e.g. profile classes when using the Roles & Profiles paradigm)
    - via an ENC (or use Hiera as an ENC)
 
-Example of declaring a class at top-scope (in the site.pp):
+The official PuppetLabs Docs talk at length about [Declaring Classes](https://docs.puppet.com/puppet/3.8/reference/lang_classes.html#declaring-classes)
+
+Example of declaring a class at top-scope (in the site.pp) using the **include** statement:
 
 ```puppet
     include common_hosts
 ```
 
-That's all there is to it.  If you put this in your site.pp, outside of any
+The class **common_hosts** would have to be defined in a file named **common_hosts.pp** and be found within the puppet codebase.
+The **include** simply reads the manifest file, and declares (adds to the catalog) the resources in that class.  The nice thing about the **include** is that if the contained class has already been declared somewhere else, it wont be added to the catalog again (which would be a puppet error.)  Resources can only be declared **once** and only once.  If you try to declare the same resource (identified by its name) two or more times, puppet will throw an error.
+
+If you put this include statement in your site.pp, outside of any
 node definition, it would apply to every node.  (Note:  this is not the
 same as putting it in the 'node default { }' section, which only applies if
 no other node definition matches.)
+
+There is another way of declaring a class called **Resource-like Declarations** which we will ignore for now, as this style of declaration really wont be needed once we get to our section on **Hiera**.
+
+You can read more about [Resource-like Declarations](https://docs.puppet.com/puppet/3.8/reference/lang_classes.html#using-resource-like-declarations) in the PuppetLabs documentation.
 
 ### More about Node Classification ###
 
@@ -81,15 +100,16 @@ ONLY for the node named 'foo_server'.
 Note:  Do not use the dash character in class names.  Underscore is allowed.
 
 You can also specify multiple nodes in a single node definition, or even
-use a regular expression to match multiple nodes.  The following page
-describes all of the ways you can use the node definition:
+use a regular expression to match multiple nodes.
+You can read more about [Node Definitions](https://docs.puppetlabs.com/puppet/3.8/reference/lang_node_definitions.html)
+in the official PuppetLabs docs.
 
-https://docs.puppetlabs.com/puppet/3.8/reference/lang_node_definitions.html
-
-...but guess what?  You probably wont care once you're introduced to Hiera, as
+...but guess what?  You probably wont care once you're introduced to **Hiera**, as
 we'll be doing all of our node classification, and parameter passing via Hiera.
 
-**Quick Preview**:  Example of declaring a class via Hiera:
+**Hiera Quick Preview**
+
+Example of declaring a class via Hiera:
 
 The site.pp would contain a call to Hiera like this:
 
@@ -103,7 +123,7 @@ applied on a per-node basis, as well as many other levels (or groupings).  For
 example, you could specify a particular class be declared for all Linux systems,
 or all Solaris systems, or all systems at a particular location, or that are a part
 of a particular department.  The call to hiera_include('classes') will build up
-a list of classes to apply for a node, but it can assembly this list of classes from
+a list of classes to apply for a node, but it can assemble this list of classes from
 all levels throughout your hierarchy if you've declared classes at multiple levels.
 
 With your Hiera config (hiera.yaml) already setup, you'd need to put somewhere within
@@ -123,6 +143,8 @@ for a specific OS, they would get declared only for systems running that particu
 For now, we will ignore Hiera, but will come back to it in a later lab.  Hiera is
 used almost universally these days, so it's not something to forget about.  Have
 patience, and we'll get to it very soon!
+
+### Let's write some code ###
 
 Okay, let's shift gears now... We've talked a lot about how to declare classes, but
 it many not make any sense until you start writing some code.
@@ -158,7 +180,7 @@ What if you want to install some packages?
 ```
 
 This bit of code will install the latest version of these 5 packages, and
-puppet will NOT track the versions installed.  If a newer version becomes 
+puppet will **NOT** track the versions installed.  If a newer version becomes
 available in the host's software repos (e.g. configured yum repos), then
 puppet wont notice, and will NOT do anything.  If you want puppet to install
 the latest package, and track the version, and update when new version are
@@ -182,13 +204,15 @@ what the code does.
 
 ---
 
-LAB:  Let's configure our agent node to install some packages
+### Install some Packages ###
 
-Login to your master and become root
+Let's configure puppet to make sure certain packages are installed on our agent node.
+
+Login to your puppet master node and become root
 
 ```shell
-cd /etc/puppetlabs/puppet/environments/production/manifests
-vi common_packages.pp
+     cd /etc/puppetlabs/puppet/environments/production/manifests
+     vi common_packages.pp
 ```
 
 We will be adding this new manifest in the **production** environment in the **manifests** directory.
@@ -197,17 +221,17 @@ Notice that Puppet looks for code in the manifests directory based upon the envi
 and the 'manifest' configuration value.
 
 ```shell
-[root@puppet]# puppet config print environment
-production
+     [root@puppet]# puppet config print environment
+     production
 
-[root@puppet]# puppet config print manifest
-/etc/puppetlabs/puppet/environments/production/manifests
+     [root@puppet]# puppet config print manifest
+     /etc/puppetlabs/puppet/environments/production/manifests
 ```
 
 In your common_packages.pp file add your code wrapped in a class with the same
 name as the file, less the .pp extension, so like this:
 
-```shell
+```puppet
 class common_packages {
 
   package { 'bind-utils':
