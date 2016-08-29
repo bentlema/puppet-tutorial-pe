@@ -957,7 +957,7 @@ Let's re-visit what our goals were in this section:
 
 ---
 
-Continue to **Lab #6** --> [Practice doing some puppet code, and puppet runs](/tutorial/06-Puppet-Code-Practice.md)
+Continue to **Lab #6** --> [Practice doing some puppet code, and puppet runs](/tutorial/06-Puppet-Code-Practice.md#lab-6)
 
 ---
 
