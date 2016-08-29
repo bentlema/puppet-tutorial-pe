@@ -1,9 +1,13 @@
+<-- Back to [Get familiar with puppet config files, and puppet code, and CLI](/tutorial/05-Puppet-Config-and-Code.md#lab-5)
 
 ---
-
-### Lab #6 - Some More Puppet Code Practice ###
-
+# Lab #6 #
+### Some More Puppet Code Practice ###
 ---
+
+### IN DEVELOPMENT ###
+
+Note:  The following sections are still be heavily edited/expanded.
 
 ### Overview ###
 
