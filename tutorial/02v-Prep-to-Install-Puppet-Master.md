@@ -122,3 +122,5 @@ LEI Install:   <https://docs.puppetlabs.com/pe/3.8/install_multimaster.html>
 
 ---
 
+Copyright © 2016 by Mark Bentley
+

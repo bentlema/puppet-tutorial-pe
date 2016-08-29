@@ -317,3 +317,8 @@ see the PuppetLabs docs at:
 
 <https://docs.puppetlabs.com/puppet/3.8/reference/dirs_manifest.html>
 
+
+---
+
+Copyright © 2016 by Mark Bentley
+

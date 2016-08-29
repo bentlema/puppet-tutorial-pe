@@ -67,3 +67,5 @@ Continue to **Lab #3** --> [Install Puppet Master](03-Install-Puppet-Master.md#l
 
 ---
 
+Copyright © 2016 by Mark Bentley
+

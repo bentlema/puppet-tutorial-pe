@@ -503,3 +503,6 @@ The Puppet Language Reference about Classes:
 <https://docs.puppetlabs.com/puppet/latest/reference/lang_classes.html>
 
 ---
+
+Copyright © 2016 by Mark Bentley
+

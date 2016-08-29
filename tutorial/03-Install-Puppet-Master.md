@@ -221,3 +221,5 @@ LEI Wrapper for PE 3.8.x:  <https://github.com/pizzaops/pizzaops-lei_wrapper>
 
 ---
 
+Copyright © 2016 by Mark Bentley
+

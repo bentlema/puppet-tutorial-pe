@@ -489,3 +489,6 @@ I didn't document how to delete the **master** branch... still need to do that, 
 ---
 
 
+Copyright © 2016 by Mark Bentley
+
+

@@ -1619,3 +1619,7 @@ See also:
 3. External Facts: <http://docs.puppetlabs.com/facter/2.4/custom_facts.html#external-facts>
 4. What is Facter? <http://codingbee.net/tutorials/puppet/puppet-what-is-facter/>
 
+---
+
+Copyright © 2016 by Mark Bentley
+

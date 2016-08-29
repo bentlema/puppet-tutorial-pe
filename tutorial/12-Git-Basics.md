@@ -693,3 +693,5 @@ Notice the last line where it says *Removing unmanaged path environments/master*
 
 
 
+Copyright © 2016 by Mark Bentley
+

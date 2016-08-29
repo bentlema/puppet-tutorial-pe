@@ -290,3 +290,7 @@ Back to **Lab #4** --> [Install Puppet Agent](04-Install-Puppet-Agent.md#run-the
 
 Continue to **Lab #5** --> [Get familiar with puppet config files, and puppet code, and CLI](/tutorial/05-Puppet-Config-and-Code.md#lab-5)
 
+---
+
+Copyright © 2016 by Mark Bentley
+

@@ -151,3 +151,5 @@ Continue to **Lab #5** --> [Get familiar with puppet config files, and puppet co
 
 ---
 
+Copyright © 2016 by Mark Bentley
+

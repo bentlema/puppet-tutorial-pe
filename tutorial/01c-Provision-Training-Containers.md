@@ -408,4 +408,5 @@ Continue on to **Lab #2** --> [Prepare to Install Puppet Enterprise](02c-Prep-to
 
 ---
 
+Copyright © 2016 by Mark Bentley
 

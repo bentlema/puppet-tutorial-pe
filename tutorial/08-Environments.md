@@ -195,3 +195,5 @@ Here's the PuppetLabs write-up including R10K in the workflow:  <https://puppetl
 
 ---
 
+Copyright © 2016 by Mark Bentley
+

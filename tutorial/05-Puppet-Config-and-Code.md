@@ -974,3 +974,5 @@ For more info on how the modulepath is used:
 
 ---
 
+Copyright © 2016 by Mark Bentley
+
