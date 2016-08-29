@@ -1,9 +1,12 @@
 
 ---
-
-### Lab #7 - Configure Hiera ###
-
+# Lab 7 #
+### Configure Hiera ###
 ---
+
+### IN DEVELOPMENT ###
+
+Note:  The following sections are still be heavily edited/expanded.
 
 ### Overview ###
 

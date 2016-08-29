@@ -1,5 +1,15 @@
+---
+# Lab 9 #
+### Install GitLab ###
+---
 
 Take a look at this: <https://github.com/puppetlabs/control-repo/blob/production/README.md>
+
+
+### IN DEVELOPMENT ###
+
+Note:  The following sections are still be heavily edited/expanded.
+
 
 ### Overview ###
 
@@ -148,7 +158,7 @@ For example:
 
 ```
 git config --global user.name "Mark Bentley"
-git config --global user.email "mark@dimension-systems.com"
+git config --global user.email "bentlema@yahoo.com"
 ```
 
 Next, try to clone the puppet/control repo from GitLab:

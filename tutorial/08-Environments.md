@@ -1,8 +1,12 @@
----
-
-Lab #8 - Environments
 
 ---
+# Lab 8 #
+### Environments ###
+---
+
+### IN DEVELOPMENT ###
+
+Note:  The following sections are still be heavily edited/expanded.
 
 ### Overview ###
 
