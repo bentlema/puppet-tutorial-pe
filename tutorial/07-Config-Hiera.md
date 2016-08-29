@@ -12,6 +12,8 @@ Note:  The following sections are still be heavily edited/expanded.
 
 Time to complete:  60 minutes
 
+In this lab we will:
+
  - Configure Hiera
  - Use Hiera to classify our nodes
 
@@ -19,7 +21,8 @@ Time to complete:  60 minutes
 
 Why is Hiera useful, and why do we want to use it?
 
-Hiera, though not technically an ENC, can be used like one.  Not only can you
+Hiera, though not technically an [External Node Classifier](https://docs.puppet.com/guides/external_nodes.html)
+(ENC), can be used like one.  Not only can you
 declare classes inside a node definition (as we've seen in previous labs) you
 can use Hiera to tie a class to a node.  You can also use Hiera to pass class
 parameters in to a class (including classes within modules).  Or you can use
