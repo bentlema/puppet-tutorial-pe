@@ -100,3 +100,7 @@ either Vagrant+Virtualbox of Docker, continue with the remaining labs...
  * **Lab 14** - [Practice doing some puppet code, and puppet runs]
  * **Lab 15** - [Further Reading](/tutorial/YY-Further-Reading.md)
 
+---
+
+Copyright © 2016 by Mark Bentley
+
