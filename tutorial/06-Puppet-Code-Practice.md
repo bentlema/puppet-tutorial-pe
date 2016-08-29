@@ -5,9 +5,6 @@
 ### Some More Puppet Code Practice ###
 ---
 
-### IN DEVELOPMENT ###
-
-Note:  The following sections are still be heavily edited/expanded.
 
 ### Overview ###
 
@@ -73,7 +70,9 @@ Example of declaring a class at top-scope (in the site.pp) using the **include**
 ```
 
 The class **common_hosts** would have to be defined in a file named **common_hosts.pp** and be found within the puppet codebase.
-The **include** simply reads the manifest file, and declares (adds to the catalog) the resources in that class.  The nice thing about the **include** is that if the contained class has already been declared somewhere else, it wont be added to the catalog again (which would be a puppet error.)  Resources can only be declared **once** and only once.  If you try to declare the same resource (identified by its name) two or more times, puppet will throw an error.
+The **include** simply reads the manifest file, and declares (adds to the catalog) the resources in that class.
+
+The nice thing about the **include** is that if the contained class has already been declared somewhere else, it wont be added to the catalog again (which would be a puppet error.)  Resources can only be declared **once** and only once.  If you try to declare the same resource (identified by its name) two or more times, puppet will throw an error.
 
 If you put this include statement in your site.pp, outside of any
 node definition, it would apply to every node.  (Note:  this is not the
@@ -135,7 +134,7 @@ your hierarchy a yaml file containing:
       - some_other_class
 ```
 
-This would case the two classes to be declared for whatever level in the hierarchy
+This would cause the two classes to be declared for whatever level in the hierarchy
 they have been declared.  For example, if you put this in a "node-level yaml" file,
 they would get declared for the corresponding node.  If you put it in a yaml file
 for a specific OS, they would get declared only for systems running that particular OS.
@@ -147,7 +146,7 @@ patience, and we'll get to it very soon!
 ### Let's write some code ###
 
 Okay, let's shift gears now... We've talked a lot about how to declare classes, but
-it many not make any sense until you start writing some code.
+it may not make any sense until you start writing some code.
 
 So let's start looking at some code to see if we can make these ideas make more sense...
 
@@ -264,6 +263,10 @@ Let's classify the 'agent' node with the 'common_packages' class.
 
 We will edit our site.pp
 
+```
+     vi site.pp
+```
+
 At the end of the site.pp add the following:
 
 ```puppet
@@ -288,7 +291,7 @@ Notice: /Stage[main]/Common_packages/Package[tcpdump]/ensure: created
 Notice: Finished catalog run in 20.14 seconds
 ```
 
-Did you notice that only 4 packages were installed?  If you do a 'yum info net-tools'
+Did you notice that only some of the packages were installed?  If you do a 'yum info net-tools'
 you'll notice that it was already installed, so puppet didn't do
 anything for that package.  Note:  net-tools is required for puppet, so when we
 installed puppet, that package was automatically installed.  DO NOT REMOVE IT.
@@ -296,11 +299,13 @@ installed puppet, that package was automatically installed.  DO NOT REMOVE IT.
 Now that all 5 of these packages have been installed, if you run puppet again, no
 additional changes will be made.  The host is as it should be.
 
+### The default node ###
+
 Now, I want to re-visit something we mentioned earlier.  Remember, the 'node default'
-only applies to a host if no other node definition matches it.  We've just added
+only applies to a host **if no other** node definition matches it.  We've just added
 a node definition for 'agent.example.com', so the default node definition will no longer apply.
 The order of the node definitions doesn't matter.  To prove that this is the case,
-go ahead and edit your /etc/hosts file on the agent.  DELETE the line with gitlab
+go ahead and edit your `/etc/hosts` file on the agent.  DELETE the line with gitlab
 on it, and then re-run 'puppet agent -t'.   Notice that puppet didn't re-add the line.
 
 Let's take this opportunity to pull the code out of the 'node default' definition,
@@ -310,27 +315,20 @@ Wrap that code in a class definition like this:
 
 ```puppet
 class common_hosts {
-  host { $::hostname:
-    ensure => 'absent',
-  } ->
-  host { 'localhost4':
-    ensure => 'absent',
-  } ->
-  host { 'localhost6':
-    ensure => 'absent',
-  } ->
-  host { 'localhost':
-    ensure => 'present',
-    ip => '127.0.0.1',
-    host_aliases => [ 'localhost.localdomain', ]
-  }
-  host { 'puppet.example.com': ip => '192.168.198.10', host_aliases => [ 'puppet' ] }
-  host { 'gitlab.example.com': ip => '192.168.198.11', host_aliases => [ 'gitlab' ] }
-  host { 'agent.example.com':  ip => '192.168.198.12', host_aliases => [ 'agent' ] }
+
+  # remove all unmanaged resources
+  resources { 'host': purge => true }
+
+  # add some host entries
+  host { 'localhost.localdomain': ip => '127.0.0.1',      host_aliases => [ 'localhost' ] }
+  host { 'puppet.example.com':    ip => '192.168.198.10', host_aliases => [ 'puppet' ] }
+  host { 'agent.example.com':     ip => '192.168.198.11', host_aliases => [ 'agent' ] }
+  host { 'gitlab.example.com':    ip => '192.168.198.12', host_aliases => [ 'gitlab' ] }
+
 }
 ```
 
-...save your new common_hosts.pp and let's, go back in to our site.pp and include it
+...save your new **common_hosts.pp** and let's, go back in to our site.pp and include it
 for the agent node again.
 
 Remove the host resources from the site.pp, and instead include the new class
@@ -350,21 +348,21 @@ node 'agent.example.com' {
 Now re-run puppet agent -t on your agent node, and notice that the gitlab entry was added back.
 
 ```shell
-[root@agent puppet]# puppet agent -t
-Info: Retrieving pluginfacts
-Info: Retrieving plugin
-Info: Loading facts
-Info: Caching catalog for agent
-Info: Applying configuration version '1453330128'
-Notice: /Stage[main]/Common_hosts/Host[gitlab.example.com]/ensure: created
-Info: Computing checksum on file /etc/hosts
+     [root@agent ~]# puppet agent -t
+     Info: Retrieving pluginfacts
+     Info: Retrieving plugin
+     Info: Loading facts
+     Info: Caching catalog for agent
+     Info: Applying configuration version '1453330128'
+     Notice: /Stage[main]/Common_hosts/Host[gitlab.example.com]/ensure: created
+     Info: Computing checksum on file /etc/hosts
+     Notice: Finished catalog run in 1.22 seconds
 ```
-
 
 The important point we're illustrating here is that the default node definition ONLY applies
 if NO OTHER node definition matches.
 
-Also, since we are including the common_hosts in both the default and the agent node 
+Also, since we are including the common_hosts in both the default and the agent node
 definitions, we could choose to move that include out of both so that it applies globally,
 even if we add new hosts in the future with their own node definitions.
 
@@ -391,7 +389,7 @@ Again, remove the gitlab line in /etc/hosts on both agent and master, and
 run puppet again, and you should see puppet add it back on both.
 
 We are going to eventually want git on the master, so let's make one final
-edit to our site.pp and move the common_packages include outside of the 
+edit to our site.pp and move the common_packages include outside of the
 node agent definition, leaving both 'node default' and 'node agent' definitions
 empty.  Let's also add an empty node definition for the puppet master in case we want
 to classify it uniquely later.  Finally, let's also re-order the code in to
@@ -438,7 +436,7 @@ Top-scope variables are accessible throughout all of your puppet code by referen
 
 New in Puppet 3.8.x is that any manifest at the top level is automatically read,
 in additional to the site.pp, though I would recommend having ONLY a site.pp, and not
-introducing other manifests at the top level, and this can cause ordering issues if
+introducing other manifests at the top level, as this can cause ordering issues if
 you are reading in hiera data to set top-scope variables, and trying to use those
 variables in other manifests at the top-scope.
 
@@ -482,15 +480,33 @@ When we say:
 ...what we are really saying is:  for every package resource declared, take these
 attributes as defaults unless they are overridden by the individual resource declaration.
 
+We could even put the Package ensure installed bit in the site.pp, and then it would
+be a global default for packages.  Pretty cool, huh?
+
+We can override the default we just set by specifying the version string to the ensure parameter.
 Example of pinning to a specific version/release of a package:
 
 ```puppet
-  package { 'whois': ensure => '5.1.1-2.el7' }
+
+  if ( $::operatingsystemmajrelease == '6' ) {
+    package { 'nc': ensure => '1.84-24.el6' }
+    package { 'nmap': ensure => '5.51-4.el6' }
+  }
+
+  if ( $::operatingsystemmajrelease == '7' ) {
+    package { 'whois': ensure => '5.1.1-2.el7' }
+  }
+
 ```
+
+We also threw in a conditional statement there that checks the **OS Major Release** version.
+If we are running an EL6 system, the **nc* and **nmap** packages will get installed to the specific version we've specified.
+If we are running an EL7 system, the **whois** package will get installed to the specific version we've specified.
+(This all assumes that the versions we've specified are available in our package repository.)
 
 The slightly annoying thing here would be that if you were maintaining this package
 across multiple platforms and versions, you'd have to manage the version/release
-strings for each, and might have something like:
+strings for each. For example, for the **whois** package, we might have something like:
 
 ```
 5.1.0-1.el5
@@ -501,10 +517,8 @@ strings for each, and might have something like:
 ...you're kinda at the mercy of the rpm maintainer, and their version/release
 scheme.  It's annoying that the platform is included in the release for example. It
 would be preferable to be able to just say '5.1.1' and have the provider figure out
-if we're running that version, but alas, it's not that smart.
-
-We could even put the Package ensure installed bit in the site.pp, and then it would
-be a global default for packages.  Pretty cool, huh?
+if we're running that version, but alas, it's not that smart.  Hopefully newer
+versions of Puppet will offer more options to help with this.
 
 ---
 
