@@ -139,10 +139,10 @@ is indeed the case.  For now don't worry about it... just remember that there's
 just one hiera.yaml, and the same one is used by every puppet run reguardless
 of the environment.
 
-**Key Point:**
+**Key Points:**
 
 - Puppet uses just one hiera.yaml for all environments
-- Each environment has its own unique Hiera Data
+- Each environment **can** have its own unique Hiera Data
 
 
 
@@ -185,14 +185,14 @@ Master) should look like this (I've only added one new line for **hiera_config**
 and the rest of these options should have already been there):
 
 ```ini
-[master]
-node_terminus = classifier
-reports = console,puppetdb
-storeconfigs = true
-storeconfigs_backend = puppetdb
-certname = puppet.example.com
-always_cache_features = true
-hiera_config = /etc/puppetlabs/puppet/hiera.yaml
+     [master]
+     node_terminus = classifier
+     reports = console,puppetdb
+     storeconfigs = true
+     storeconfigs_backend = puppetdb
+     certname = puppet.example.com
+     always_cache_features = true
+     hiera_config = /etc/puppetlabs/puppet/hiera.yaml
 ```
 
 Again, this is the default, but we will change the location of the hiera.yaml
@@ -219,13 +219,13 @@ of the config it memory for fast access.
 If you're on CentOS/RHEL6:
 
 ```
-service pe-puppetserver restart
+     service pe-puppetserver restart
 ```
 
 Or if you're on CentOS/RHEL7:
 
 ```
-systemctl restart pe-puppetserver
+     systemctl restart pe-puppetserver
 ```
 
 
@@ -295,13 +295,16 @@ second case the classes could be be applied to a set of nodes.
 
 Let's work through an example to get a better understanding how all of this works.
 
-1. Install the ntp module (puppet module install puppetlabs-ntp)
-2. Create a "node-level" yaml file for the **agent** node and assign the **ntp** class
+Here's the overview of what we are about to do:
+
+1. Install the ntp module
+2. Create a "node-level" yaml file for the **agent** node and assign the **ntp** class to it
 3. Create a **common.yaml** and put in NTP server parameters to illistrate the **[auto-parameter lookup](https://docs.puppetlabs.com/hiera/1/puppet.html#automatic-parameter-lookup)** feature of Hiera
 4. Show how we can define multiple locations, and override the NTP servers for each location
 5. Start to talk about facter just a little bit, and show how we can set the location in two ways: a Hiera key or a Fact on the agent side and explain the security implications
    (Facts come from the agent/node side, while Hiera data is only on the Master)
 
+Now, follow along as we walk through each step...
 
 On our Puppet Master, the end of the **site.pp** looks like this:
 
