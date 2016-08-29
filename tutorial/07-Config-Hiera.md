@@ -19,7 +19,21 @@ In this lab we will:
 
 ---
 
-Why is Hiera useful, and why do we want to use it?
+### What is Hiera? ###
+
+Hiera is a database that you can query in your Puppet code.  Hiera stores
+data in YAML or JSON formatted flat text files.  We refer to the data as
+**Hiera Data** and Hiera allows us to store data in a hierarchical fashion
+such that a query can return different results depending on the value of
+system facts or other puppet variables.
+
+
+### Why is Hiera useful, and why do we want to use it? ###
+
+The two key reasons we like to use Hiera are:
+
+  - Node Classification (Potentially much nicer than using **node** definitions in the site.pp)
+  - Module Portability (Keeping site/company-specific data separate from the actual code)
 
 Hiera, though not technically an [External Node Classifier](https://docs.puppet.com/guides/external_nodes.html)
 (ENC), can be used like one.  Not only can you
@@ -44,43 +58,42 @@ function calls we can use in our puppet code to search our Hiera data.  But
 first, we need to configure the main Hiera config file:
 
 ```
-[root@puppet puppet]# puppet config print hiera_config
-/etc/puppetlabs/puppet/hiera.yaml
+     [root@puppet ~]# puppet config print hiera_config
+     /etc/puppetlabs/puppet/hiera.yaml
 ```
 
 Puppet comes with an example hiera.yaml as follows:
 
 ```
-[root@puppet manifests]# cd /etc/puppetlabs/puppet
-[root@puppet puppet]# cat hiera.yaml
----
-:backends:
-  - yaml
+     [root@puppet ~]# cd /etc/puppetlabs/puppet
+     [root@puppet puppet]# cat hiera.yaml
+     ---
+     :backends:
+       - yaml
 
-:hierarchy:
-  - defaults
-  - "%{clientcert}"
-  - "%{environment}"
-  - global
+     :hierarchy:
+       - defaults
+       - "%{clientcert}"
+       - "%{environment}"
+       - global
 
-:yaml:
-# datadir is empty here, so hiera uses its defaults:
-# - /var/lib/hiera on *nix
-# - %CommonAppData%\PuppetLabs\hiera\var on Windows
-# When specifying a datadir, make sure the directory exists.
-  :datadir:
+     :yaml:
+     # datadir is empty here, so hiera uses its defaults:
+     # - /var/lib/hiera on *nix
+     # - %CommonAppData%\PuppetLabs\hiera\var on Windows
+     # When specifying a datadir, make sure the directory exists.
+       :datadir:
 ```
 
 In addition to the 'yaml' backend option, you can use 'json' if you like.
-See:  <https://docs.puppetlabs.com/hiera/1/data_sources.html#yaml>
+See Also:  [Hiera Data Sources](https://docs.puppetlabs.com/hiera/1/data_sources.html#yaml)
 
-
-The hiera.yaml provided is actually fully usable as-is except for that lack of **datadir** definition.  Let's define that, and make some other minor changes as follows:
+The **hiera.yaml** provided is actually fully usable as-is except for that lack of **datadir** definition.  Let's define that, and make some other minor changes as follows:
 
 1. Change 'global' to 'common' ... just my own personal preference
 2. Delete 'defaults' as we wont use it
-3. Tweak the clientcert line to look for the yaml in a **node/** directory
-4. Set the **datadir** to the %{environment}/data directory as we will eventually have multiple environments
+3. Tweak the **clientcert** line to look for the yaml in a **node/** directory
+4. Set the **datadir** to the `%{environment}/data` directory as we will eventually have multiple environments
 5. Lets also add a couple other levels to our hierarchy for **role** and **location**
 
 That should be good to get us started looking at how Hiera can be used...so our hiera.yaml
