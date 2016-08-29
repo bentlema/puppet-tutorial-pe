@@ -920,6 +920,32 @@ If you are following the Docker track, you'll be happy, because **puppet.example
 
 Re-try your puppet run, and it should work, and should restore all of the missing entries.  In a real production environment, we'd **always** have our puppet master registered in DNS, so this wouldn't normally be an issue.
 
+Go ahead and try adding some additional entries to /etc/hosts, and then run puppet again.  You should see puppet remove them:
+
+I added this line:
+
+```
+     1.2.3.4   foo.example.com foo
+```
+
+Then puppet ran an removed it:
+
+```
+     [root@agent /]# puppet agent -t
+     Info: Retrieving pluginfacts
+     Info: Retrieving plugin
+     Info: Loading facts
+     Info: Caching catalog for agent.example.com
+     Info: Applying configuration version '1472432976'
+     Notice: /Stage[main]/Main/Node[default]/Host[foo.example.com]/ensure: removed
+     Info: Computing checksum on file /etc/hosts
+     Notice: Finished catalog run in 0.55 seconds
+```
+
+---
+
+Okay, that's enough for now.  Take a break, and let's move on to the next lab...
+
 ---
 
 Let's re-visit what our goals were in this section:
