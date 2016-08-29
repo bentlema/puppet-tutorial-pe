@@ -500,7 +500,7 @@ Example of pinning to a specific version/release of a package:
 ```
 
 We also threw in a conditional statement there that checks the **OS Major Release** version **fact**.
-If we are running an EL6 system, the **nc* and **nmap** packages will get installed to the specific version we've specified.
+If we are running an EL6 system, the **nc** and **nmap** packages will get installed to the specific version we've specified.
 If we are running an EL7 system, the **whois** package will get installed to the specific version we've specified.
 (This all assumes that the versions we've specified are available in our package repository.)
 
