@@ -32,6 +32,29 @@ To review:
   - a class is simply a named block of puppet code that we can refer to by the class name.
   - we "tie" a class to a node through **node classification**, which simply says "apply this **class** to this **node**"
 
+### The Catalog ###
+
+We're going to start using the term **catalog** in the following sections, but what is the catalog?
+Simply put, it's just the **compiled** version of your puppet code (manifests).  When the puppet
+agent runs, it sends all of the facts about the system it's running on back to the puppet master.
+All of the puppet code is sitting on the puppet master, and the master takes all of the built-in
+puppet variables, facts, and code (conditional logic, functions, etc.) and compiles them into a
+static set of instructions to be executed on the agent side.  All of these instructions are
+executed on the agent side in a certain order as determined by the dependencies set forth in
+your puppet code.  You'll learn more about ordering with dependencies later on, but for now,
+just remember that the catalog is just all of your puppet code resolved down to the specific
+instructions for the specific node it's being compiled for.
+
+On other important concept to grasp is that when the catalog is compiled, all of the functions
+and conditional logic you have in your manifests are evaluated (on the master side, not the agent
+side.)  Puppet variables such as system fast are interpolated at this time as well.  All of the
+decision-making within a manifest has already happened when the agent receives its catalog, so the
+agent just executes the instructions it receives in the correct order.
+
+Understanding what happens on the master side vs the agent side will become very important
+later on, so just keep this in mind for now, and hopefully some questions will be triggerd
+later on as we work through the tutorial.
+
 ### Defining Classes and Declaring Classes ###
 
 First, we need to understand the difference between **defining** a class and **declaring** a class.
@@ -506,19 +529,26 @@ If we are running an EL7 system, the **whois** package will get installed to the
 
 The slightly annoying thing here would be that if you were maintaining this package
 across multiple platforms and versions, you'd have to manage the version/release
-strings for each. For example, for the **whois** package, we might have something like:
+strings for each. For example, for the **whois** package, we might have several
+different versions for each platform:
 
 ```
-5.1.0-1.el5
-5.1.1-3.el6
-5.1.1-2.el7
+     5.1.0-1.el5
+     5.1.1-3.el6
+     5.1.1-2.el7
 ```
 
-...you're kinda at the mercy of the rpm maintainer, and their version/release
-scheme.  It's annoying that the platform is included in the release for example. It
-would be preferable to be able to just say '5.1.1' and have the provider figure out
-if we're running that version, but alas, it's not that smart.  Hopefully newer
-versions of Puppet will offer more options to help with this.
+It's annoying that the platform (el5, el6, or el7) must be included in the
+release for example.  If you don't include it, Puppet will not recognize the
+version.  It would be preferable to be able to just say '5.1.1' and have the
+provider figure out if we're running that version, but this wouldn't help us
+if the '5.1.1' version isn't available on EL5, and we want to install '5.1.0'
+there.
+
+One solution to this problem could be using Hiera along with **$::operatingsystemmajrelease**
+in the hierarchy, and then specifying the specific package version string for
+each in the appropriate yaml file.  We will look at configuring Hiera in the
+next lab, and show how to do this.
 
 ---
 
@@ -529,16 +559,13 @@ Continue to **Lab #7** --> [Config Hiera](/tutorial/07-Config-Hiera.md)
 Further Reading:
 
 
-There is a Book called 'The Puppet Cookbook' and it's available
-on the web here:   <http://www.puppetcookbook.com/>
+[The Puppet Cookbook](http://www.puppetcookbook.com/) has many examples for
+doing simple things, and is a nice place to visit to get code fragments to
+accomplish many of the common things you'll want to do.
 
-It has many examples for doing simple things, and is a nice place
-to visit to get code fragments to accomplish many of the common
-things you'll want to do.
+[The Puppet Language Reference about Classes](https://docs.puppetlabs.com/puppet/latest/reference/lang_classes.html)
 
-The Puppet Language Reference about Classes:
-
-<https://docs.puppetlabs.com/puppet/latest/reference/lang_classes.html>
+[More about Catalog Compilation](https://docs.puppet.com/puppet/3.8/reference/subsystem_catalog_compilation.html)
 
 ---
 
