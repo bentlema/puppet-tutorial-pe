@@ -42,8 +42,8 @@
 - [Killer R10K Workflow - Phil Zimmerman, Time Warner Cable](https://puppetlabs.com/presentations/killer-r10k-workflow-phil-zimmerman-time-warner-cable)
 - [Git Workflow Best Practices & Deploying with r10k](https://puppetlabs.com/webinars/git-workflow-best-practices-deploying-r10k)
 - [PuppetConf 2015 Videos and Presentations](https://puppetlabs.com/puppetconf-2015-videos-and-presentations)
-- [PuppetConf 2014 Videos and Presentations](https://puppetlabs.com/puppetconf-2014-videos-and-presentations)
-- [PuppetConf 2013 Videos and Presentations](https://puppetlabs.com/resources/puppetconf-2013)
+- [PuppetConf 2014 Videos and Presentations](https://puppetlabs.com/puppetconf-2014-videos-and-presentations) (Broken? Fix me.)
+- [PuppetConf 2013 Videos and Presentations](https://puppetlabs.com/resources/puppetconf-2013) (Broken? Fix me.)
 - [PuppetConf 2012 Videos on YouTube](https://www.youtube.com/playlist?list=PLV86BgbREluVFB73Wwqp_tCbw5Z9TMLX1)
 - [Other PuppetLabs Playlists on YouTube](https://www.youtube.com/user/PuppetLabsInc/playlists)
 - [Git Workflow and Puppet Environments](https://puppetlabs.com/blog/git-workflow-and-puppet-environments)
@@ -73,7 +73,7 @@
 - [Lars Vogel Git Tutorial](http://www.vogella.com/tutorials/Git/article.html)
 - [Git Tower - Learn Git Tutorial](https://www.git-tower.com/learn/)
 - [Git in the Trenches Book](http://cbx33.github.io/gitt/intro.html) - Read online or download PDF
-- [GitHub's Cheatsheet](https://training.github.com/kit/downloads/github-git-cheat-sheet.pdf)
+- [GitHub's Cheatsheets](https://services.github.com/resources/)
 - [GitHub's Help](https://help.github.com/) - Has a ton of Git info, not just about GitHub
 - [Git Magic Book](http://www-cs-students.stanford.edu/~blynn/gitmagic/)
 - [Git Beginner's Guide for Dummies](http://backlogtool.com/git-guide/en/)
