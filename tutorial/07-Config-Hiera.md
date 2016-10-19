@@ -445,6 +445,8 @@ So all we've done is configured Hiera and used it as a pseudo-ENC, created our f
 
 # The following example only works on a full VM, not in a Docker container #
 # Need to come up with a different example that works in both a VM and Docker Container #
+# Possible alternatives:  puppetlabs/motd, puppetlabs/apache, puppetlabs/mysql, puppetlabs/postgresql
+
 
 **Next**, let's install a module, and show how we can declare that class on only the agent node using a "node-level" yaml file.
 
