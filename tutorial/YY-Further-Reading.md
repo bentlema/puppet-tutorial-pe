@@ -74,6 +74,7 @@
 - [Git Tower - Learn Git Tutorial](https://www.git-tower.com/learn/)
 - [Git in the Trenches Book](http://cbx33.github.io/gitt/intro.html) - Read online or download PDF
 - [GitHub's Cheatsheets](https://services.github.com/resources/)
+- [GitHub's Training Kit](https://github.com/github/training-kit)
 - [GitHub's Help](https://help.github.com/) - Has a ton of Git info, not just about GitHub
 - [Git Magic Book](http://www-cs-students.stanford.edu/~blynn/gitmagic/)
 - [Git Beginner's Guide for Dummies](http://backlogtool.com/git-guide/en/)
