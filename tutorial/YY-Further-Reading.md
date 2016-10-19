@@ -3,12 +3,14 @@
 
 # Puppet-Related Links #
 
-## Misc Links ##
+## General Puppet Learning Links ##
 - [Puppet Lunch](http://puppetlunch.com/contents/)
 - [Designing Puppet – Roles and Profiles](http://www.craigdunn.org/2012/05/239/)
 - [Puppet Cookbook](http://www.puppetcookbook.com/)
 - [Adrien Thebo Blog](http://somethingsinistral.net/blog/)
 - [R.I. Pienaar Blog - Author of Hiera and MCollective](https://www.devco.net/)
+- [The PuppetLabs Learning VM](https://puppet.com/download-learning-vm)
+- [Example42 Blog](http://www.example42.com/blog/)
 
 ## RNELSON0 Blog ##
 - [Puppet for vSphere Admins - Table of Contents](http://rnelson0.com/puppet-for-vsphere-admins/)
@@ -41,7 +43,7 @@
 ## PuppetLabs Videos and Presentations ##
 - [Killer R10K Workflow - Phil Zimmerman, Time Warner Cable](https://puppetlabs.com/presentations/killer-r10k-workflow-phil-zimmerman-time-warner-cable)
 - [Git Workflow Best Practices & Deploying with r10k](https://puppetlabs.com/webinars/git-workflow-best-practices-deploying-r10k)
-- [PuppetConf 2015 Videos and Presentations](https://puppetlabs.com/puppetconf-2015-videos-and-presentations)
+- [PuppetConf 2015 Videos and Presentations](https://puppetlabs.com/puppetconf-2015-videos-and-presentations) (Broken? Fix me.)
 - [PuppetConf 2014 Videos and Presentations](https://puppetlabs.com/puppetconf-2014-videos-and-presentations) (Broken? Fix me.)
 - [PuppetConf 2013 Videos and Presentations](https://puppetlabs.com/resources/puppetconf-2013) (Broken? Fix me.)
 - [PuppetConf 2012 Videos on YouTube](https://www.youtube.com/playlist?list=PLV86BgbREluVFB73Wwqp_tCbw5Z9TMLX1)
@@ -50,7 +52,6 @@
 - [Git Workflows with Puppet and r10k](https://puppetlabs.com/blog/git-workflows-puppet-and-r10k)
 - [Refactor Your Monolithic Code Repo To Deploy with r10k](https://puppetlabs.com/blog/refactor-your-monolithic-code-repo-to-deploy-with-r10k)
 - [Puppet Enterprise 3.8 Upgrade Series ](https://puppetlabs.com/puppet/whats-new/puppet-enterprise-3.8-upgrade-series)
-- [The PuppetLabs Learning VM](https://puppet.com/download-learning-vm)
 
 ---
 
