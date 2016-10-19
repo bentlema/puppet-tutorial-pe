@@ -50,6 +50,7 @@
 - [Git Workflows with Puppet and r10k](https://puppetlabs.com/blog/git-workflows-puppet-and-r10k)
 - [Refactor Your Monolithic Code Repo To Deploy with r10k](https://puppetlabs.com/blog/refactor-your-monolithic-code-repo-to-deploy-with-r10k)
 - [Puppet Enterprise 3.8 Upgrade Series ](https://puppetlabs.com/puppet/whats-new/puppet-enterprise-3.8-upgrade-series)
+- [The PuppetLabs Learning VM](https://puppet.com/download-learning-vm)
 
 ---
 
