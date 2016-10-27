@@ -1,3 +1,10 @@
+# UNDER DEVELOPMENT
+
+This tutorial is a bit out-dated now that Puppet 3 is being EOL'ed at the end of this year (2016).
+Even PE 2016.1 is being EOL'ed!  https://puppet.com/misc/puppet-enterprise-lifecycle
+I'm developing a new version which will use Puppet Enterprise 2016.4.x
+If anyone is interested in contributing to this project, let me know.
+
 # Start Here #
 
 This is a **Puppet Enterprise** and **Git** training tutorial.
