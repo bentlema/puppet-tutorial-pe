@@ -38,12 +38,14 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
+    echo 'Executing provisioning shell commands...'
     # Update the VM with latest Centos packages, and re-install NetworkManager to work-around nmcli bug
     # (Commented out, as we only use it when re-building the base box.)
     #yum clean all && yum update -y && yum reinstall -y NetworkManager
     #
     # Install some packages that are not in the base box
-    yum install -y tree nc
+    # yum install -y tree nc
+    echo 'Done provisioning.'
   SHELL
 
   # Our Puppet Server (CA, Master compile host, puppetDB, PE Console, etc.)
