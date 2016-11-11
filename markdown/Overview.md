@@ -1,7 +1,7 @@
 
 ## Training Overview
 
-What will we do in this training tutorial?
+What will we do in this tutorial?
 
 * Deploy your own training environment using either Docker or Vagrant + VirtualBox
 * Install Puppet Enterprise (Monolithic Install), GitLab, and one additional training VM/Container

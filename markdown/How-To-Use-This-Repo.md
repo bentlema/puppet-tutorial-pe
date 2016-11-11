@@ -8,13 +8,13 @@
 * Clone this repo
 
 ```
-     git clone https://github.com/bentlema/puppet-training-pe
+     git clone https://github.com/bentlema/puppet-tutorial-pe
 ```
 
 * Change directory to...
 
 ```
-     cd puppet-training-pe
+     cd puppet-tutorial-pe
 ```
 
 * Begin following the Labs (links below)
@@ -25,5 +25,5 @@ This entire tutorial is of course a Git repository!  All of the tutorial
 files are written in [Markdown](https://en.wikipedia.org/wiki/Markdown).
 Make sure you're comfortable navigating this code repo before you start.
 At any time, if you wish to return to this main README.md file, you can
-click the bentlema/[puppet-training-pe](/README.md) link at the top of the page.
+click the bentlema/[puppet-tutorial-pe](/README.md) link at the top of the page.
 
