@@ -77,8 +77,7 @@ A summary of the minimal installation structions for GitLab follow...
 - Install and configure the necessary dependencies
 
 ```
-     # These should already be installed and running, but just in case...
-     yum install -y openssh-server postfix
+     # Postfix should already be installed and running, but just in case...
      yum install -y postfix
      systemctl enable postfix
      systemctl start postfix
