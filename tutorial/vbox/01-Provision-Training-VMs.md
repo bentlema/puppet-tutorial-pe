@@ -2,11 +2,9 @@
 
 ---
 
-# **Lab #1** - Install software, and use Vagrant to deploy 3 training VMs
+## **Lab #1** - Install software, and use Vagrant to deploy 3 training VMs
 
----
-
-### Overview ###
+### Overview
 
 Time to complete:  30 minutes
 
@@ -22,7 +20,7 @@ In the following lab you will install the following software:
 3. **agent**    (A Puppet agent)
 2. **gitlab**   (GitLab, which will also run the Puppet agent)
 
-### Steps ###
+### Steps
 
 * Download the needed software for this training...
 
