@@ -39,12 +39,11 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
     # Update the VM with latest Centos packages, and re-install NetworkManager to work-around nmcli bug
-    yum clean all
-    yum update -y
-    yum reinstall -y NetworkManager
-    # Install some additional useful packages
-    yum install -y tree
-    yum install -y nc
+    # (Commented out, as we only use it when re-building the base box.)
+    #yum clean all && yum update -y && yum reinstall -y NetworkManager
+    #
+    # Install some packages that are not in the base box
+    yum install -y tree nc
   SHELL
 
   # Our Puppet Server (CA, Master compile host, puppetDB, PE Console, etc.)
