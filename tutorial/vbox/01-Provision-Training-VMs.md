@@ -24,16 +24,16 @@ In the following lab you will install the following software:
 
 ### Steps
 
-* Download the needed software for this training...
+* Download the needed software for this tutorial...
 
 ```
-[puppet-training-pe]$ cd share
-[puppet-training-pe/share]$ cd software
-[puppet-training-pe/share/software]$ ./download-all.sh
+[puppet-tutorial-pe]$ cd share
+[puppet-tutorial-pe/share]$ cd software
+[puppet-tutorial-pe/share/software]$ ./download-all.sh
 ```
 
 * Install VirtualBox
-      - find the appropriate installer in `puppet-training-pe/share/software/virtualbox/5.0.14-105127`
+      - find the appropriate installer in `puppet-tutorial-pe/share/software/virtualbox/5.0.14-105127`
       - Installers for Mac OS X and Windows are provided, but others can be downloaded as well
       - other installers available here: <https://www.virtualbox.org/wiki/Downloads>
 
@@ -41,13 +41,13 @@ In the following lab you will install the following software:
       - (e.g. external HD with more space than your internal SSD)
 
 * Install Vagrant
-      - find the appropriate installer in `puppet-training-pe/share/software/vagrant`
+      - find the appropriate installer in `puppet-tutorial-pe/share/software/vagrant`
       - others available here: <https://www.vagrantup.com/downloads.html>
 
-* cd into puppet-training-pe and 'vagrant up puppet' to provision the VM
+* cd into puppet-tutorial-pe and 'vagrant up puppet' to provision the VM
 
 ```
-cd puppet-training-pe
+cd puppet-tutorial-pe
 vagrant plugin install vagrant-vbguest
 vagrant up puppet
 ```
@@ -85,7 +85,7 @@ Filesystem      Size  Used Avail Use% Mounted on
 none            223G  206G   18G  93% /share
 ```
 
-If you copy a file to **/share** within your VM, you will be able to get to it from your host OS at **puppet-training-pe/share**
+If you copy a file to **/share** within your VM, you will be able to get to it from your host OS at **puppet-tutorial-pe/share**
 (and visa versa)
 
 
@@ -114,9 +114,9 @@ Once you provision your **gitlab** and **agent** VMs, you should see them in the
 $ vagrant global-status
 id       name         provider   state    directory
 ------------------------------------------------------------------------------
-4dd5ed7  puppet       virtualbox running  /Users/Mark/Vagrant/puppet-training-pe
-070258c  gitlab       virtualbox running  /Users/Mark/Vagrant/puppet-training-pe
-682eafe  agent        virtualbox running  /Users/Mark/Vagrant/puppet-training-pe
+4dd5ed7  puppet       virtualbox running  /Users/Mark/Vagrant/puppet-tutorial-pe
+070258c  gitlab       virtualbox running  /Users/Mark/Vagrant/puppet-tutorial-pe
+682eafe  agent        virtualbox running  /Users/Mark/Vagrant/puppet-tutorial-pe
 
 The above shows information about all known Vagrant environments
 on this machine. This data is cached and may not be completely
@@ -129,7 +129,7 @@ with Vagrant commands from any directory. For example:
 This concludes Lab #1.  You should now have 3 VMs up and running named as shown above in the 'global-status' output above.
 
 If you're curious how the VM's are configured, take a peek at the
-[puppet-training-pe/Vagrantfile](/Vagrantfile)
+[puppet-tutorial-pe/Vagrantfile](/Vagrantfile)
 
 If you're not planning to continue to the next lab, you may want to halt all
 of your training VM's.  Make sure you've exited the ssh session of each VM,

@@ -26,9 +26,9 @@ If you don't know the status of your vagrant-controlled VM's, you can always che
 $ vagrant global-status
 id       name         provider   state    directory
 --------------------------------------------------------------------------------
-4dd5ed7  puppet       virtualbox running  /Users/Mark/Vagrant/puppet-training-pe
-070258c  gitlab       virtualbox poweroff /Users/Mark/Vagrant/puppet-training-pe
-682eafe  agent        virtualbox poweroff /Users/Mark/Vagrant/puppet-training-pe
+4dd5ed7  puppet       virtualbox running  /Users/Mark/Vagrant/puppet-tutorial-pe
+070258c  gitlab       virtualbox poweroff /Users/Mark/Vagrant/puppet-tutorial-pe
+682eafe  agent        virtualbox poweroff /Users/Mark/Vagrant/puppet-tutorial-pe
 ```
 
 Notice that my **puppet** VM is running, but my **gitlab** and **agent** VM's are powered off.
