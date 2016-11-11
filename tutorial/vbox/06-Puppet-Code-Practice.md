@@ -225,7 +225,7 @@ A class allows us to refer to some code by name, and optionally pass in
 parameters that the code within the class could access to further control
 what the code does.
 
-## Install Some Packages
+### Install Some Packages
 
 Let's configure puppet to make sure certain packages are installed on our agent node.
 
