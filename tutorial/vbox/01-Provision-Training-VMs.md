@@ -33,11 +33,11 @@ In the following lab you will install the following software:
 ```
 
 * Install VirtualBox
-      - find the appropriate installer in `puppet-tutorial-pe/share/software/virtualbox/5.0.14-105127`
+      - find the appropriate installer in the `puppet-tutorial-pe/share/software/virtualbox/` directory
       - Installers for Mac OS X and Windows are provided, but others can be downloaded as well
       - other installers available here: <https://www.virtualbox.org/wiki/Downloads>
 
-* OPTIONAL: Start VirtualBox and configure 'Default Machine Folder' to place VM's in a directory other than the default if you wish
+* Start VirtualBox and configure 'Default Machine Folder' to place VM's in a directory other than the default (if you wish)
       - (e.g. external HD with more space than your internal SSD)
 
 * Install Vagrant
@@ -56,11 +56,13 @@ vagrant up puppet
 
 ```
     vagrant ssh puppet              # to verify that you are able to login (should not be prompted for password)
+    cat /etc/centos-release         # what CentOS release are we running?
     cat /proc/cpuinfo | grep proc   # how many vCPU's does the VM have? (should see 4 processors)
-    free -h                         # how much RAM is available on this VM? (should be 3.7GB or close to that)
+    lscpu                           # another way to see CPU info
+    free -h                         # how much RAM is available on this VM?
     df -h /share                    # is our shared space mounted up? (should see 'share' filesystem mounted on /share)
-    ls -al /share/software          # should see out puppet-enterprise directory in there
-    exit                            # and drop out of VM, back to host OS shell prompt
+    ls -al /share/software          # should see our puppet/ directory in there
+    exit                            # and drop out of the VM, back to host OS shell prompt
 ```
 
 When you're done working through any particular lab, and want to stop your
@@ -87,6 +89,18 @@ none            223G  206G   18G  93% /share
 
 If you copy a file to **/share** within your VM, you will be able to get to it from your host OS at **puppet-tutorial-pe/share**
 (and visa versa)
+
+If for some reason, you do not see the `/share/` filesystem mounted up, try halting your VM and starting again.  Sometimes the VMware tools need to be updated, and a stop/start will trigger that:
+
+```
+[vagrant@puppet ~]$ exit
+[puppet-tutorial-pe]$ vagrant halt puppet
+[puppet-tutorial-pe]$ vagrant up puppet
+[puppet-tutorial-pe]$ vagrant ssh puppet
+```
+
+...and check again.
+
 
 
 Get comfortable with Vagrant, and connecting to your VM.  The most useful commands you'll need are:
