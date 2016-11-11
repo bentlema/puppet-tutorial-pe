@@ -5,12 +5,28 @@
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
+
 Vagrant.configure("2") do |config|
+
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+  #
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://atlas.hashicorp.com/search.
+  #
   # These are the default settings, but we can override them on a per-VM basis
-  # config.vm.box = "centos/7"
-  config.vm.box = "puppetlabs/centos-7.2-64-nocm"
+
+  #config.vm.box = "puppetlabs/centos-7.2-64-nocm"      # the orig base box
+  config.vm.box = "bentlema/centos-7.2-64"              # my modified box
+
+  # Turn off the default sync folder
   config.vm.synced_folder ".", "/home/vagrant/sync", disabled: true
+
+  # We use /share instead of the default /vagrant shared directory
   config.vm.synced_folder "share", "/share", disabled: false
+
+  # Some defaults for all VMs
   config.vm.provider "virtualbox" do |vb|
     vb.gui = false
     vb.memory = "512"
@@ -18,8 +34,18 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--ioapic", "on"]
   end
 
-  # Update the VM with latest Centos packages, and re-install NetworkManager to work-around nmcli bug
-  config.vm.provision "shell", inline: "yum clean all && yum update -y && yum reinstall -y NetworkManager"
+  # Enable provisioning with a shell script. Additional provisioners such as
+  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+  # documentation for more information about their specific syntax and use.
+  config.vm.provision "shell", inline: <<-SHELL
+    # Update the VM with latest Centos packages, and re-install NetworkManager to work-around nmcli bug
+    yum clean all
+    yum update -y
+    yum reinstall -y NetworkManager
+    # Install some additional useful packages
+    yum install -y tree
+    yum install -y nc
+  SHELL
 
   # Our Puppet Server (CA, Master compile host, puppetDB, PE Console, etc.)
   config.vm.define "puppet" do |puppet|
@@ -37,12 +63,14 @@ Vagrant.configure("2") do |config|
     puppet.vm.network "forwarded_port", guest: 3000, host: 22000 # Used during PE Installation (HTTPS)
   end
 
+  # A VM to test with -- only the puppet agent will run on this one
   config.vm.define "agent" do |agent|
     agent.vm.hostname = "agent"
     agent.vm.network "private_network",    ip: "192.168.198.11"
     agent.vm.network "forwarded_port",  guest:   22, host: 23022, id: 'ssh'
   end
 
+  # A VM to run GitLab
   config.vm.define "gitlab" do |gitlab|
     config.vm.provider "virtualbox" do |vb|
       vb.memory = "2048"

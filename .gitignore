@@ -19,3 +19,4 @@ virtualbox-shared/software/vagrant/*.msi
 virtualbox-shared/software/vagrant/*.rpm
 virtualbox-shared/software/virtualbox/5.0.??-??????/
 gitlab
+*.box
