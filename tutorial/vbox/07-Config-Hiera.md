@@ -2,11 +2,11 @@
 
 ---
 
-# **Lab #7** - Configure Hiera
+### **Lab #7** - Configure Hiera
 
 ---
 
-## Overview
+### Overview
 
 Time to complete:  60 minutes
 
@@ -15,9 +15,7 @@ In this lab we will:
  - Configure Hiera
  - Use Hiera to classify our nodes
 
----
-
-## What is Hiera?
+### What is Hiera?
 
 Hiera is a database that you can query in your Puppet code.  Hiera stores
 data in YAML or JSON formatted flat text files.  We refer to the data as
@@ -26,7 +24,7 @@ such that a query can return different results depending on the value of
 system facts or other puppet variables.
 
 
-## Why is Hiera useful, and why do we want to use it?
+### Why is Hiera useful, and why do we want to use it?
 
 The two key reasons we like to use Hiera are:
 
@@ -49,7 +47,7 @@ We will see how to do all three of these things in the following lab...
 
 But first we need to configure Puppet to use Hiera...
 
-## The Hiera Config File
+### The Hiera Config File
 
 Puppet knows about Hiera, and you'll see in a bit that there are some hiera
 function calls we can use in our puppet code to search our Hiera data.  But
@@ -119,7 +117,7 @@ will look like this:
 Go ahead and edit your hiera.yaml if you haven't already.
 
 
-## There's just one hiera.yaml
+### There's just one hiera.yaml
 
 Notice that there is just one **hiera.yaml** for all of our puppet environments,
 **NOT** separate hiera.yaml files per-environment.  This is important to
@@ -145,7 +143,7 @@ of the environment.
 
 
 
-## Setup the Hiera Data directory(s)
+### Setup the Hiera Data directory(s)
 
 We've configured our hiera.yaml, but we still need to create the **datadir** as
 we've defined it within the hiera.yaml.  This is where Hiera will look for
@@ -176,7 +174,7 @@ Make sure you're still sitting in **/etc/puppetlabs/puppet** and make the follow
 
 ```
 
-## Update the puppet.conf to know about the hiera.yaml
+### Update the puppet.conf to know about the hiera.yaml
 
 Even though the default value for **hiera_config** is correct, let's put it
 in the puppet.conf **[main]** section just to have it explicitely defined.
@@ -201,7 +199,7 @@ in a later lab (when we move our code under Git control) so let's get the defaul
 in there now, so later on when we change it we can easily see what we're changing
 it **from** and changing it **to**.
 
-## Restart the Puppet Master
+### Restart the Puppet Master
 
 After making any changes to the **puppet.conf** and/or the **hiera.yaml**,
 you must **re-start** the Puppet Master so that it re-reads those config files.
@@ -222,7 +220,7 @@ of the config it memory for fast access.
 ```
 
 
-## So are we ready to use Hiera yet?
+### So are we ready to use Hiera yet?
 
 **Yes!**   Here's what we've done to get to this point:
 
@@ -232,7 +230,7 @@ of the config it memory for fast access.
 4. Updated the **puppet.conf** with the **hiera_config** option and value
 5. **Restarted** the Puppet Master so that it would re-read the puppet.conf and hiera.yaml
 
-## Using Hiera in your Puppet Code
+### Using Hiera in your Puppet Code
 
 Again, there are 3 ways we can use Hiera:
 
@@ -242,7 +240,7 @@ Again, there are 3 ways we can use Hiera:
 
 Let's start looking at the first one:  Classify a node
 
-## Node Classification with Hiera
+### Node Classification with Hiera
 
 Instead of using node definitions in the **site.pp**, let's use the Hiera
 function call **hiera_include('classes')** as follows...
@@ -285,7 +283,7 @@ Etc.  Notice in the first case the classes would be applied to one specific node
 second case the classes could be be applied to a set of nodes.
 
 
-## Hiera Examples ##
+### Hiera Examples
 
 Let's work through an example to get a better understanding how all of this works.
 
@@ -429,7 +427,7 @@ Now run puppet again, and you should notice no changes at all.  Good?
 
 So all we've done is configured Hiera and used it as a pseudo-ENC, created our first hiera data file **common.yaml** and changed the way we are declaring the 'common_hosts' and 'common_packages' classes.
 
-## Install a module and classify a node with it
+### Install a module and classify a node with it
 
 **Next**, let's install a module, and show how we can declare that class on only the agent node using a "node-level" yaml file.
 
@@ -650,7 +648,7 @@ Let's go ahead and install the saz-timezone module...
        └── puppetlabs-stdlib (v4.11.0)
 ```
 
-## Hiera auto-parameter lookup
+### Hiera auto-parameter lookup
 
 Next, edit your node yaml for **"agent.example.com"** again, add the new class, and add the class parameter we'd like to pass in:
 
@@ -1074,7 +1072,7 @@ classes:
 timezone::timezone: 'US/Pacific'
 ```
 
-## Important Note about Hiera Lookups
+### Important Note about Hiera Lookups
 
 So far we've looked at two ways Hiera can be used:
 
@@ -1113,7 +1111,7 @@ The same behavior is followed for the **hiera()** lookup function we will
 cover in the following section...
 
 
-## Hiera lookup functions for arbitrary data
+### Hiera lookup functions for arbitrary data
 
 The third way we can use Hiera is to lookup arbitrary data in our hierarchy.
 We can define key/value pairs within our hierarchy and then use the hiera
@@ -1128,7 +1126,7 @@ One use case for this that I've seen in the wild is to store certain bits
 of static data about a node in Hiera, rather than rely on a agent-side custom
 defined fact.
 
-## Facter
+### Facter
 
 But what is a fact?  We haven't talked about what a **"fact"** is yet, so let's
 take this opportunity to introduce **facter** and than show two ways that we
@@ -1497,13 +1495,13 @@ So what have we learned here?
 3.  Any top-scope variable can be used in the hiera.yaml to define the hierarchy
 4.  We observed that more-specific class parameters override less-specific ones
 
-## Security Note
+### Security Note
 
 Did you notice that you affected the configuration of the host by simply changing the value of a agent-side fact?
 You should be asking yourself the question:  do we want this ability and power on the agent side? Or do we prefer to "host" this power within our Hiera data?
 Clearly, if we use agent-side facts, we want to ensure the facts are only writable by those we trust.
 
-## Getting back to Hiera
+### Getting back to Hiera
 
 Remember we were talking about how to use the **hiera()** lookup function?
 
@@ -1622,7 +1620,7 @@ Now, the location variable is controlled within our Hiera data, and not on
 the local agent node.  In theory, this is more secure, because your puppet
 master should be more secure than any old agent node out there.
 
-## Important note about using Hiera Data within the hiera.yaml
+### Important note about using Hiera Data within the hiera.yaml
 
 It's really important for you to notice that:
 
@@ -1649,7 +1647,7 @@ no guarantee it has been defined yet.  The order in which puppet processes top-l
 manifests is not defined, and the common_hosts.pp may be read prior to the site.pp,
 and the $::location variable would be undefined at that point.
 
-## Hiera vs Facter for static data
+### Hiera vs Facter for static data
 
 So, to summarize, we can use the hiera() lookup function and facter to do
 the same thing, the difference being where the data is hosted--on the agent side,

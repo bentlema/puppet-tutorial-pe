@@ -2,15 +2,15 @@
 
 ---
 
-# **Lab #8** - Environments
+### **Lab #8** - Environments
 
 ---
 
-### Overview ###
+### Overview
 
 Time to complete:  90 minutes
 
-### Puppet Environments ###
+### Puppet Environments
 
 We've already looked a little bit at puppet **environments** in
 [Lab #5](05-Puppet-Config-and-Code.md), however we really haven't
@@ -127,7 +127,7 @@ this will all start to make sense.
 The above 2 use cases for environemnts are what I've seen used at the
 companies I've worked at.  In fact, both use cases have been used simultaneously.
 
-## Know the vocabulary and how different folks use it
+### Know the vocabulary and how different folks use it
 
 There is the potential for some confusion when deciding how to build a new
 puppet infrastructure for your company.  Every company is going to have
@@ -188,7 +188,7 @@ something called a Puppetfile, and you may want different version of
 the Puppetfile in Dev, Stg, Prod, and you'll want to merge Dev into
 Stg, and Stg into Prod, and you will not like it.
 
-## Let's do something with Puppet Environments
+### Let's do something with Puppet Environments
 
 Okay, so we've talked a lot about environments, but we haven't actually
 done anything to show how they work.  So let's get our hands dirty
@@ -231,7 +231,7 @@ where you plan to have thoustands of nodes, you'd want to go with option 2 and
 disable the PE Console as the ENC entirely, as it will eventually become a
 performance bottleneck.  (This is a known issues with PE 3.8.x and older.)
 
-## Add node to Agent-specified environment node group
+### Add node to Agent-specified environment node group
 
 Let's do this:
 
@@ -267,7 +267,7 @@ be enforced.  Give it a try by making a change to the /etc/hosts file, then
 running puppet against the development environment, and note that nothing
 happened to revert your change.  This is exactly what we'd expect.
 
-## Our Development Environment
+### Our Development Environment
 
 What if we want to introduce a new module in to our development environment,
 but not production?
@@ -634,7 +634,7 @@ ntp::servers:
 
 Run puppet on both the **puppet** master and the **agent** node, and you should see the /etc/motd get updated.
 
-## Wrapping it up
+### Wrapping it up
 
 We've seen how we can use two environments to test a new module, and then promote the code changes from one
 to the other (development to production in this case).  We've also seen how cumbersome and prone to error it
@@ -649,7 +649,7 @@ Continue on to **Lab #9** --> [Install GitLab](09-Install-GitLab.md)
 
 ---
 
-### More Reading ###
+### More Reading
 
 Gary Larizza did a nice write-up on this issue here:  <http://garylarizza.com/blog/2014/03/26/random-r10k-workflow-ideas/>
 

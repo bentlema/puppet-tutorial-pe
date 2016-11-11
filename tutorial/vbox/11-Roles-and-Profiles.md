@@ -2,11 +2,11 @@
 
 ---
 
-# **Lab #11** - Roles and Profiles
+### **Lab #11** - Roles and Profiles
 
 ---
 
-## Overview
+### Overview
 
 So where are we at now?
 
@@ -25,7 +25,7 @@ Where do we want to go?
 We will see some Git usage as we move through this lab, and will cover the basics in the following lab.
 Let's start by looking at the **"Roles & Profiles Pattern"**...
 
-## Code Organization
+### Code Organization
 
 We've already seen that there are multiple ways to classify a node:
 
@@ -48,7 +48,7 @@ We can...
 
 We're going to look at the 4th option:  Roles and Profiles
 
-## Roles & Profiles
+### Roles & Profiles
 
 There's already been *a lot* written on the Roles & Profiles Pattern...
 
@@ -106,7 +106,7 @@ That is key, so let's restate it:
 
 We want to maintain code **simplicity** and **readability** while **reducing code duplication** where possible*
 
-## Where to put our Roles & Profiles?
+### Where to put our Roles & Profiles?
 
 We could treat our **role** and **profile** code directories like modules,
 and put them in their own Git repos, and then use R10K to pull them in
@@ -185,7 +185,7 @@ at the same time.)
 There is a simple solution to avoid all of this, and more and more folks
 are doing it the following way...
 
-## Keep it simple...
+### Keep it simple...
 
 We really have no good reason to keep our **role** and **profile** modules
 in their own Git repos, so let's take a different approach, and add another
@@ -469,13 +469,13 @@ classes hierarchy in Hiera, or we can assign a role, but a role would be
 assigned at the node-level or role-level, not in the common.yaml. (We build
 a role class for a specific application.)
 
-## TODO
+### TODO
 
 Anyway, now that we're setup with the proper directory structure, and the
 environment.conf to set the modulepath, let's do a real example to illistrate
 how to use Roles and Profiles...
 
-## TODO
+### TODO
 
 We also have to decide if we want to assign the role via a custom facter
 fact? or do we want to use a hiera key/value pair?

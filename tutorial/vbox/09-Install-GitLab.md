@@ -2,7 +2,7 @@
 
 ---
 
-# **Lab #9** - Install GitLab
+### **Lab #9** - Install GitLab
 
 ---
 
@@ -12,7 +12,7 @@ Note:  if you're running with less than 10GB of memory (like on an 8GB system), 
 When running all 3 VM's on an 8GB system, you may start to swap and your workstation may start to crawl and/or freeze up...Close any applications you don't need running to help conserve memory, or get a better workstations.
 Geesh.
 
-### Start up your GitLab VM ###
+### Start up your GitLab VM
 
 You should have already created your **gitlab** VM, but if not, go ahead and do it now...
 
@@ -22,7 +22,7 @@ You should have already created your **gitlab** VM, but if not, go ahead and do 
      sudo su -             # become root
 ```
 
-### Install the Puppet Agent ##
+### Install the Puppet Agent
 
 Although not required for our training environment, let's install the Puppet
 Agent on our GitLab VM so that our timezone is set, and NTP is configured to
@@ -69,7 +69,7 @@ That should be fine for now...Run puppet again and you should get a clean run...
 
 
 
-### GitLab Installation Instructions ###
+### GitLab Installation Instructions
 
 A summary of the minimal installation structions for GitLab follow...
 (Full instructions are [here](https://about.gitlab.com/downloads/#centos7))

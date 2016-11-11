@@ -2,11 +2,11 @@
 
 ---
 
-# **Lab #10** - Move Puppet Code Under GitLab Control
+### **Lab #10** - Move Puppet Code Under GitLab Control
 
 ---
 
-## Overview
+### Overview
 
 We've just setup GitLab in [Lab #9](09-Install-GitLab.md#lab-9) and now we
 want to be able to use it.  We've already written some puppet code, and it's
@@ -24,7 +24,7 @@ GitLab, and drop it (along with all of the modules we're using) in the
 correct place.  All of this will be done without seeing a failed puppet run
 (say if one of the agents runs in the background while we're doing this work.)
 
-## Some Git commands and concepts
+### Some Git commands and concepts
 
 What is a Push? Pull? What does it mean to **"clone a repo"**?  What is Git exactly?
 We're going to talk more about Git commands in [Lab #12](12-Git-Basics.md), but we
@@ -43,7 +43,7 @@ Git is the tool that will...
 
 Let's go over some of the basic Git concepts and commands we will see in this lab...
 
-## Git Concept: The Git Repository
+### Git Concept: The Git Repository
 
 A **"Git Repo"** is just just a self-contained bundle of files along with its commit history.
 As mentioned previously, this **commit history** is like a stream of snapshots.
@@ -66,7 +66,7 @@ Some other well known Git servers available are:
 - [Atlassian BitBucket](https://bitbucket.org/)
 - [Gitolite](http://gitolite.com/)
 
-## Git Command:  git clone
+### Git Command:  git clone
 
 To make a complete copy of a remote repo, you can use `git clone <URL>`
 
@@ -82,25 +82,25 @@ Type `git remote -v` to see the configured remote of your control repo.
 Git will also use **origin** as the default for other commands if you don't
 specify a remote.
 
-## Git Command: git status
+### Git Command: git status
 
 The `git status` command is useful for telling you what branch you're on, as
 well as the status of the staging area.  When you make changes to files that
 Git is tracking, it will notice that, and show you that it noticed.
 
-## Git Concept: The Staging Area
+### Git Concept: The Staging Area
 
 Git has something called a **"Staging Area"** (sometimes referred to as
 **"The Index"**).  It's where we can "stage" our changes in preperation
 to permanently commit them to the repo.  Once you commit a change, it's
 there forever in the commit history.
 
-## Git Command: git add
+### Git Command: git add
 
 To add a file to the staging area, use the `git add` command.  We can use
 this command to add files to the staging area prior to commiting them.
 
-## Git Command: git commit
+### Git Command: git commit
 
 Now that we're run the `git add` on a file, and the `git status` shows that
 it's staged (ready to be committed), we can go ahead and either:
@@ -114,7 +114,7 @@ The **-m** option is short for **commit message** and is just a descriptive mess
 to go along with the commit in case we need to find it in the future, the message
 should make it easier to identify later what changes were made
 
-## Git Command: git push
+### Git Command: git push
 
 Remember earlier we looked at `git clone` and mentioned that when we clone a
 repo, Git will automatically setup the remote tracking branch.  Git is comparing
@@ -123,7 +123,7 @@ notice when we have made a new commit, but the remote doesn't yet have that comm
 
 We need to `git push` to send our local commits to the remote repository.
 
-## Git Command: git pull
+### Git Command: git pull
 
 If you have multiple people working in the same repo, they will also have a
 clone on their local workstation, and will also be making changes and
@@ -142,7 +142,7 @@ to fetch all changes in other branches as well.  Depending on the version of
 Git your using, this behavior may differ, so just to be safe, it's also good
 to `git pull` after switching to a different branch.
 
-## Git Concept: Git Branches
+### Git Concept: Git Branches
 
 Although we've seen **branches** a little bit (e.g. **production branch**) we've
 not really talked about what a branch is.  Git allows us to spin off a copy of
@@ -151,7 +151,7 @@ merge our changes up to the parent branch, or discard our changes.  This idea
 becomes very useful when making changes to puppet code without affecting the
 production environment, but still allowing us to test our code.
 
-## Git Command: git checkout
+### Git Command: git checkout
 
 The easiest way to create a new branch is to use `git checkout -b <branch-name>`
 
@@ -160,7 +160,7 @@ It's a shortcut for creating a branch, and then checking out that branch.
 The longer version would be a `git branch <branch-name>`
 followed by `git checkout <branch-name>` but why type all of that?
 
-## Okay, shifting gears...
+### Okay, shifting gears...
 
 With these Git concepts and commands in mind, let's work on getting our existing
 Puppet code into GitLab (our Git hosting server).
@@ -171,7 +171,7 @@ workstation, but we will also need to allow the root user on our puppet master a
 to clone the control repo as well, as this repo is where we will store some of our
 puppet code and hiera data.
 
-## Let's Setup root SSH access to GitLab
+### Let's Setup root SSH access to GitLab
 
 So, to recap...
 
@@ -223,7 +223,7 @@ Next, within the GitLab WebGUI
 
 At this point, the root user on the **puppet* VM should be able to clone the repo.
 
-## Test that the root user can clone the puppet/control repo
+### Test that the root user can clone the puppet/control repo
 
 ```
 [root@puppet .ssh]# cd /tmp
@@ -240,11 +240,11 @@ Receiving objects: 100% (3/3), done.
 
 Works!
 
-## Create new branch called 'production'
+### Create new branch called 'production'
 
 In the GitLab webGUI, create a new branch called 'production'
 
-## Test that R10K can pull down your code
+### Test that R10K can pull down your code
 
 R10K knows to look for its config file in `/etc/puppetlabs/r10k/`
 
@@ -289,7 +289,7 @@ the original **master** branch (the initial branch that a new Git repo always co
 and the **production** branch, which we created in the GitLab WebGUI.  Both get their
 own environment directory.
 
-## Let's Move Our Existing Puppet Code In To GitLab
+### Let's Move Our Existing Puppet Code In To GitLab
 
 How do we get our existing puppet code in to GitLab?
 
@@ -985,7 +985,7 @@ INFO     -> Removing unmanaged path /tmp/r10k-test/master
 
 Notice that the un-used **master** directory environment was removed?  That's what we want.
 
-## Put R10K in control
+### Put R10K in control
 
 Finally!
 
@@ -1081,7 +1081,7 @@ Good run on the GitLab agent node as well!
 
 If you also have the **agent** VM up and running, you should get a clean run on it as well.
 
-## Cleanup
+### Cleanup
 
 Remember that we used the `share/` directory as a temporary staging directory.  Let's clean that up so Git doesn't bug us about untracked files there...
 
@@ -1112,10 +1112,7 @@ Your branch is up-to-date with 'origin/master'.
 nothing to commit, working directory clean
 ```
 
-
-
-
-## Git post-receive hook
+### Git post-receive hook
 
 Let's setup a **post-receive hook** which will ssh from GitLab to the puppet master and run r10k for us.
 This way, every time we do a **git push** to GitLab, it will automatically run R10K on the master for us.
@@ -1259,7 +1256,7 @@ To ssh://localhost/puppet/control.git
    f193b1d..625fe7e  production -> production
 ```
 
-## Summary
+### Summary
 
 So what have we done?
 
@@ -1274,7 +1271,7 @@ So what have we done?
 6. Configured a **post-receive** hook on the GitLab server
   - This will trigger an R10K run on the puppet master when we do a **git push**
 
-## REMINDER - No more editing Puppet code directly on the Puppet Master
+### REMINDER - No more editing Puppet code directly on the Puppet Master
 
 From this point going forward we will **NOT** edit any code files directly on the Puppet Master.
 Instead, we will edit our code and Hiera data on our workstation in our **puppet/control** repo.

@@ -2,12 +2,12 @@
 
 ---
 
-# **Lab #6** - Some More Puppet Code Practice
+### **Lab #6** - Some More Puppet Code Practice
 
 ---
 
 
-## Overview
+### Overview
 
 Time to complete:  60 minutes
 
@@ -23,9 +23,7 @@ puppet code, but the **primary goal** of this lab is to learn:
  - Notice that we are editing code files directly on the master (Bad? Why?)
  - Notes on the `site.pp` and **top-scope variables** (will become important later)
 
----
-
-## Node Classification
+### Node Classification
 
 Remember from Lab #5, we talked about **classes** and **node classification**?
 
@@ -34,7 +32,7 @@ To review:
   - a class is simply a named block of puppet code that we can refer to by the class name.
   - we "tie" a class to a node through **node classification**, which simply says "apply this **class** to this **node**"
 
-## The Catalog
+### The Catalog
 
 We're going to start using the term **catalog** in the following sections, but what is the catalog?
 Simply put, it's just the **compiled** version of your puppet code (manifests).  When the puppet
@@ -57,7 +55,7 @@ Understanding what happens on the master side vs the agent side will become very
 later on, so just keep this in mind for now, and hopefully some questions will be triggerd
 later on as we work through the tutorial.
 
-## Defining Classes and Declaring Classes
+### Defining Classes and Declaring Classes
 
 First, we need to understand the difference between **defining** a class and **declaring** a class.
 
@@ -109,7 +107,7 @@ There is another way of declaring a class called **Resource-like Declarations** 
 
 You can read more about [Resource-like Declarations](https://docs.puppet.com/puppet/3.8/reference/lang_classes.html#using-resource-like-declarations) in the PuppetLabs documentation.
 
-## More about Node Classification
+### More about Node Classification
 
 Example of declaring a class for a specific node:
 
@@ -169,7 +167,7 @@ For now, we will ignore Hiera, but will come back to it in a later lab.  Hiera i
 used almost universally these days, so it's not something to forget about.  Have
 patience, and we'll get to it very soon!
 
-## Let's write some code
+### Let's write some code
 
 Okay, let's shift gears now... We've talked a lot about how to declare classes, but
 it may not make any sense until you start writing some code.
@@ -323,7 +321,7 @@ installed puppet, that package was automatically installed.  DO NOT REMOVE IT.
 Now that all 5 of these packages have been installed, if you run puppet again, no
 additional changes will be made.  The host is as it should be.
 
-## The default node
+### The default node
 
 Now, I want to re-visit something we mentioned earlier.  Remember, the 'node default'
 only applies to a host **if no other** node definition matches it.  We've just added

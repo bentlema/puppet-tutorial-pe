@@ -2,11 +2,11 @@
 
 ---
 
-# **Lab #12** - Git Basics
+### **Lab #12** - Git Basics
 
 ---
 
-### Overview ###
+### Overview
 
 First of all, Git is a huge topic.  It will be impossible to cover everything in this
 quick overview, but we will cover all of what you'll need to work with Git to manage
@@ -29,9 +29,7 @@ that can read a technical book and absorb the content for use later, it's a must
 you're like me, and tend to learn more through examples, and then consult the book when you
 want to learn more about a specific feature of Git, then use it as a reference.
 
----
-
-### The Repository ###
+### The Repository
 
 A "Git Repo" is just just a self-contained bundle of files along with its commit history.
 As mentioned previously, this *commit history* is like a stream of snapshots.
@@ -55,9 +53,7 @@ Some well known Git servers available are:
 
 Let's talk about the basics of Git...
 
----
-
-### Git Clone ###
+### Git Clone
 
 To make a complete copy of a remote repo, you can use *git clone*
 
@@ -85,7 +81,7 @@ specify a remote.
 
 ---
 
-### Git Status ###
+### Git Status
 
 The *git status* command is useful for telling you what branch you're on, as
 well as the status of the staging area.  When you make changes to files that
@@ -135,7 +131,7 @@ working tree.   However, it's still not added to the *staging area*
 
 ---
 
-### The Staging Area (Index) ###
+### The Staging Area (Index)
 
 Git has something called a *Staging Area*.  It's where we can "stage" our changes
 in preperation to permanently commit them to the repo.  Once you commit a
@@ -143,7 +139,7 @@ change, it's there forever in the commit history.
 
 ---
 
-### Git Diff ###
+### Git Diff
 
 To see what changes we've made in the working tree that are not yet staged,
 use *git diff* or *git diff <filename>* for a specific file.   In our example,
@@ -166,7 +162,7 @@ index ec1ce4e..0de3371 100644
 
 ---
 
-### Git Add ###
+### Git Add
 
 To add a file to the staging area, use the *git add* command.  In our example,
 we can simply run *git add environment.conf*
@@ -217,7 +213,7 @@ We will go over all of these in a later lab...
 
 ---
 
-### Git Commit ###
+### Git Commit
 
 Now that we're run the *git add* on our file, and the *git status* shows that
 it's staged (ready to be committed), we can go ahead and either:
@@ -238,7 +234,7 @@ should make it easier to identify later what changes were made
 
 ---
 
-### Git Push ###
+### Git Push
 
 If we do a *git status* again, we'll see something new:
 
@@ -296,7 +292,7 @@ nothing to commit, working directory clean
 
 ---
 
-### Git Pull ###
+### Git Pull
 
 If you have multiple people working in the same repo, they will also have a
 clone on their local workstation, and will also be making changes and
@@ -317,7 +313,7 @@ to *git pull* after switching to a different branch.
 
 ---
 
-### Git Branches ###
+### Git Branches
 
 Although we've seen *branches* a little bit (e.g. *production branch*) we've
 not really talked about what a branch is.  Git allows us to spin off a copy of
@@ -366,7 +362,7 @@ in the repo, and puts an asterisk next to the currently-checked-out branch.
 
 ---
 
-### Git Merge ###
+### Git Merge
 
 When we make changes in another branch, it's possible that we will eventually
 want to merge those changes back in to the branch we split off of.
@@ -491,7 +487,7 @@ To ssh://localhost/puppet/control.git
 
 ---
 
-### More about branches ###
+### More about branches
 
 Let's do a *git branch -a* to see all of our local and remote branches...
 
@@ -707,7 +703,7 @@ Notice the last line where it says *Removing unmanaged path environments/master*
 
 ---
 
-## Example 2:  Remember that we have a develpment branch?
+### Example 2:  Remember that we have a develpment branch?
 
 We've largely been working with the **production** branch in our control repo, but
 remember that we've created a **development** branch as well?

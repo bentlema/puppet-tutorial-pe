@@ -998,7 +998,7 @@ Continue to **Lab #6** --> [Practice doing some puppet code, and puppet runs](06
 
 ---
 
-Further Reading:
+### Further Reading
 
 For more info on how the site.pp **main manifest** is configured and used,
 see the PuppetLabs docs at:
