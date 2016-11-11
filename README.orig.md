@@ -1,13 +1,9 @@
-Start Here
-----------
+# Start Here #
 
 This is a **Puppet Enterprise** and **Git** training tutorial.
 We will also use **Vagrant** and/or **Docker** to provision our training environment.
 
-![Puppet](images/Puppet-Logo.jpg)
-![Git](images/Git-Logo.png)
-
-## Training Overview
+### Training Overview ###
 
 What will we do in this training tutorial?
 
@@ -22,8 +18,7 @@ What will we do in this training tutorial?
 * Learn how to setup R10K to automate code deployment
 * Learn basic Puppet Coding, Git usage, and Vagrant & Docker usage
 
-
-## How to use this repo?
+### How to use this repo? ###
 
 * Download and install the Git client on your workstation
 
@@ -32,27 +27,26 @@ What will we do in this training tutorial?
 * Clone this repo
 
 ```
-     git clone https://github.com/bentlema/puppet-training-pe
+     git clone https://github.com/bentlema/puppet-training
 ```
 
 * Change directory to...
 
 ```
-     cd puppet-training-pe
+     cd puppet-training
 ```
 
 * Begin following the Labs (links below)
 
-## Navigating This Tutorial
+### Navigating This Tutorial ###
 
 This entire tutorial is of course a Git repository!  All of the tutorial
 files are written in [Markdown](https://en.wikipedia.org/wiki/Markdown).
 Make sure you're comfortable navigating this code repo before you start.
 At any time, if you wish to return to this main README.md file, you can
-click the bentlema/[puppet-training-pe](/README.md) link at the top of the page.
+click the bentlema/[puppet-training](https://github.com/bentlema/puppet-training#start-here) link at the top of the page.
 
-
-## Minimum System Requirements
+### Minimum System Requirements ##
 
 * You will need the ability to install software on your workstation (Admin / Super-User privileges).  We will use the following software:
     - Git
@@ -73,9 +67,7 @@ click the bentlema/[puppet-training-pe](/README.md) link at the top of the page.
     - Although Vagrant is capable of spinning up Docker containers, we will
       not use this capability
 
----
-
-## Labs
+### Labs ###
 
 There are enough differences between using Docker and Vagrant+VirtualBox,
 I've split this tutorial into two distinct tracks.  I will cover all of the
@@ -83,11 +75,7 @@ same core materials, but will use different examples in each track, so it
 may be worth it to go through both tracks if you have the time and energy.
 
 
-
----
-
-### TRACK: Vagrant + VirtualBox
-![Vagrant Logo](images/Vagrant-Logo.png) ![VirtualBox Logo](images/VirtualBox-Logo.png)
+#### Track: Vagrant + VirtualBox ####
 
  * **Lab 01** - [Vagrant to deploy 3 training VMs](/tutorial/vbox/01-Provision-Training-VMs.md#lab-1)
  * **Lab 02** - [Prepare to Install Puppet Enterprise on VMs](/tutorial/vbox/02-Prep-to-Install-Puppet-Master.md#lab-2)
@@ -104,11 +92,7 @@ may be worth it to go through both tracks if you have the time and energy.
  * **Lab 13** - [Git Workflow](/tutorial/vbox/13-Git-Workflow.md)
  * **Lab 14** - [Practice doing some puppet code, and puppet runs](/tutorial/vbox/14-practice.md)
 
-
----
-
-### TRACK: Docker Containers
-![Docker Logo](images/Docker-Logo.png)
+#### Track: Docker Containers ####
 
  * **Lab 01** - [Docker to deploy 3 training Containers](/tutorial/docker/01-Provision-Training-Containers.md#lab-1)
  * **Lab 02** - [Prepare to Install Puppet Enterprise on Containers](/tutorial/docker/02-Prep-to-Install-Puppet-Master.md#lab-2)
@@ -125,13 +109,9 @@ may be worth it to go through both tracks if you have the time and energy.
  * **Lab 13** - [Git Workflow](/tutorial/docker/13-Git-Workflow.md)
  * **Lab 14** - [Practice doing some puppet code, and puppet runs](/tutorial/docker/14-practice.md)
 
+### Some Further Reading ###
 
----
-
-## Further Reading
-
- - [Lots of links to external resources](/tutorial/YY-Further-Reading.md)
-
+ * **Lots of Links** - [Further Reading](/tutorial/YY-Further-Reading.md)
 
 ---
 

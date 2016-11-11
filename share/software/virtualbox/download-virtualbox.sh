@@ -1,18 +1,29 @@
 #!/bin/bash
-
+#
+# All releases of VirtualBox can be found here: 
+#
+#     http://download.virtualbox.org/virtualbox/
+#
 # http://download.virtualbox.org/virtualbox/5.0.16/
-# http://download.virtualbox.org/virtualbox/5.1.2/
+#VERSION="5.0.16"
+#BUILD="105871"
+#
 # http://download.virtualbox.org/virtualbox/5.0.26/VirtualBox-5.0.26-108824-OSX.dmg
-
-VERSION="5.0.16"
-BUILD="105871"
-
-VERSION="5.0.26"
-BUILD="108824"
-
-# Don't use until Vagrant 1.8.6 comes up (1.8.5 is broken)
+#VERSION="5.0.26"
+#BUILD="108824"
+#
+# http://download.virtualbox.org/virtualbox/5.0.28/VirtualBox-5.0.28-111378-OSX.dmg
+VERSION="5.0.28"
+BUILD="111378"
+#
+# Don't use 5.1.x series until Vagrant 1.8.6+ comes out (1.8.5 is broken)
+# http://download.virtualbox.org/virtualbox/5.1.2/
 #VERSION="5.1.2"
 #BUILD="108956"
+#
+# http://download.virtualbox.org/virtualbox/5.1.8/
+#VERSION="5.1.8"
+#BUILD="111374"
 
 mkdir -p ${VERSION}-${BUILD} && cd ${VERSION}-${BUILD} || exit
 
