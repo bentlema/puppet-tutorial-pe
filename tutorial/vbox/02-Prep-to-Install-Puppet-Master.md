@@ -2,11 +2,11 @@
 
 ---
 
-# **Lab #2** - Prepare to Install Puppet Enterprise on the **puppet** VM
+### **Lab #2** - Prepare to Install Puppet Enterprise on the **puppet** VM
 
 ---
 
-## Overview
+### Overview
 
 Time to complete:  10 minutes
 
@@ -33,7 +33,7 @@ id       name         provider   state    directory
 
 Notice that my **puppet** VM is running, but my **gitlab** and **agent** VM's are powered off.
 
-## Login/Connect to your Training VM
+### Login/Connect to your Training VM
 
 ```
 $ vagrant ssh puppet
@@ -81,9 +81,8 @@ below...
     - Use sudo to edit the /etc/hosts file
     - Start a root shell, and configure the host firewall
 
----
 
-## Pre-installation Steps
+### Pre-installation Steps
 
 There are a couple things we need to do to make our VM ready to take PE:
 
@@ -155,7 +154,7 @@ Continue to **Lab #3** --> [Install Puppet Master](03-Install-Puppet-Master.md#l
 
 ---
 
-### Further Reading ###
+### Further Reading
 
 These links are not needed for this Lab, but for reference here's the PE Install Guide at the PuppetLabs web site:
 

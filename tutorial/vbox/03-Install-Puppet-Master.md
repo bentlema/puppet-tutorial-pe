@@ -2,11 +2,11 @@
 
 ---
 
-# **Lab #3** - Install Puppet Enterprise
+### **Lab #3** - Install Puppet Enterprise
 
 ---
 
-## Overview
+### Overview
 
 Time to complete:  45 minutes
 
@@ -15,14 +15,13 @@ In this lab we will install Puppet Enterprise 3.8.X
 * PE is free to install and evaluate
 * When running PE without a license, you're limited to 10 agents
 
----
 
-## Get logged in to your puppet VM
+### Get logged in to your puppet VM
 
 We are about to install Puppet Enterprise, and make sure you're
 logged into our puppet master host.
 
-## Note about root
+### Note about root
 
 When connecting to a Vagrant-provisioned VM with **vagrant ssh** you will be
 logged in as the **vagrant** user (a normal/unprivileged user).  However, we
@@ -42,7 +41,7 @@ If you're not the root user yet, then become root, and be happy!
      sudo su -
 ```
 
-## Run The Installer
+### Run The Installer
 
 Now let's un-compress/de-archive the PE installation tarball, and install...
 
@@ -125,7 +124,7 @@ VM/Container to our localhost.  Use the link below instead.
 
 ---
 
-## Login to the PE Console
+### Login to the PE Console
 
 We've forwarded port 443 from our puppet VM/Container to port 22443 on our hosting workstation, so you should be able to connect to the PE Console via the URL:
 
@@ -149,7 +148,7 @@ server.
 Although we wont cover the **Split** install, nor the **Large Environment Install**
 in this tutorial, it may be helpful to understand what they are:
 
-## What is a Split / LEI Install ?
+### What is a Split / LEI Install ?
 
 A Split install would consist of 3 hosts (or VMs) with the various components split across them as follows:
 
@@ -207,7 +206,7 @@ Okay, let's get back to the lab...
 
 ---
 
-## Back to the PE Console...
+### Back to the PE Console...
 
 Let's play around in the PE Console a bit.  To change the 'admin' account
 password, click on 'admin' in the top right corner, and select 'My Account'.
@@ -220,7 +219,7 @@ You should see 1 agent is registered called
 **puppet.example.com**.  This is your Puppet Master!
 
 
-## Test your Puppet installation...
+### Test your Puppet installation...
 
 Test your PE installation by running the agent manually from the shell prompt like this:
 

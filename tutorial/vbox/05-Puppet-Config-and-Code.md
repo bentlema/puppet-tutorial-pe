@@ -2,11 +2,11 @@
 
 ---
 
-# **Lab #5** - Get Familiar with Puppet Config Files, Code, and CLI
+### **Lab #5** - Get Familiar with Puppet Config Files, Code, and CLI
 
 ---
 
-## Overview
+### Overview
 
 Time to complete:  60 minutes
 
@@ -23,9 +23,7 @@ where puppet got installed, how we can use puppet to make a config change
 on an agent system, and then we'll dig into puppet config and coding in
 more depth...
 
----
-
-## Where is Puppet Enterprise Installed?
+### Where is Puppet Enterprise Installed?
 
 Let's look at where PE installs itself, the config files
 we should know about, and how to get started writing some
@@ -80,7 +78,7 @@ is well defined, and you shouldn't just use them for whatever you want:
 * **modules** - any puppet modules you use go here, including site-developed modules
 * **templates** - similar to the files dir, but holds marked-up files in ERB format
 
-## The environments directory
+### The environments directory
 
 Did you notice the environments directory?  Out-of-the-box, PE comes with a single
 environment setup, called the **production** environment.   Environments are useful
@@ -94,7 +92,7 @@ environment gets its own directory within the **environments** directory,
 and each environment contains it's own set of manifests, modules, files
 and templates.
 
-## The modules directory
+### The modules directory
 
 The modules directory can contain additional Puppet code from PuppetLabs or
 other third parties, or even in-house-developed  modules.  One common module
@@ -106,7 +104,7 @@ module.
 Let's start to look at some of the things we might want to do from the
 command line with respect to modules...
 
-## List Installed Modules
+### List Installed Modules
 
 Puppet Enterprise comes with some modules pre-installed.  To see what's installed,
 run the `puppet module list` command as follows on your puppet node (The "Puppet Master"):
@@ -152,7 +150,7 @@ the puppet installer is using puppet to install and configure other components:
 ```
 
 
-## Install a Puppet Module
+### Install a Puppet Module
 
 What if you want to install a Puppet Module from the Puppet Forge?
 (Follow along, and go ahead and run each command as we talk about them...)
@@ -325,7 +323,7 @@ What other ways might we need/want to envoke puppet from the command line? ...
 
 ---
 
-## Puppet from the command line
+### Puppet from the command line
 
 Explore the 'puppet' command on both the master and the agent.  Run the following commands
 and take note of what they do.
@@ -346,7 +344,7 @@ and take note of what they do.
 
 ---
 
-## The Puppet Config File
+### The Puppet Config File
 
 Let's look at the **puppet.conf** a bit... Here's what a minimal agent-side
 puppet.conf would look like:
@@ -484,7 +482,7 @@ fast enough to handle more than 500 agents.  It becomes a bottleneck
 and agent runs would begin to fail.)  This scaling issue has been
 fixed in newer versions of Puppet Enterprise such as version 2016.2.x
 
-## Sections of the puppet.conf
+### Sections of the puppet.conf
 
 The main, master, and agent sections control where a setting
 is applicable.  The **[agent]** section applies to any puppet agent,
@@ -500,7 +498,7 @@ If you change the puppet.conf, you should also **restart** the pe-puppet
 service so that it re-reads its config.
 
 
-## Okay, so how do we run puppet manually?
+### Okay, so how do we run puppet manually?
 
 The puppet agent will run automatically in the background
 * Every 30 minutes if its cert has been signed, or...
@@ -538,11 +536,11 @@ more about troubleshooting and tracing puppet runs later...
 
 ---
 
-## Okay, Let's get our hands dirty...
+### Okay, Let's get our hands dirty...
 
 ---
 
-## Let's make puppet manage the /etc/hosts file
+### Let's make puppet manage the /etc/hosts file
 
 One annoying thing about Vagrant is that if you configure the VM with a hostname,
 Vagrant will automatically edit /etc/hosts to make sure the hostname entry is in
@@ -689,7 +687,7 @@ It removed the rogue entry we added! Nice!
 
 So we've seen that Puppet recognized a change to /etc/hosts and un-did that change.
 
-## The host resource
+### The host resource
 
 The `host { }` definition is called a **puppet resource type**, or just
 the 'host resource' or simply a 'type'.  Depending on what documentation your're reading,
@@ -867,7 +865,7 @@ simply shows the current state of that resoure at that moment in time.
 
 ---
 
-## Okay, getting back to the host resource...
+### Okay, getting back to the host resource...
 
 Remember that `puppet describe host` will show you all of the available
 parameters for a host resource.

@@ -2,11 +2,11 @@
 
 ---
 
-# **Lab #4** - Install the Puppet Agent
+### **Lab #4** - Install the Puppet Agent
 
 ---
 
-## Overview
+### Overview
 
 Time to complete:  10-15 minutes
 
@@ -15,7 +15,7 @@ In this lab we will:
 * Manually edit the /etc/hosts to prepare for the agent install
 * Install the Puppet Agent on the **agent** node
 
-## Pre-installation Steps
+### Pre-installation Steps
 
 Make sure your **agent** VM or container is started, and get logged in.
 
@@ -26,7 +26,7 @@ If using Vagrant, start your VM, and connect to it via ssh:
      vagrant ssh agent
 ```
 
-## Edit the hosts file
+### Edit the hosts file
 
 Edit **/etc/hosts** and make sure it looks exactly like this (delete any other lines):
 (This should be the exact same hosts file as we created on the **puppet** master node)
@@ -40,7 +40,7 @@ Edit **/etc/hosts** and make sure it looks exactly like this (delete any other l
 
 In a later lab we will write the puppet code to maintain the /etc/hosts entries, but for now we add them manually.
 
-## Install the Agent
+### Install the Agent
 
 To install the puppet agent on the **agent** node, we can take advantage of
 a feature of the PE Master:  The PE Master makes available the agent installer
@@ -67,7 +67,7 @@ opening <https://localhost:22140/packages> in your workstation's web browser.
 Go ahead an install the agent if you haven't already done so, and then
 try running the puppet agent...
 
-## Run the Puppet Agent
+### Run the Puppet Agent
 
 Run the puppet agent manually.  This will cause an SSL certificate request
 to be generated and sent to the puppetmaster.
@@ -89,7 +89,7 @@ so you may not see that in your output.  In that case, you would see just this:
 Exiting; no certificate found and waitforcert is disabled
 ```
 
-## Sign the Certificate
+### Sign the Certificate
 
 Next, We need to sign the agent's cert on the master, so switch to your **puppet**
 window/terminal and issue the following commands on the puppet master as root:
@@ -118,7 +118,7 @@ Alternatively, you can sign the cert through the PE Console if you wish:
 
 ![Node Requests](images/Accept-Node-Request.png)
 
-## Run puppet...
+### Run puppet...
 
 Now, back on the agent node:  Let's run puppet again (be sure you're running as root)
 
@@ -133,7 +133,7 @@ its certificate being signed, there is a small chance that the first puppet run 
 occur before you're able to do a manual run.  In that case, you should see a little output
 as in the second puppet run (no changes made.)
 
-## Run the Puppet Agent Again
+### Run the Puppet Agent Again
 
 Run puppet a **second** time, and you should get a clean run with no changes.
 
@@ -148,7 +148,8 @@ here:
 
 * Puppet Run Output:  [04-Puppet-Agent-Run-Output.md](04-Puppet-Agent-Run-Output.md)
 
----
+
+### Summary
 
 At this point we have:
 
