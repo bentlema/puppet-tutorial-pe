@@ -1,7 +1,7 @@
 Start Here
 ----------
 
-This is a **Puppet Enterprise** and **Git** training tutorial.
+This is a **Puppet Enterprise** and **Git** tutorial.
 We will also use **Vagrant** and/or **Docker** to provision our training environment.
 
 ![Puppet](images/Puppet-Logo.jpg)
@@ -107,7 +107,7 @@ may be worth it to go through both tracks if you have the time and energy.
 
 ---
 
-### TRACK: Docker Containers (UNDER CONSTRUCTION -- COMING SOON)
+### TRACK: Docker Containers
 ![Docker Logo](images/Docker-Logo.png)
 
  * **Lab 01** - [Docker to deploy 3 training Containers](/tutorial/docker/01-Provision-Training-Containers.md#lab-1)
