@@ -2,7 +2,9 @@
 
 ---
 
-## **Lab #1** - Install software, and use Vagrant to deploy 3 training VMs
+### **Lab #1** - Install software, and use Vagrant to deploy 3 training VMs
+
+---
 
 ### Overview
 
