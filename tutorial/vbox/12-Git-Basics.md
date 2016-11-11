@@ -538,7 +538,7 @@ exists on the remote called *origin* and our local branch is tracking it
 
 ---
 
-# Another example... #
+### Another example...
 
 We configured Hiera in an earlier lab, but one thing we left un-done was the
 location of the **hiera.yaml**.  It's fine sitting where it's at, but it's

@@ -1653,11 +1653,13 @@ So, to summarize, we can use the hiera() lookup function and facter to do
 the same thing, the difference being where the data is hosted--on the agent side,
 or on the puppet master side.
 
+---
+
 Continue to **Lab #8** --> [Environments](08-Environments.md)
 
 ---
 
-See also:
+### Further Reading
 
 1. Hiera Lookup Functions: <https://docs.puppetlabs.com/hiera/1/puppet.html#hiera-lookup-functions>
 2. Hiera Automatic-Parameter Lookup: <https://docs.puppetlabs.com/hiera/1/puppet.html#automatic-parameter-lookup>

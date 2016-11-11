@@ -71,7 +71,7 @@ here so that we can have the following discussion about **"Puppet Environments"*
 Going forward, I will simply write **environment** when talking about Puppet
 Environments, as it gets old typing out **"Puppet Environemnts"** over and over.
 
-## How to Use Puppet Environments
+### How to Use Puppet Environments
 
 Again, we learned a little bit about environments and the `environment/`
 directory structure in [Lab #5](05-Puppet-Config-and-Code.md), but we didn't
