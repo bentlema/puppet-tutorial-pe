@@ -37,8 +37,7 @@ In the following lab you will install the following software:
       - Installers for Mac OS X and Windows are provided, but others can be downloaded as well
       - other installers available here: <https://www.virtualbox.org/wiki/Downloads>
 
-* Start VirtualBox and configure 'Default Machine Folder' to place VM's in a directory other than the default (if you wish)
-      - (e.g. external HD with more space than your internal SSD)
+* Start VirtualBox and configure 'Default Machine Folder' to place VM's in a directory other than the default (if you wish), then exit VirtualBox again.
 
 * Install Vagrant
       - find the appropriate installer in `puppet-tutorial-pe/share/software/vagrant`
@@ -241,10 +240,10 @@ This concludes Lab #1.  You should now have 3 VMs up and running named as
 shown above in the **global-status** output above.
 
 
-If you're not planning to continue to the next lab, you may want to halt all
-of your training VM's.  Make sure you've exited the ssh session of each VM,
-and back down to the shell prompt on your workstation, then issue the `vagrant halt`
-for each VM as follows:
+If you're not planning to continue to the next lab right away, you may want
+to halt all of your training VM's.  Make sure you've exited the ssh session
+of each VM, and back down to the shell prompt on your workstation, then issue
+the `vagrant halt` for each VM as follows:
 
 ```
 vagrant halt puppet
