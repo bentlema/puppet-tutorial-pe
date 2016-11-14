@@ -173,6 +173,12 @@ unpredictable results.  By manually specifying the certname, we guarantee we
 will always get the name we want, rather than letting puppet try and pick
 it for us.
 
+There are other params we may wish to pass in to the install script as well.
+You can pass in any config item that makes sense.  Just run `puppet config print`
+to see the possibilities.
+
+Also, to read more about passing parameters to the agent installer, see:  https://docs.puppet.com/pe/latest/install_agents.html#passing-configuration-parameters-to-the-install-script
+
 ### Summary
 
 At this point we have:
