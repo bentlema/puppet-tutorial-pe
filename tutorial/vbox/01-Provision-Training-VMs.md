@@ -44,7 +44,11 @@ In the following lab you will install the following software:
       - find the appropriate installer in `puppet-tutorial-pe/share/software/vagrant`
       - others available here: <https://www.vagrantup.com/downloads.html>
 
-* cd into puppet-tutorial-pe and 'vagrant up puppet' to provision the VM
+* cd into `puppet-tutorial-pe/`
+
+* We install a Vagrant plugin to manage VirtualBox guest additions
+
+* Then `vagrant up puppet` to provision the VM
 
 ```
 cd puppet-tutorial-pe
@@ -52,7 +56,7 @@ vagrant plugin install vagrant-vbguest
 vagrant up puppet
 ```
 
-* once the 'puppet' VM is provisioned, get familiar with vagrant, and confirm the VM specs are correct:
+* once the **puppet** VM is provisioned, get familiar with vagrant, and confirm the VM specs are correct:
 
 ```
     vagrant ssh puppet              # to verify that you are able to login (should not be prompted for password)
@@ -65,19 +69,26 @@ vagrant up puppet
     exit                            # and drop out of the VM, back to host OS shell prompt
 ```
 
+### Stopping your Vagrant-managed VM
+
 When you're done working through any particular lab, and want to stop your
-VM's, you'd issue a 'vagrant halt' command followed by the VM name, as follows:
+VM's, you'd issue a `vagrant halt` command followed by the VM name, as follows:
 
 ```
     vagrant halt puppet        # and wait for VM to shutdown
 ```
-If you issued a `vagrant halt puppet` to test the above, make sure you issue a `vagrant up puppet` before continuing on through the labs...
+
+### Starting your Vagrant-managed VM
+
+If you issued a `vagrant halt puppet` to test the above, you may issue a `vagrant up puppet` before continuing on through the labs to start it back up again...
 
 If all goes well with the above, we can be confident that our VM is working as expected, and let's move on.
 
+### Login to your VM again...
+
 Let's login to your puppet VM again with `vagrant ssh puppet`
 
-You should see that /share is in `df` output, and this is your shared filesystem space that is also accessible outside of the VM
+You should see that `/share` is in the `df` output. This is your shared filesystem space that is also accessible outside of the VM
 
 ```
 $ vagrant ssh puppet
@@ -87,8 +98,8 @@ Filesystem      Size  Used Avail Use% Mounted on
 none            223G  206G   18G  93% /share
 ```
 
-If you copy a file to **/share** within your VM, you will be able to get to it from your host OS at **puppet-tutorial-pe/share**
-(and visa versa)
+This `/share` directory is accessible **both** within your VM and from your host system.
+For example, if you copy a file to `/share` within your VM, you will be able to get to it from your host OS at `puppet-tutorial-pe/share/` (and visa versa)
 
 If for some reason, you do not see the `/share/` filesystem mounted up, try halting your VM and starting again.  Sometimes the VMware tools need to be updated, and a stop/start will trigger that:
 
@@ -101,7 +112,7 @@ If for some reason, you do not see the `/share/` filesystem mounted up, try halt
 
 ...and check again.
 
-
+### Explore more Vagrant commands
 
 Get comfortable with Vagrant, and connecting to your VM.  The most useful commands you'll need are:
 
@@ -114,8 +125,12 @@ vagrant ssh <name>         # connect to your VM with ssh
 vagrant ssh-config <name>  # show ssh config in case you want to use PuTTY to connect to your VM
 ```
 
-You'll also need to provision 2 more VMs, one for GitLab, and one more which will run the
-puppet agent.
+### Provision two more VMs
+
+You'll also need to provision 2 more VMs, one for **GitLab**, and one more
+which will run the puppet **agent**.  (Actually, all 3 will run the puppet
+agent, but we create a separate small VM for testing with so we don't have
+to worry about breaking something while we are testing.)
 
 ```
 vagrant up gitlab          # provision the VM for your GitLab server
@@ -140,14 +155,15 @@ with Vagrant commands from any directory. For example:
 "vagrant destroy 1a2b3c4d"
 ```
 
-This concludes Lab #1.  You should now have 3 VMs up and running named as shown above in the 'global-status' output above.
+This concludes Lab #1.  You should now have 3 VMs up and running named as
+shown above in the **global-status** output above.
 
 If you're curious how the VM's are configured, take a peek at the
 [puppet-tutorial-pe/Vagrantfile](/Vagrantfile)
 
 If you're not planning to continue to the next lab, you may want to halt all
 of your training VM's.  Make sure you've exited the ssh session of each VM,
-and back down to the shell prompt on your workstation, then issue the **vagrant halt**
+and back down to the shell prompt on your workstation, then issue the `vagrant halt`
 for each VM as follows:
 
 ```
