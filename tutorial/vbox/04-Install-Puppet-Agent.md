@@ -12,14 +12,12 @@ Time to complete:  10-15 minutes
 
 In this lab we will:
 
-* Manually edit the /etc/hosts to prepare for the agent install
+* Manually edit the /etc/hosts to prepare for the agent install (if not already done)
 * Install the Puppet Agent on the **agent** node
 
 ### Pre-installation Steps
 
-Make sure your **agent** VM or container is started, and get logged in.
-
-If using Vagrant, start your VM, and connect to it via ssh:
+Make sure your **agent** VM is started, and get logged in.
 
 ```
      vagrant up agent
@@ -28,7 +26,11 @@ If using Vagrant, start your VM, and connect to it via ssh:
 
 ### Edit the hosts file
 
-Edit **/etc/hosts** and make sure it looks exactly like this (delete any other lines):
+Again, our `/etc/hosts` file should already be setup, as we've used a pre-configured
+Vagrant base box that already has the entries we want, but for the sake of completness,
+let's double check...
+
+View and/or edit `/etc/hosts` and make sure it looks exactly like this (delete any other lines):
 (This should be the exact same hosts file as we created on the **puppet** master node)
 
 ```
@@ -38,7 +40,8 @@ Edit **/etc/hosts** and make sure it looks exactly like this (delete any other l
 192.168.198.12 gitlab.example.com gitlab
 ```
 
-In a later lab we will write the puppet code to maintain the /etc/hosts entries, but for now we add them manually.
+In a later lab we will write the puppet code to maintain the /etc/hosts entries,
+but for now we add them manually.
 
 ### Install the Agent
 
@@ -50,27 +53,31 @@ installer script and then pipe it through bash.
 * To use **wget**
 
 ```
-     wget --no-check-certificate --secure-protocol=TLSv1 -O - https://puppet:8140/packages/current/install.bash | bash
+     wget --no-check-certificate --secure-protocol=TLSv1 -O - https://puppet:8140/packages/current/install.bash | bash -s agent:certname=agent.example.com
 ```
 
 * To use **curl**
 
 ```
-     curl -k --tlsv1 https://puppet:8140/packages/current/install.bash | bash
+     curl -k --tlsv1 https://puppet:8140/packages/current/install.bash | bash -s agent:certname=agent.example.com
 ```
 
 If you'd like to browse what else is accessible via that web server, try
 opening <https://localhost:22140/packages> in your workstation's web browser.
 
-(Remember we port-forwarded 8140 to 22140 on our hosting workstation)
+(Remember we port-forwarded **8140** <--> **22140** on our hosting workstation)
 
 Go ahead an install the agent if you haven't already done so, and then
 try running the puppet agent...
 
+* Puppet Install Output:  [04-Puppet-Agent-Install-Output.md](04-Puppet-Agent-Install-Output.md)
+
+
 ### Run the Puppet Agent
 
 Run the puppet agent manually.  This will cause an SSL certificate request
-to be generated and sent to the puppetmaster.
+to be generated and sent to the puppetmaster (if it hasn't already happened
+in the background.)
 
 ```
      [root@agent ~]# puppet agent -t
@@ -114,10 +121,6 @@ The **puppet cert sign agent.example.com** command signs the cert, and removes t
      Notice: Removing file Puppet::SSL::CertificateRequest agent.example.com at '/etc/puppetlabs/puppet/ssl/ca/requests/agent.example.com.pem'
 ```
 
-Alternatively, you can sign the cert through the PE Console if you wish:
-
-![Node Requests](images/Accept-Node-Request.png)
-
 ### Run puppet...
 
 Now, back on the agent node:  Let's run puppet again (be sure you're running as root)
@@ -147,7 +150,6 @@ For brevity, I've not included the output on this page, but it's available for v
 here:
 
 * Puppet Run Output:  [04-Puppet-Agent-Run-Output.md](04-Puppet-Agent-Run-Output.md)
-
 
 ### Summary
 
