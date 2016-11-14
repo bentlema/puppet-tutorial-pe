@@ -168,6 +168,8 @@ We've forwarded port 443 from our puppet VM to port 22443 on our hosting worksta
 
 * PE Console URL:  **<https://127.0.0.1:22443/>**
 
+![PE Console Login](images/PE-Console-Login.png)
+
 Login as **admin** and enter the admin password you chose during the install.
 
 If you forgot (or not sure what you typed) you can find the password in the answers file:
