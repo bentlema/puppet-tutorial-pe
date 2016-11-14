@@ -119,7 +119,7 @@ file { '/usr/local/bin/hiera':
 
 ---
 
-Back to **Lab #4** --> [Install Puppet Agent](04-Install-Puppet-Agent.md#run-the-puppet-agent-again)
+Back to **Lab #4** --> [Install Puppet Agent](04-Install-Puppet-Agent.md#install-the-agent)
 
 ---
 
