@@ -289,13 +289,14 @@ in the puppet.conf on the master that are managed by puppet itself.
 
 
 ```shell
-    [root@puppet ~]# puppet agent -t
-    Info: Retrieving pluginfacts
-    Info: Retrieving plugin
-    Info: Loading facts
-    Info: Caching catalog for puppet.example.com
-    Info: Applying configuration version '1477070396'
-    Notice: Finished catalog run in 5.03 seconds
+[root@puppet ~]# puppet agent -t
+Info: Using configured environment 'production'
+Info: Retrieving pluginfacts
+Info: Retrieving plugin
+Info: Loading facts
+Info: Caching catalog for puppet.example.com
+Info: Applying configuration version '1479158750'
+Notice: Applied catalog in 15.20 seconds
 ```
 
 Not too exciting.  We have confirmed that the agent run succeeds, so we know the puppetmaster is up and running and able
