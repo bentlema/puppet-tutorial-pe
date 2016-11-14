@@ -94,7 +94,8 @@ There are a couple things we need to do to make our VM ready to take PE:
 The `/etc/hosts` file should already be setup correctly, but if for some reason
 you find it is not, go ahead and edit it as follows.
 
-Edit **/etc/hosts** and add entries for localhost, as well as our 3 training VMs
+Edit **/etc/hosts** and add entries for localhost, as well as our 3 training VMs, both
+long (FQDN) and short name.
 
     Note: For the purposes of this training, we will not use DNS.  We will rely
           on the /etc/hosts file for name resolution.  In a production deployment
@@ -105,8 +106,7 @@ Edit **/etc/hosts** and add entries for localhost, as well as our 3 training VMs
 sudo vi /etc/hosts
 ```
 
-Delete the localhost lines in there (both IPv4 and IPv6 lines), which should be the
-only two lines in there at this point, and add the following:
+We want our `/etc/hosts` file to look like this:
 
 ```
 127.0.0.1      localhost
