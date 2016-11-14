@@ -162,7 +162,7 @@ VM's are configured, take a peek at the [puppet-tutorial-pe/Vagrantfile](/Vagran
 
 We've used a custom base box that already has some things we need (packages, config, etc.)
 This custom base box already has entries in `/etc/hosts` that we want/need (since we will
-rely on /etc/hosts to resolve names without our training environment.)
+rely on /etc/hosts to resolve names within our training environment.)
 
 Each VM should have the following contnets in their `/etc/hosts` file:
 
