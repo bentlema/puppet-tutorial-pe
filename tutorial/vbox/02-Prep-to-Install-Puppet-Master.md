@@ -94,7 +94,7 @@ There are a couple things we need to do to make our VM ready to take PE:
 The `/etc/hosts` file should already be setup correctly, but if for some reason
 you find it is not, go ahead and edit it as follows.
 
-Edit **/etc/hosts** and add entries for localhost, as well as our 3 training VMs, both
+Edit `/etc/hosts` and add entries for localhost, as well as our 3 training VMs, both
 long (FQDN) and short name.
 
     Note: For the purposes of this training, we will not use DNS.  We will rely
@@ -134,7 +134,7 @@ firewall-cmd --list-all
 exit # drop out of root shell
 ```
 
-The output of your **firewall-cmd --list-all** should look like this:
+The output of your `firewall-cmd --list-all` should look like this:
 
 ```
 [vagrant@puppet ~]$ firewall-cmd --list-all
