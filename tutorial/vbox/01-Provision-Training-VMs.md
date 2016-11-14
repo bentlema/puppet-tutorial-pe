@@ -232,6 +232,8 @@ logout
 Connection to 127.0.0.1 closed.
 ```
 
+This ability to ssh between our VMs will become useful in a later lab
+(when we configure R10K to pull code from GitLab.)
 
 ### Next up...
 
