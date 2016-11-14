@@ -74,8 +74,8 @@ typing in the wrong command in the wrong place. (e.g. what if you accidently cop
 and paste some text into a root shell, and it contains some commands that remove
 the entire /lib directory?)
 
-I will use **sudo** to run commands as root while in the vagrant user's shell, as
-well as starting a root shell with **sudo su -** to illistrate these two options
+I will use `sudo` to run commands as root while in the vagrant user's shell, as
+well as starting a root shell with `sudo su -` to illistrate these two options
 below...
 
     - Use sudo to edit the /etc/hosts file
@@ -86,10 +86,13 @@ below...
 
 There are a couple things we need to do to make our VM ready to take PE:
 
-    - Add some entries to the /etc/hosts file
+    - Add some entries to the /etc/hosts file ( if not already there )
     - Open some ports through the host firewall
 
 ### Edit /etc/hosts
+
+The `/etc/hosts` file should already be setup correctly, but if for some reason
+you find it is not, go ahead and edit it as follows.
 
 Edit **/etc/hosts** and add entries for localhost, as well as our 3 training VMs
 
@@ -112,7 +115,7 @@ only two lines in there at this point, and add the following:
 192.168.198.12 gitlab.example.com gitlab
 ```
 
-In a later lab, we will configure Puppet to make these /etc/hosts changes for us.
+In a later lab, we will configure Puppet to manage these /etc/hosts entries for us.
 
 **Configure Firewall**
 
