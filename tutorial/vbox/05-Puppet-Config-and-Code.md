@@ -35,37 +35,41 @@ The PE config file for Puppet, as well as the various
 other components that come with PE (such as MCollective)
 are stored under **/etc/puppetlabs**
 
-Note:  this is different from "Open Source" Puppet, who's
-config is installed under just /etc/puppet.  Because PE comes
-with a many other components, each component has its own config
-directory under /etc/puppetlabs. Puppet itself is just one
-of those components, and utilizes /etc/puppetlabs/puppet to
-store its config and code.  (Both the Puppet Master and Agent
-uses this same directory.)
+As of PE 2015.x.y, the default location of puppet code is `/etc/puppetlabs/code`
+(Historically, code has been in `/etc/puppetlabs/puppet/environments`, but this
+is no longer the case.)
 
-Let's look at Puppet and its config and code under:  **/etc/puppetlabs/puppet**
+Let's look at Puppet and its config and code under:  **/etc/puppetlabs/code**
 
 Here are the files and directories we will start looking at.
 
-     /etc/puppetlabs/puppet
+```
+     [root@puppet ~]# tree /etc/puppetlabs/code
+
+     /etc/puppetlabs/code
      ├── environments
      │   └── production
+     │       ├── environment.conf
+     │       ├── hieradata
      │       ├── manifests
      │       │   └── site.pp
      │       └── modules
-     ├── puppet.conf
+     └── modules
+```
 
 The **site.pp** is the **main manifest** (also called the **site manifest**)
 that puppet reads first.  It's the first bit of code that puppet parses, or
 the point of entry into our Puppet codebase.  Every other bit of code "hangs off"
-of the site.pp.  We will talk more about what things you can put in the site.pp
-in the next lab.  Also, Out-of-the-Box you'll find some pre-created empty
-directories at the "top level" /etc/puppetlabs/puppet
+of the `site.pp`.  We will talk more about what things you can put in the `site.pp`
+in the next lab.
 
-     /etc/puppetlabs/puppet
-     ├── files
-     ├── manifests
-     ├── modules
+Notice that there is a **production** directory, which corresponds to the
+puppet **production environment**.  Out of the box, there is a single
+environment called **production** although others can be created and used.
+
+Within the `production/` directory, we have `manifests/`, `modules/`, and `hieradata/`.
+There could also be directories for `files/` and `templates/` but they haven't been
+created quite yet.
 
 Some of these same directories are also used within each puppet module.  (A
 module is just a bit of puppet code bundled up in a well-defined way, so that
@@ -80,17 +84,17 @@ is well defined, and you shouldn't just use them for whatever you want:
 
 ### The environments directory
 
-Did you notice the environments directory?  Out-of-the-box, PE comes with a single
-environment setup, called the **production** environment.   Environments are useful
-for containing different sets of modules and code.  It's possible, for example, to
+Out-of-the-box, PE comes with a single environment setup, called the **production**
+environment.   Environments are useful for containing different sets of modules,
+code, and site data.  It's possible, for example, to
 test a newer version of a module, or some puppet code you're actively developing,
 in a different environment, totally seprate from the **production** environment.
 This way, you can make changes to your code, test it on a test system, all without
 ever having to worry about affecting production systems.  We will come back to
 this topic in more depth in a subsequent lab...For now, just know this: Each
 environment gets its own directory within the **environments** directory,
-and each environment contains it's own set of manifests, modules, files
-and templates.
+and each environment contains it's own set of manifests, modules, files,
+templates, and Hiera data.
 
 ### The modules directory
 
@@ -116,27 +120,32 @@ run the `puppet module list` command as follows on your puppet node (The "Puppet
 And you should see something like this:
 
 ```
-[root@puppet ~]# puppet module list
-/etc/puppetlabs/puppet/environments/production/modules (no modules installed)
-/etc/puppetlabs/puppet/modules (no modules installed)
-/opt/puppet/share/puppet/modules
-├── puppetlabs-pe_accounts (v2.0.2-8-g8acc04e)
-├── puppetlabs-pe_concat (v1.1.2-7-g77ec55b)
-├── puppetlabs-pe_console_prune (v0.1.1-4-g293f45b)
-├── puppetlabs-pe_inifile (v1.1.4-16-gcb39966)
-├── puppetlabs-pe_java_ks (v1.2.4-35-g44fbb26)
-├── puppetlabs-pe_postgresql (v3.4.4-15-g32e56ed)
-├── puppetlabs-pe_razor (v0.2.1-28-g7f0be6d)
-├── puppetlabs-pe_repo (v3.8.5)
-├── puppetlabs-pe_staging (v3.8.3)
-└── puppetlabs-puppet_enterprise (v3.8.5)
+     [root@puppet puppetlabs]# puppet module list
+     /etc/puppetlabs/code/environments/production/modules (no modules installed)
+     /etc/puppetlabs/code/modules (no modules installed)
+     /opt/puppetlabs/puppet/modules
+     ├── puppetlabs-pe_accounts (v2.0.2-6-gd2f698c)
+     ├── puppetlabs-pe_concat (v1.1.2-7-g77ec55b)
+     ├── puppetlabs-pe_console_prune (v0.1.1-9-gfc256c0)
+     ├── puppetlabs-pe_hocon (v2016.2.0)
+     ├── puppetlabs-pe_infrastructure (v2016.4.0)
+     ├── puppetlabs-pe_inifile (v2016.2.1-rc0)
+     ├── puppetlabs-pe_java_ks (v1.2.4-37-g2d86015)
+     ├── puppetlabs-pe_nginx (v2016.4.0)
+     ├── puppetlabs-pe_postgresql (v2016.2.0)
+     ├── puppetlabs-pe_puppet_authorization (v2016.2.0-rc1)
+     ├── puppetlabs-pe_r10k (v2016.2.0)
+     ├── puppetlabs-pe_razor (v1.0.0)
+     ├── puppetlabs-pe_repo (v2016.4.0)
+     ├── puppetlabs-pe_staging (v2015.3.0)
+     └── puppetlabs-puppet_enterprise (v2016.4.0)
 ```
 
 Notice that there are 3 different directories that puppet is looking for modules in:
 
-* `/etc/puppetlabs/puppet/environments/production/modules`
-* `/etc/puppetlabs/puppet/modules`
-* `/opt/puppet/share/puppet/modules`   <-- Modules used by PE itself are installed here
+* `/etc/puppetlabs/code/environments/production/modules`
+* `/etc/puppetlabs/code/modules`
+* `/opt/puppetlabs/puppet/modules`   <-- Modules used by PE itself are installed here
 
 Since Puppet Enterprise uses itself to configure itself (e.g. Installing MCollective,
 installing the PostgreSQL instance that sits behind PuppetDB, setup of the agent
@@ -146,9 +155,8 @@ If you're really curious, take a look at the installer log, and you'll see where
 the puppet installer is using puppet to install and configure other components:
 
 ```
-     more /var/log/pe-installer/installer.log
+     more /var/log/puppetlabs/installer/installer.log
 ```
-
 
 ### Install a Puppet Module
 
@@ -157,42 +165,29 @@ What if you want to install a Puppet Module from the Puppet Forge?
 
 ```
      [root@puppet ~]# puppet module install puppetlabs/stdlib
-     Notice: Preparing to install into /etc/puppetlabs/puppet/environments/production/modules ...
+     Notice: Preparing to install into /etc/puppetlabs/code/environments/production/modules ...
      Notice: Downloading from https://forgeapi.puppetlabs.com ...
      Notice: Installing -- do not interrupt ...
-     /etc/puppetlabs/puppet/environments/production/modules
-     └── puppetlabs-stdlib (v4.12.0)
+     /etc/puppetlabs/code/environments/production/modules
+     └── puppetlabs-stdlib (v4.13.1)
 ```
 
 Now look at your installed modules again, and you should see it in the list:
 
-
 ```
      [root@puppet ~]# puppet module list
-     /etc/puppetlabs/puppet/environments/production/modules
-     └── puppetlabs-stdlib (v4.12.0)
-     /etc/puppetlabs/puppet/modules (no modules installed)
-     /opt/puppet/share/puppet/modules
-     ├── puppetlabs-pe_accounts (v2.0.2-8-g8acc04e)
-     ├── puppetlabs-pe_concat (v1.1.2-7-g77ec55b)
-     ├── puppetlabs-pe_console_prune (v0.1.1-4-g293f45b)
-     ├── puppetlabs-pe_inifile (v1.1.4-16-gcb39966)
-     ├── puppetlabs-pe_java_ks (v1.2.4-35-g44fbb26)
-     ├── puppetlabs-pe_postgresql (v3.4.4-15-g32e56ed)
-     ├── puppetlabs-pe_razor (v0.2.1-28-g7f0be6d)
-     ├── puppetlabs-pe_repo (v3.8.5)
-     ├── puppetlabs-pe_staging (v3.8.3)
-     └── puppetlabs-puppet_enterprise (v3.8.5)
-
+     /etc/puppetlabs/code/environments/production/modules
+     └── puppetlabs-stdlib (v4.13.1)
+     [snip]
 ```
 
 Notice that when you installed the Puppet Module, it was automatically
-installed within the *production* environemnt.  By default modules
-get installed in to the *first element of the modulepath*:
+installed within the **production** environemnt.  By default modules
+get installed in to the **first element of the modulepath**:
 
 ```
-     [root@puppet ~]# puppet config print modulepath
-     /etc/puppetlabs/puppet/environments/production/modules:/etc/puppetlabs/puppet/modules:/opt/puppet/share/puppet/modules
+     [root@puppet ~]#  puppet config print modulepath
+     /etc/puppetlabs/code/environments/production/modules:/etc/puppetlabs/code/modules:/opt/puppetlabs/puppet/modules
 ```
 
 The modulepath contains colon-separated absolute paths to the locations where
@@ -205,13 +200,13 @@ What if you want to use that same module in a different environment? And a
 different version?
 
 ```
-     [root@puppet ~]# cd /etc/puppetlabs/puppet
-     [root@puppet ~]# mkdir -p environments/development/modules
-     [root@puppet ~]# puppet module install --environment development puppetlabs/stdlib --version 4.9.1
-     Notice: Preparing to install into /etc/puppetlabs/puppet/environments/development/modules ...
+     [root@puppet environments]# cd /etc/puppetlabs/code/
+     [root@puppet code]# mkdir -p environments/development/modules
+     [root@puppet code]# puppet module install --environment development puppetlabs/stdlib --version 4.9.1
+     Notice: Preparing to install into /etc/puppetlabs/code/environments/development/modules ...
      Notice: Downloading from https://forgeapi.puppetlabs.com ...
      Notice: Installing -- do not interrupt ...
-     /etc/puppetlabs/puppet/environments/development/modules
+     /etc/puppetlabs/code/environments/development/modules
      └── puppetlabs-stdlib (v4.9.1)
 ```
 
@@ -219,39 +214,40 @@ Notice now there are two environment directories (**development** and **producti
 we've installed two different versions of the **stdlib** module.
 
 ```
-     # yum install -y --quiet tree
-     # tree -L 3 environments
-     environments/
+     [root@puppet code]# tree -L 3 environments
+     environments
      ├── development
      │   └── modules
      │       └── stdlib
      └── production
+         ├── environment.conf
+         ├── hieradata
          ├── manifests
          │   └── site.pp
          └── modules
              └── stdlib
 
-     # grep '"version":' environments/*/modules/stdlib/metadata.json
-     development/modules/stdlib/metadata.json:  "version": "4.9.1",
-     production/modules/stdlib/metadata.json:  "version": "4.12.0",
+     [root@puppet code]# grep '"version":' environments/*/modules/stdlib/metadata.json
+     environments/development/modules/stdlib/metadata.json:  "version": "4.9.1",
+     environments/production/modules/stdlib/metadata.json:  "version": "4.13.1",
 ```
 
 * The development environment has v4.9.1
-* The production environment has v4.12.0
+* The production environment has v4.13.0
 
-What if we want to install a module in the "site modules" directory at /etc/puppetlabs/puppet/modules ?
-Modules installed here would/could be used by any/every agent, regardless of environment.  It's like 
+What if we want to install a module in the "site modules" directory at /etc/puppetlabs/code/modules ?
+Modules installed here would/could be used by any/every agent, regardless of environment.  It's like
 a **common** or **global** modules repository.  Just remember that because puppet will search the
 modulepath, if an environment's modules directory contains the same module, that will be used instead
 of those found further down the module search path, such as in this case.
 
-```
-     [root@puppet puppet]# cd /etc/puppetlabs/puppet
+Let's try installing a different version of stdlib here...
 
-     [root@puppet puppet]# puppet module install --target-dir /etc/puppetlabs/puppet/modules puppetlabs/stdlib --version 4.10.0
-     Notice: Preparing to install into /etc/puppetlabs/puppet/modules ...
-     Error: Could not install module 'puppetlabs-stdlib' (v4.10.0)
-       Module 'puppetlabs-stdlib' (v4.11.0) is already installed
+```
+     [root@puppet code]# puppet module install --target-dir /etc/puppetlabs/code/modules puppetlabs/stdlib --version 4.12.0
+     Notice: Preparing to install into /etc/puppetlabs/code/modules ...
+     Error: Could not install module 'puppetlabs-stdlib' (v4.12.0)
+       Module 'puppetlabs-stdlib' (v4.13.1) is already installed
          Use `puppet module upgrade` to install a different version
          Use `puppet module install --force` to re-install only this module
 ```
@@ -259,12 +255,12 @@ of those found further down the module search path, such as in this case.
 Oops.  Puppet warns you that you're trying to install a module that is already installed and is newer.  Let's force the install...
 
 ```
-     [root@puppet puppet]# puppet module install --target-dir /etc/puppetlabs/puppet/modules puppetlabs/stdlib --version 4.10.0 --force
-     Notice: Preparing to install into /etc/puppetlabs/puppet/modules ...
+     [root@puppet code]# puppet module install --target-dir /etc/puppetlabs/code/modules puppetlabs/stdlib --version 4.12.0 --force
+     Notice: Preparing to install into /etc/puppetlabs/code/modules ...
      Notice: Downloading from https://forgeapi.puppetlabs.com ...
      Notice: Installing -- do not interrupt ...
-     /etc/puppetlabs/puppet/modules
-     └── puppetlabs-stdlib (v4.10.0)
+     /etc/puppetlabs/code/modules
+     └── puppetlabs-stdlib (v4.12.0)
 ```
 
 Now, let's grep recursively through the files starting at our current-working-dir
@@ -273,10 +269,10 @@ versions of all of the installed modules (every module should have a metadata.js
 file with this string.)
 
 ```
-     [root@puppet puppet]# grep -r '"version":' .
-     ./modules/stdlib/metadata.json:  "version": "4.10.0",
-     ./environments/production/modules/stdlib/metadata.json:  "version": "4.12.0",
+     [root@puppet code]# grep -r '"version":' .
+     ./environments/production/modules/stdlib/metadata.json:  "version": "4.13.1",
      ./environments/development/modules/stdlib/metadata.json:  "version": "4.9.1",
+     ./modules/stdlib/metadata.json:  "version": "4.12.0",
 ```
 
 You can also use the **puppet module list** command to see what modules are
@@ -423,64 +419,12 @@ follows would not work as intended (without some additional steps):
      environment = development
 ```
 
-Give it a try.  Use **puppet config set** or manually edit the `puppet.conf`
-on the agent node, adding a new line to the **[agent]** section setting
-**environment = development** and then do a manual puppet run.  Here's what
-you'll see:
-
-```
-[root@puppet ~]# puppet config set environment development
-[root@puppet ~]# puppet agent -t
-Warning: Local environment: "development" doesn't match server specified node environment "production", switching agent to "production".
-Info: Retrieving pluginfacts
-Info: Retrieving plugin
-Info: Loading facts
-Info: Caching catalog for puppet.example.com
-Info: Applying configuration version '1477076828'
-Notice: Finished catalog run in 5.07 seconds
-
-```
-
-Okay, revert back to 'environment = production'
-
-
-```
-[root@puppet ~]# puppet config set environment production
-[root@puppet ~]# cd /etc/puppetlabs/puppet
-[root@puppet puppet]# cat puppet.conf
-[main]
-    certname = puppet.example.com
-    vardir = /var/opt/lib/pe-puppet
-    logdir = /var/log/pe-puppet
-    rundir = /var/run/pe-puppet
-    basemodulepath = /etc/puppetlabs/puppet/modules:/opt/puppet/share/puppet/modules
-    environmentpath = /etc/puppetlabs/puppet/environments
-    server = puppet.example.com
-    user  = pe-puppet
-    group = pe-puppet
-    archive_files = true
-    archive_file_server = puppet.example.com
-    module_groups = base+pe_only
-    parser = future
-environment = production
-
-[agent]
-    report = true
-    classfile = $vardir/classes.txt
-    localconfig = $vardir/localconfig
-    graph = true
-    pluginsync = true
-
-```
-
+In fact, depending on the version of puppet you're running, this could
+break your puppet agent, requiring you to manually edit the `puppet.conf`
+to change the environment back to **production**.
 
 In a later lab we will cover how we can change the environment
-via the PE Console, as well as by editing the puppet.conf.  This will
-include disabling the PE Console from doing node classification (which
-is comonly done in a real production deployment, as the PE Console is not
-fast enough to handle more than 500 agents.  It becomes a bottleneck
-and agent runs would begin to fail.)  This scaling issue has been
-fixed in newer versions of Puppet Enterprise such as version 2016.2.x
+via the PE Console, as well as by editing the `puppet.conf`.
 
 ### Sections of the puppet.conf
 
@@ -494,7 +438,7 @@ Any settings you put in the **[master]** section will apply only to the
 puppet master service, and any settings in the [agent] section will
 apply just to the puppet agent itself.
 
-If you change the puppet.conf, you should also **restart** the pe-puppet
+If you change the puppet.conf, you should also **restart** the puppet
 service so that it re-reads its config.
 
 
@@ -504,8 +448,8 @@ The puppet agent will run automatically in the background
 * Every 30 minutes if its cert has been signed, or...
 * Every 5 minutes if it's waiting for its cert to be signed
 
-However, you can also run the puppet agent manually.  You're going to 
-find out this is something you'll do all of the time when you're developing
+However, you can also run the puppet agent manually.  You're going to
+find out this is something you'll do a lot when you're developing
 puppet code, and testing that it does what you want.  Simply run:
 
 ```
@@ -549,7 +493,8 @@ what we want.  And every time we stop and start the VM with Vagrant, it re-write
 the hosts file this way!
 
 UPDATE:  this **was** the case for older versions of Vagrant, but newer versions
-appear to fix this issue. (I'm using v1.8.6 on Mac OS X)
+appear to fix this issue. (I'm using v1.8.4 on Mac OS X)  In any case, we will
+continue with our example, because it's still a good example...
 
 We want our /etc/hosts to have the following 4 lines, and only these 4 lines:
 
@@ -559,10 +504,6 @@ We want our /etc/hosts to have the following 4 lines, and only these 4 lines:
 192.168.198.11 agent.example.com  agent
 192.168.198.12 gitlab.example.com gitlab
 ```
-
-The default /etc/hosts also has the IPv6 localhost entry, which we will
-just remove.  It's not necessary for what we are doing here, and we will
-be able to demonstrate some additional puppet technique.
 
 We know that puppet starts at the **site.pp** for every puppet run.  The site.pp
 contains node definitions (that tells puppet what code to apply to what nodes),
@@ -575,10 +516,10 @@ Later on, we'll see how we can use Hiera to "classify" nodes as well, but for
 now we will use good-old node definitions.
 
 Login to the puppet master, become root, and cd in to:
-/etc/puppetlabs/puppet/environments/production/manifests
+/etc/puppetlabs/code/environments/production/manifests
 
 ```
-     cd /etc/puppetlabs/puppet/environments/production/manifests
+     cd /etc/puppetlabs/code/environments/production/manifests
 ```
 
 Edit the **site.pp** and add the following at the end of the file in the **node default** section:
@@ -609,13 +550,13 @@ in the 'node default' definition, it will be applied to any node that isn't matc
 by a more specific node definition (such as 'node agent { }' or 'node puppet { }').
 
 ```
-[root@puppet manifests]# puppet agent -t
-Info: Retrieving pluginfacts
-Info: Retrieving plugin
-Info: Loading facts
-Info: Caching catalog for puppet.example.com
-Info: Applying configuration version '1477078262'
-Notice: Finished catalog run in 5.23 seconds
+     [root@puppet manifests]# puppet agent -t
+     Info: Retrieving pluginfacts
+     Info: Retrieving plugin
+     Info: Loading facts
+     Info: Caching catalog for puppet.example.com
+     Info: Applying configuration version '1477078262'
+     Notice: Finished catalog run in 5.23 seconds
 ```
 
 Nothing changed?
@@ -698,7 +639,7 @@ own custom resource types with the 'define' function.
 For a complete list of all of the available built-in resource
 types, see this page:
 
-<http://docs.puppetlabs.com/puppet/3.8/reference/type.html>
+<http://docs.puppetlabs.com/puppet/latest/reference/type.html>
 
 You may also use the **puppet describe** command to get info about any
 resource from the command line.  For example, if you want to see the
@@ -708,7 +649,7 @@ parameters/attributes available to the host resource type, simply run:
      puppet describe host
 ```
 
-Compare that with the **types reference** here:  <http://docs.puppetlabs.com/puppet/3.8/reference/type.html#host>
+Compare that with the **types reference** here:  <http://docs.puppetlabs.com/puppet/latest/reference/type.html#host>
 
 If you want to see the current state of a particular resource type,
 you can use the **puppet resource** command.  For example, if you want
@@ -781,46 +722,46 @@ code to enforce a config state, as you can easily cut-and-paste the code
 for the resource into a manifest and modify it accordingly.
 
 To further illistrate this, let's look at a service resource, and how the
-output of 'puppet resource service pe-puppet' changes as we stop/start or
+output of 'puppet resource service puppet' changes as we stop/start or
 enable/disable a service.
 
-Let's see the current state of the pe-puppet service on our puppetmaster:
+Let's see the current state of the puppet service on our puppetmaster:
 
 ```
-     [root@puppet ~]# puppet resource service pe-puppet
-     service { 'pe-puppet':
+     [root@puppet ~]# puppet resource service puppet
+     service { 'puppet':
        ensure => 'running',
        enable => 'true',
      }
 ```
 
-We see that the pe-puppet service is both enabled, and running.
+We see that the puppet service is both enabled, and running.
 
 We can confirm that with the **systemctl** (on RHEL7) command as well:
 
 ```
-     [root@puppet ~]# systemctl status pe-puppet
-      pe-puppet.service - Puppet Enterprise Puppet agent
-        Loaded: loaded (/usr/lib/systemd/system/pe-puppet.service; enabled; vendor preset: disabled)
-        Active: active (running) since Wed 2016-01-27 16:48:21 UTC; 37min ago
-      Main PID: 3178 (puppet)
-        CGroup: /system.slice/pe-puppet.service
-                └─3178 /opt/puppet/bin/ruby /opt/puppet/bin/puppet agent --no-daemonize
+     [root@puppet ~]#  systemctl status puppet
+     ● puppet.service - Puppet agent
+        Loaded: loaded (/usr/lib/systemd/system/puppet.service; enabled; vendor preset: disabled)
+        Active: active (running) since Mon 2016-11-14 18:17:39 UTC; 5h 11min ago
+      Main PID: 8308 (puppet)
+        CGroup: /system.slice/puppet.service
+                └─8308 /opt/puppetlabs/puppet/bin/ruby /opt/puppetlabs/puppet/bin/puppet agent --no-daemonize
 ```
 
 Now, let's disable the service, but leave it running, and then show the output
 of the puppet resource again.  Notice that the **enabled** attribute has changed to **false** now.
 
 ```
-     [root@puppet ~]# systemctl disable pe-puppet
-     Removed symlink /etc/systemd/system/multi-user.target.wants/pe-puppet.service.
+     [root@puppet ~]# systemctl disable puppet
+     Removed symlink /etc/systemd/system/multi-user.target.wants/puppet.service.
 ```
 
 Now check the puppet service resource:
 
 ```
-     [root@puppet ~]# puppet resource service pe-puppet
-     service { 'pe-puppet':
+     [root@puppet ~]# puppet resource service puppet
+     service { 'puppet':
        ensure => 'running',
        enable => 'false',
      }
@@ -829,14 +770,14 @@ Now check the puppet service resource:
 Let's stop the service, and then look again.  Notice that the **ensure** attribute has changed to **stopped** now.
 
 ```
-     [root@puppet ~]# systemctl stop pe-puppet
+     [root@puppet ~]# systemctl stop puppet
 ```
 
 Now check the puppet service resource again:
 
 ```
-     [root@puppet ~]# puppet resource service pe-puppet
-     service { 'pe-puppet':
+     [root@puppet ~]# puppet resource service puppet
+     service { 'puppet':
        ensure => 'stopped',
        enable => 'false',
      }
@@ -845,22 +786,22 @@ Now check the puppet service resource again:
 Now re-enable, and re-start the service, and look again...
 
 ```
-     [root@puppet ~]# systemctl enable pe-puppet
-     Created symlink from /etc/systemd/system/multi-user.target.wants/pe-puppet.service to /usr/lib/systemd/system/pe-puppet.service.
-     [root@puppet ~]# systemctl start pe-puppet
+     [root@puppet ~]# systemctl enable puppet
+     Created symlink from /etc/systemd/system/multi-user.target.wants/puppet.service to /usr/lib/systemd/system/puppet.service.
+     [root@puppet ~]# systemctl start puppet
 ```
 
 Now let's check again...
 
 ```
-     [root@puppet ~]# puppet resource service pe-puppet
-     service { 'pe-puppet':
+     [root@puppet ~]# puppet resource service puppet
+     service { 'puppet':
        ensure => 'running',
        enable => 'true',
      }
 ```
 
-...and we are back to where we started.  Notice that the **puppet resource service pe-puppet** command
+...and we are back to where we started.  Notice that the **puppet resource service puppet** command
 simply shows the current state of that resoure at that moment in time.
 
 ---
@@ -927,34 +868,32 @@ Note:  We need at least one entry for the Puppet Master itself, otherwise the ag
 This is a great reason to be using DNS (so that our puppet master's IP would **always** be resolvable).
 
 ```
-[root@agent ~]# echo '192.168.198.10 puppet.example.com puppet' > /etc/hosts
-[root@agent ~]# cat /etc/hosts
-192.168.198.10 puppet.example.com puppet
-[root@agent ~]# puppet agent -t
+[root@puppet ~]# echo '192.168.198.10 puppet.example.com puppet' > /etc/hosts
+[root@puppet ~]# puppet agent -t
+Info: Using configured environment 'production'
 Info: Retrieving pluginfacts
 Info: Retrieving plugin
 Info: Loading facts
-Info: Caching catalog for agent.example.com
-Info: Applying configuration version '1477079819'
+Info: Caching catalog for puppet.example.com
+Info: Applying configuration version '1479166434'
 Notice: /Stage[main]/Main/Node[default]/Host[localhost]/ensure: created
 Info: Computing checksum on file /etc/hosts
-Info: FileBucket got a duplicate file {md5}dd837742bce6801782115619773820ff
 Notice: /Stage[main]/Main/Node[default]/Host[agent.example.com]/ensure: created
 Notice: /Stage[main]/Main/Node[default]/Host[gitlab.example.com]/ensure: created
-Notice: Finished catalog run in 0.39 seconds
+Notice: Applied catalog in 13.83 seconds
 ```
 
 See how Puppet added back all of the missing host entries?
 
 ```
-[root@agent ~]# cat /etc/hosts
-# HEADER: This file was autogenerated at 2016-10-21 19:57:00 +0000
+[root@puppet ~]# cat /etc/hosts
+# HEADER: This file was autogenerated at 2016-11-14 23:34:05 +0000
 # HEADER: by puppet.  While it can still be managed manually, it
 # HEADER: is definitely not recommended.
-192.168.198.10    puppet.example.com    puppet
-127.0.0.1    localhost
-192.168.198.11    agent.example.com    agent
-192.168.198.12    gitlab.example.com    gitlab
+192.168.198.10  puppet.example.com  puppet
+127.0.0.1       localhost
+192.168.198.11  agent.example.com   agent
+192.168.198.12  gitlab.example.com  gitlab
 ```
 
 Go ahead and try adding some additional entries to /etc/hosts, and then run puppet again.  You should see puppet remove them:
@@ -962,7 +901,7 @@ Go ahead and try adding some additional entries to /etc/hosts, and then run pupp
 I added this line:
 
 ```
-     1.2.3.4   foo.example.com foo
+1.2.3.4   foo.example.com foo
 ```
 
 Then puppet ran an removed it:
@@ -978,6 +917,17 @@ Then puppet ran an removed it:
      Info: Computing checksum on file /etc/hosts
      Notice: Finished catalog run in 0.55 seconds
 ```
+
+If you dont see Puppet remove the entry, it could be that Puppet wasn't able to parse the hosts file, and
+decided to silently do nothing.  I've observed that with PE 2016.4.0, if you have any whitespace before
+your entry, Puppet will just ignore it, even though the system can still resolve it.  This is a bug if
+you ask me, as Puppet is allowing an out-of-compliance file to exist without saying anything.  Is this
+better or worse than what Puppet used to do?  In older versions of Puppet, if there was invalid content
+in your /etc/hosts that Puppet couldn't parse, it would give up after having already started to re-write
+the file with its header.  This left the /etc/hosts file truncated without any entries at all.  This
+could obviously break the system, if critical entries exited in /etc/hosts that the application relies on.
+
+Anyway...
 
 ---
 
@@ -1003,11 +953,11 @@ Continue to **Lab #6** --> [Practice doing some puppet code, and puppet runs](06
 For more info on how the site.pp **main manifest** is configured and used,
 see the PuppetLabs docs at:
 
-<https://docs.puppetlabs.com/puppet/3.8/reference/dirs_manifest.html>
+<https://docs.puppetlabs.com/puppet/latest/reference/dirs_manifest.html>
 
 For more info on how the modulepath is used:
 
-<https://docs.puppetlabs.com/puppet/3.8/reference/dirs_modulepath.html#loading-content-from-modules>
+<https://docs.puppetlabs.com/puppet/latest/reference/dirs_modulepath.html#loading-content-from-modules>
 
 ---
 
