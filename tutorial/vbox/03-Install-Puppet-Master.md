@@ -246,7 +246,6 @@ Here are the relevant pages:
 * [Split Installation](https://docs.puppetlabs.com/pe/2016.4/install_pe_split.html)
 * [Scale Compile Masters](https://docs.puppet.com/pe/2016.4/install_multimaster.html)
 * [Scale ActiveMQ](https://docs.puppet.com/pe/2016.4/install_add_activemq.html)
-* [Scale Console](https://docs.puppet.com/pe/2016.4/install_add_dashboard_workers.html)
 
 Okay, let's get back to the lab...
 

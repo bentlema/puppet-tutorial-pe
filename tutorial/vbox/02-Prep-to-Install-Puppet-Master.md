@@ -162,20 +162,6 @@ Continue to **Lab #3** --> [Install Puppet Master](03-Install-Puppet-Master.md#l
 
 ---
 
-### Further Reading
-
-These links are not needed for this Lab, but for reference here's the PE Install Guide at the PuppetLabs web site:
-
-Quick Start Guide:  <https://docs.puppetlabs.com/pe/3.8/quick_start_install_mono.html>
-
-Detailed Install Guide:  <https://docs.puppetlabs.com/pe/3.8/install_basic.html>
-
-Split Install:   <https://docs.puppetlabs.com/pe/3.8/install_pe_split.html>
-
-LEI Install:   <https://docs.puppetlabs.com/pe/3.8/install_multimaster.html>
-
----
-
 <-- [Back to Contents](/README.md)
 
 ---
