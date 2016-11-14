@@ -119,7 +119,7 @@ In a later lab, we will configure Puppet to manage these /etc/hosts entries for 
 
 **Configure Firewall**
 
-Open the host firewall to allow Puppet to work as per [PE Install Guide - Firewall Config](https://docs.puppetlabs.com/pe/3.8/install_system_requirements.html#firewall-configuration)
+Open the host firewall to allow Puppet to work as per [PE Install Guide - Firewall Config](https://docs.puppet.com/pe/latest/sys_req_sysconfig.html#for-monolithic-installs)
 
 ```shell
 sudo su -
@@ -128,7 +128,9 @@ firewall-cmd --permanent --add-port=3000/tcp   # to access configuration web int
 firewall-cmd --permanent --add-port=8080/tcp   # to access PuppetDB metrics over HTTP
 firewall-cmd --permanent --add-port=8081/tcp   # to access PuppetDB metrics over HTTPS
 firewall-cmd --permanent --add-port=8140/tcp   # to access puppetmaster API and packages repo via HTTP
+firewall-cmd --permanent --add-port=8142/tcp   # Orchestration services and the Run Puppet button use this port
 firewall-cmd --permanent --add-port=61613/tcp  # so that MCollective works (ActiveMQ communication)
+firewall-cmd --permanent --add-port=4433/tcp   # This port is used as a Classifier / Console Services API endpoint
 firewall-cmd --reload
 firewall-cmd --list-all
 exit # drop out of root shell
@@ -142,7 +144,7 @@ public (default, active)
   interfaces: enp0s3 enp0s8
   sources:
   services: dhcpv6-client https ssh
-  ports: 3000/tcp 8140/tcp 8080/tcp 8081/tcp 61613/tcp
+  ports: 3000/tcp 8140/tcp 8080/tcp 4433/tcp 8081/tcp 8142/tcp 61613/tcp
   masquerade: no
   forward-ports:
   icmp-blocks:

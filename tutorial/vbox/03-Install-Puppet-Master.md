@@ -10,7 +10,7 @@
 
 Time to complete:  45 minutes
 
-In this lab we will install Puppet Enterprise 3.8.X
+In this lab we will install Puppet Enterprise 2016.4.0
 
 * PE is free to install and evaluate
 * When running PE without a license, you're limited to 10 agents
@@ -49,8 +49,8 @@ Change into the directory with the PE software:
 
 ```shell
      cd /share/software/puppet
-     tar xzvf puppet-enterprise-3.8.6-el-7-x86_64.tar.gz
-     cd puppet-enterprise-3.8.6-el-7-x86_64
+     tar xzvf puppet-enterprise-2016.4.0-el-7-x86_64.tar.gz
+     cd puppet-enterprise-2016.4.0-el-7-x86_64
 ```
 
 Then run the installer:
@@ -61,31 +61,68 @@ Then run the installer:
 
 The installer will prompt you:
 
-```
-     ?? Install packages and perform a guided install? [Y/n]
-```
-
-Press Enter to accept the default 'Y' and then you'll see:
 
 ```
-     Installing setup packages.
-     Please go to https://puppet.example.com:3000 in your browser to continue installation.
-     Be sure to use https:// and that port 3000 is reachable through the firewall.
+=============================================================
+    Puppet Enterprise Installer
+=============================================================
+Puppet Enterprise offers two different methods of installation.
+
+ [1] Guided install
+
+Recommended for beginners. This method will install and configure a temporary
+webserver to walk you through the various configuration options.
+
+NOTE: This method requires you to be able to access port 3000 on this machine
+from your desktop web browser.
+
+ [2] Text-mode
+
+Recommended for advanced users. This method will open your $EDITOR (vi)
+with a PE config file (pe.conf) for you to edit before you proceed with installation.
+
+The pe.conf file is a HOCON formatted file that declares parameters and values needed to
+install and configure PE.
+We recommend that you review it carefully before proceeding.
+
+=============================================================
+
+
+ How to proceed? [1]:
+```
+
+Accept the default `[1]` (just press Return/Enter).
+
+Some packages will be installed, and then the installer will prompt you do
+open a page in your web browser...
+
+```
+## We're preparing the Web Installer...
+
+2016-11-14 17:39:20,482 Running command: mkdir -p /opt/puppetlabs/puppet/share/installer/installer
+2016-11-14 17:39:20,487 Running command: cp -pR /share/software/puppet/puppet-enterprise-2016.4.0-el-7-x86_64/* /opt/puppetlabs/puppet/share/installer/installer/
+
+## Go to https://puppet.example.com:3000 in your browser to continue installation.
+
+## Be sure to use 'https://' and that port 3000 is reachable through the firewall.
 ```
 
 Remember that we have **forwarded port 3000 to 22000** on our workstation, so...
 
 * Use web browser to connect to: **<https://127.0.0.1:22000/>**
+* Click **Let's Get Started**
 * Click **Monolithic Install**
 * For FQDN, enter **puppet.example.com**
 * For DNS alias, enter **puppet**
-* Use the Puppet 4 parser:  **checked** (wont really matter for this tutorial)
 * Select: Install PostgreSQL on the PuppetDB host for me.
 * Enter an initial password for the admin user (we will change it later)
 * Click **Submit**
 * Click **Continue**
 
-    Note:  Don't worry about the memory and disk space warnings.  The amount of memory and disk space we've provisioned will be just fine for this training exercise.
+Note:  Don't worry about the memory and disk space warnings.  The amount
+of memory and disk space we've provisioned will be just fine for this training
+exercise.  Obviously, when deploying for a real production environment, you'd
+want to pay attention to these!
 
 You will see this:
 
