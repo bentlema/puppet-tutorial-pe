@@ -128,14 +128,15 @@ You will see this:
 
 ```
      We're checking to make sure the installation will work correctly
-     Verify that 127.0.0.1 can resolve puppet.
-     Verify root access on puppet.
-     Verify that DNS is properly configured for puppet.
-     Verify that your hardware meets requirements on puppet.
-     [puppet] We found 3,792 MB RAM. We recommend at least 6,144 MB.
-     Verify that 127.0.0.1 has a PE installer that matches puppet's OS.
-     Verify that '/opt' and '/var' contain enough free space on puppet.
-     [puppet] Insufficient space in '/opt' (16 GB); we recommend at least 100 GB for a production environment.
+     Verify local environment.
+     Verify that 127.0.0.1 can resolve puppet.example.com.
+     Verify root access on puppet.example.com.
+     Verify that DNS is properly configured for puppet.example.com.
+     Verify that your hardware meets requirements on puppet.example.com.
+     [puppet.example.com] We found 2,847 MB RAM. We recommend at least 4096 MB.
+     Verify that 127.0.0.1 has a PE installer that matches puppet.example.com's OS.
+     Verify that '/opt', '/var', and '/tmp' contain enough free space on puppet.example.com.
+     [puppet.example.com] Insufficient space in '/opt' (16 GB); we recommend at least 100 GB for a production environment.
 ```
 
 Click **Deploy Now**

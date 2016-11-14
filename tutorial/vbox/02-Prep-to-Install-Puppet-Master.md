@@ -123,14 +123,17 @@ Open the host firewall to allow Puppet to work as per [PE Install Guide - Firewa
 
 ```shell
 sudo su -
-firewall-cmd --permanent --add-service=https   # to access Enterprise Console (default port 443)
-firewall-cmd --permanent --add-port=3000/tcp   # to access configuration web interface during installation
-firewall-cmd --permanent --add-port=8080/tcp   # to access PuppetDB metrics over HTTP
-firewall-cmd --permanent --add-port=8081/tcp   # to access PuppetDB metrics over HTTPS
-firewall-cmd --permanent --add-port=8140/tcp   # to access puppetmaster API and packages repo via HTTP
-firewall-cmd --permanent --add-port=8142/tcp   # Orchestration services and the Run Puppet button use this port
-firewall-cmd --permanent --add-port=61613/tcp  # so that MCollective works (ActiveMQ communication)
-firewall-cmd --permanent --add-port=4433/tcp   # This port is used as a Classifier / Console Services API endpoint
+firewall-cmd --permanent --add-service=https   # PE Console (default port 443)
+firewall-cmd --permanent --add-port=3000/tcp   # PE web-based installer
+firewall-cmd --permanent --add-port=8080/tcp   # PuppetDB
+firewall-cmd --permanent --add-port=8081/tcp   # PuppetDB
+firewall-cmd --permanent --add-port=8140/tcp   # Puppet Master, Certificate Authority
+firewall-cmd --permanent --add-port=8142/tcp   # Orchestration services
+firewall-cmd --permanent --add-port=8143/tcp   # The Orchestrator client uses this port to communicate with the orchestration services
+firewall-cmd --permanent --add-port=61613/tcp  # MCollective / ActiveMQ
+firewall-cmd --permanent --add-port=4432/tcp   # Local connections for node classifier, activity service, and RBAC status checks
+firewall-cmd --permanent --add-port=4433/tcp   # Classifier / Console Services API endpoint
+firewall-cmd --permanent --add-port=8170/tcp   # Code Manager
 firewall-cmd --reload
 firewall-cmd --list-all
 exit # drop out of root shell
@@ -144,7 +147,7 @@ public (default, active)
   interfaces: enp0s3 enp0s8
   sources:
   services: dhcpv6-client https ssh
-  ports: 3000/tcp 8140/tcp 8080/tcp 4433/tcp 8081/tcp 8142/tcp 61613/tcp
+  ports: 3000/tcp 8140/tcp 8170/tcp 8080/tcp 4433/tcp 8081/tcp 4432/tcp 8143/tcp 8142/tcp 61613/tcp
   masquerade: no
   forward-ports:
   icmp-blocks:
