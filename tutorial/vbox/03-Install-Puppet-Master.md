@@ -173,10 +173,17 @@ Login as **admin** and enter the admin password you chose during the install.
 If you forgot (or not sure what you typed) you can find the password in the answers file:
 
 ```
-     grep q_puppet_enterpriseconsole_auth_password /opt/puppet/share/installer/answers/*.answers
+     grep console_admin_password /opt/puppetlabs/puppet/share/installer/conf.d/puppet.example.com.conf
 ```
 
-Probabbly a good idea to **change it**...!
+Probabbly a good idea to **change it**...!  (You can change the admin password via the PE Console Web-Interface)
+
+### Log files
+
+All log files for Puppet Enterprise and its components can be found in:  `/var/log/puppetlabs/`
+
+If you would like to look at the install logs, they are available within `/var/log/puppetlabs/installer/`
+
 
 ---
 
@@ -232,13 +239,13 @@ A **Split** and/or **Large Environment Install** is a bit more work, as we'd be
 splitting up the various parts of PE on to separate VM's, as well as deploying
 multiple compile masters behind a loadbalancer.  If you're interested
 in learning more about a split install, you may read about it in the
-[PE Installation Guide](https://docs.puppetlabs.com/pe/3.8/install_pe_split.html).
+[PE Installation Guide](https://docs.puppet.com/pe/latest/install_pe_mono.html).
 Here are the relevant pages:
 
-* [Split Installation](https://docs.puppetlabs.com/pe/3.8/install_pe_split.html)
-* [Scale Compile Masters](https://docs.puppet.com/pe/3.8/install_multimaster.html)
-* [Scale ActiveMQ](https://docs.puppet.com/pe/3.8/install_add_activemq.html)
-* [Scale Console](https://docs.puppet.com/pe/3.8/install_add_dashboard_workers.html)
+* [Split Installation](https://docs.puppetlabs.com/pe/latest/install_pe_split.html)
+* [Scale Compile Masters](https://docs.puppet.com/pe/latest/install_multimaster.html)
+* [Scale ActiveMQ](https://docs.puppet.com/pe/latest/install_add_activemq.html)
+* [Scale Console](https://docs.puppet.com/pe/latest/install_add_dashboard_workers.html)
 
 Okay, let's get back to the lab...
 
