@@ -158,13 +158,13 @@ the overview.
 
 Note:  Once the installation completes, clicking the 'Start Using Puppet
 Enterprise' button will **not** work, as we are port-forwarding from a
-VM/Container to our localhost.  Use the link below instead.
+VM to our localhost.  Use the link below instead.
 
 ---
 
 ### Login to the PE Console
 
-We've forwarded port 443 from our puppet VM/Container to port 22443 on our hosting workstation, so you should be able to connect to the PE Console via the URL:
+We've forwarded port 443 from our puppet VM to port 22443 on our hosting workstation, so you should be able to connect to the PE Console via the URL:
 
 * PE Console URL:  **<https://127.0.0.1:22443/>**
 
