@@ -155,11 +155,89 @@ with Vagrant commands from any directory. For example:
 "vagrant destroy 1a2b3c4d"
 ```
 
+### Validate your training environment
+
+We've used Vagrant to provision 3 training VMs.  If you're curious how the
+VM's are configured, take a peek at the [puppet-tutorial-pe/Vagrantfile](/Vagrantfile)
+
+We've used a custom base box that already has some things we need (packages, config, etc.)
+This custom base box already has entries in `/etc/hosts` that we want/need (since we will
+rely on /etc/hosts to resolve names without our training environment.)
+
+Each VM should have the following contnets in their `/etc/hosts` file:
+
+```
+127.0.0.1       localhost
+192.168.198.10  puppet.example.com  puppet
+192.168.198.11  agent.example.com   agent
+192.168.198.12  gitlab.example.com  gitlab
+```
+
+With all 3 of your VMs up and running, validate that you can ping each using
+the FQDN as well as the short name.
+
+For example:
+
+```
+[vagrant@puppet ~]$ ping puppet.example.com
+PING puppet.example.com (192.168.198.10) 56(84) bytes of data.
+64 bytes from puppet.example.com (192.168.198.10): icmp_seq=1 ttl=64 time=0.043 ms
+64 bytes from puppet.example.com (192.168.198.10): icmp_seq=2 ttl=64 time=0.098 ms
+64 bytes from puppet.example.com (192.168.198.10): icmp_seq=3 ttl=64 time=0.075 ms
+^C
+--- puppet.example.com ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1999ms
+rtt min/avg/max/mdev = 0.043/0.072/0.098/0.022 ms
+
+[vagrant@puppet ~]$ ping puppet
+PING puppet.example.com (192.168.198.10) 56(84) bytes of data.
+64 bytes from puppet.example.com (192.168.198.10): icmp_seq=1 ttl=64 time=0.052 ms
+64 bytes from puppet.example.com (192.168.198.10): icmp_seq=2 ttl=64 time=0.088 ms
+64 bytes from puppet.example.com (192.168.198.10): icmp_seq=3 ttl=64 time=0.098 ms
+^C
+--- puppet.example.com ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1999ms
+rtt min/avg/max/mdev = 0.052/0.079/0.098/0.021 ms
+```
+
+You should also be able to ssh between each VM as either the **vagrant** user
+or the **root** user.  The default password is simply **"vagrant"**.  Give it
+a try if you like.  You should also be able to ssh in to any of your VMs from
+the host itself.  You can learn the ssh port to use using the `vagrant ssh-config`
+command.  Give it a try:
+
+```
+[puppet-tutorial-pe]$ vagrant ssh-config puppet
+Host puppet
+  HostName 127.0.0.1
+  User vagrant
+  Port 22022
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /Users/Mark/.vagrant.d/boxes/bentlema-VAGRANTSLASH-centos-7.2-64/1.0.0/virtualbox/vagrant_private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+```
+
+Take note that the NAT'ed port is 22022.
+
+```
+[puppet-tutorial-pe]$ ssh root@127.0.0.1 -p 22022
+Warning: Permanently added '[127.0.0.1]:22022' (ECDSA) to the list of known hosts.
+root@127.0.0.1's password:
+Last login: Fri Nov 11 21:57:06 2016
+[root@puppet ~]# exit
+logout
+Connection to 127.0.0.1 closed.
+```
+
+
+### Next up...
+
 This concludes Lab #1.  You should now have 3 VMs up and running named as
 shown above in the **global-status** output above.
 
-If you're curious how the VM's are configured, take a peek at the
-[puppet-tutorial-pe/Vagrantfile](/Vagrantfile)
 
 If you're not planning to continue to the next lab, you may want to halt all
 of your training VM's.  Make sure you've exited the ssh session of each VM,
