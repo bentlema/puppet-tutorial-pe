@@ -151,6 +151,28 @@ here:
 
 * Puppet Run Output:  [04-Puppet-Agent-Run-Output.md](04-Puppet-Agent-Run-Output.md)
 
+### The Certname
+
+The **certname** is the name assigned to the puppet agent.  It's how the puppet
+master identifies each node.  Most of the time, the certname will be the same
+as the host's FQDN, but it could be anything you choose.  Best practice is to
+use the FQDN.
+
+You may have noticed that when we installed the puppet agent, we passed in
+an additional parameter using the `bash -s <key:value>` construct.  If you've
+had any exposure to Puppet before, you may be asking yourself "Way did we have
+to do that?"  The answer lies in how puppet determines the certname if you
+dont provide one.  By default, puppet will take the hostname, and append the
+domain name as configured in the /etc/resolv.conf.  We've not configured
+the /etc/resolv.conf at all, and Vagrant automatically configures it to when
+the VM is started up each time. It will inherit the DNS config from the host
+system.  The inherited config will be different for everyone, and since the
+agent installer would normally attempt to determine the **certname** from the
+hostname and DNS domain, we don't want to rely on it here as we'd get
+unpredictable results.  By manually specifying the certname, we guarantee we
+will always get the name we want, rather than letting puppet try and pick
+it for us.
+
 ### Summary
 
 At this point we have:
