@@ -186,7 +186,6 @@ All log files for Puppet Enterprise and its components can be found in:  `/var/l
 
 If you would like to look at the install logs, they are available within `/var/log/puppetlabs/installer/`
 
-
 ---
 
 Believe it or not, that's all there is to installing a **Monolithic** puppet
