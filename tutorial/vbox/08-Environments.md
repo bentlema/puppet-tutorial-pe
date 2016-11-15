@@ -218,7 +218,7 @@ We got a warning!
 Warning: Local environment: "development" doesn't match server specified node environment "production", switching agent to "production".
 ```
 
-So how are we suposed to implement the code dev/test/promote workflow we
+So how are we suposed to implement the code/dev/test/promote workflow we
 presented previously?
 
 There's a couple ways we can approach this:
@@ -226,17 +226,17 @@ There's a couple ways we can approach this:
 1. Add our **agent.example.com** node to the **"Agent-specified environment"** node group via the PE Console
 2. Disable the PE Console as the node classifier entirely
 
-For the purposes of this example, we will go with option 1.  In a LEI install,
-where you plan to have thoustands of nodes, you'd want to go with option 2 and
-disable the PE Console as the ENC entirely, as it will eventually become a
-performance bottleneck.  (This is a known issues with PE 3.8.x and older.)
+For the purposes of this example, we will go with option 1.
+
 
 ### Add node to Agent-specified environment node group
 
 Let's do this:
 
 1. Get logged into the PE console as the admin user.
-2. Click on **Classification** tab
+2. Click on **Nodes** in the left-sidebar
+2. Click on **Classification** sub-category
+3. Drill into the **Production environment**
 3. Click on **"Agent-specified environment"**
 4. In the bottom section where you see **"Certname"** click and select **agent.example.com**
 5. On the right, click **Pin Node**
