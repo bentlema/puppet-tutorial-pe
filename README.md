@@ -79,12 +79,11 @@ As there can be compatibility issues between different versions of the software 
 
 | Vagrant | VirtualBox | Platform                  |
 | ------- | ---------- | ------------------------- |
-|         |            | Linux                     |
 | 1.8.4   | 4.0.28     | Mac OS X 10.11 El Capitan |
 |         |            | Mac OS X 10.10 Yosemite   |
 |         |            | Mac OS X 10.9 Mavericks   |
-|         |            | Windows 8                 |
-|         |            | Windows 10                |
+|         |            | Linux                     |
+|         |            | Windows                   |
 
 All of my initial testing has been done using Mac OS X 10.11 El Capitan, Vagrant 1.8.4, and VirtualBox 4.0.28.
 Feel free to test other version/platform combinations, and contribute your results here.
