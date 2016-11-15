@@ -249,13 +249,14 @@ That's all there is to it!  Your node **agent.example.com** will now be able to 
 Go ahead and try running puppet against the development environment again...
 
 ```
-[root@agent ~]# puppet agent -t --environment=development
-Info: Retrieving pluginfacts
-Info: Retrieving plugin
-Info: Loading facts
-Info: Caching catalog for agent.example.com
-Info: Applying configuration version '1477338676'
-Notice: Finished catalog run in 0.36 seconds
+     [root@agent ~]# puppet agent -t --environment=development
+     Info: Using configured environment 'development'
+     Info: Retrieving pluginfacts
+     Info: Retrieving plugin
+     Info: Loading facts
+     Info: Caching catalog for agent.example.com
+     Info: Applying configuration version '1479250438'
+     Notice: Applied catalog in 0.57 seconds
 ```
 
 It worked just fine!
@@ -275,26 +276,32 @@ but not production?
 Take a look at what modules are already installed:
 
 ```
-[root@puppet manifests]# puppet module list --environment=development
-/etc/puppetlabs/puppet/environments/development/modules
+[root@puppet ~]# puppet module list --environment=development
+
+/etc/puppetlabs/code/environments/development/modules
 └── puppetlabs-stdlib (v4.9.1)
-/etc/puppetlabs/puppet/modules
-└── puppetlabs-stdlib (v4.10.0)
-/opt/puppet/share/puppet/modules
-├── puppetlabs-pe_accounts (v2.0.2-8-g8acc04e)
+/etc/puppetlabs/code/modules
+└── puppetlabs-stdlib (v4.12.0)
+/opt/puppetlabs/puppet/modules
+├── puppetlabs-pe_accounts (v2.0.2-6-gd2f698c)
 ├── puppetlabs-pe_concat (v1.1.2-7-g77ec55b)
-├── puppetlabs-pe_console_prune (v0.1.1-4-g293f45b)
-├── puppetlabs-pe_inifile (v1.1.4-16-gcb39966)
-├── puppetlabs-pe_java_ks (v1.2.4-35-g44fbb26)
-├── puppetlabs-pe_postgresql (v3.4.4-15-g32e56ed)
-├── puppetlabs-pe_razor (v0.2.1-28-g7f0be6d)
-├── puppetlabs-pe_repo (v3.8.5)
-├── puppetlabs-pe_staging (v3.8.3)
-└── puppetlabs-puppet_enterprise (v3.8.6)
+├── puppetlabs-pe_console_prune (v0.1.1-9-gfc256c0)
+├── puppetlabs-pe_hocon (v2016.2.0)
+├── puppetlabs-pe_infrastructure (v2016.4.0)
+├── puppetlabs-pe_inifile (v2016.2.1-rc0)
+├── puppetlabs-pe_java_ks (v1.2.4-37-g2d86015)
+├── puppetlabs-pe_nginx (v2016.4.0)
+├── puppetlabs-pe_postgresql (v2016.2.0)
+├── puppetlabs-pe_puppet_authorization (v2016.2.0-rc1)
+├── puppetlabs-pe_r10k (v2016.2.0)
+├── puppetlabs-pe_razor (v1.0.0)
+├── puppetlabs-pe_repo (v2016.4.0)
+├── puppetlabs-pe_staging (v2015.3.0)
+└── puppetlabs-puppet_enterprise (v2016.4.0)
 ```
 
 Notice that we already have the **puppetlabs-stdlib** installed (v4.9.1) in
-the development environment.  Let's install another modules in the development
+the development environment.  Let's install another module in the development
 environment only.
 
 The **message of the day** module is very simple, so let's test it out.
@@ -304,11 +311,11 @@ It can be found on the **Puppet Forge** here:  https://forge.puppet.com/puppetla
 Install it on your puppet master for the development environment only, as follows:
 
 ```
-[root@puppet manifests]# puppet module install --environment development puppetlabs/motd
-Notice: Preparing to install into /etc/puppetlabs/puppet/environments/development/modules ...
+[root@puppet ~]# puppet module install --environment development puppetlabs/motd
+Notice: Preparing to install into /etc/puppetlabs/code/environments/development/modules ...
 Notice: Downloading from https://forgeapi.puppetlabs.com ...
 Notice: Installing -- do not interrupt ...
-/etc/puppetlabs/puppet/environments/development/modules
+/etc/puppetlabs/code/environments/development/modules
 └─┬ puppetlabs-motd (v1.4.0)
   └─┬ puppetlabs-registry (v1.1.3)
     └── puppetlabs-stdlib (v4.9.1)
@@ -331,9 +338,12 @@ the various files we've already created in the production environment to get us 
 we'll modify things from there...
 
 ```
-[root@puppet manifests]# cd /etc/puppetlabs/puppet/environments/
-[root@puppet environments]# cp -r production/data development/
+[root@puppet manifests]# cd /etc/puppetlabs/code/environments/
+[root@puppet environments]# cp -r production/hieradata development/
 [root@puppet environments]# cp -r production/manifests/ development/
+[root@puppet environments]# chown -R pe-puppet:pe-puppet development
+[root@puppet environments]# chmod a+rX development
+
 ```
 
 Okay, now we have all of the Hiera data and puppet code that we created for the production environment sitting in the development environment as well.
@@ -341,13 +351,15 @@ Okay, now we have all of the Hiera data and puppet code that we created for the 
 Now run puppet on the agent node and see what happens:
 
 ```
-[root@agent ~]# puppet agent -t --environment=development
+[root@agent ~]# puppet agent -t --environment development
+Info: Using configured environment 'development'
 Info: Retrieving pluginfacts
 Info: Retrieving plugin
 Info: Loading facts
-Error: Could not retrieve catalog from remote server: Error 400 on SERVER: Evaluation Error: Error while evaluating a Function Call, Could not find class ::ntp for agent.example.com at /etc/puppetlabs/puppet/environments/development/manifests/site.pp:57:1 on node agent.example.com
+Error: Could not retrieve catalog from remote server: Error 500 on SERVER: Server Error: Evaluation Error: Error while evaluating a Function Call, Could not find class ::ntp for agent.example.com at /etc/puppetlabs/code/environments/development/manifests/site.pp:42:1 on node agent.example.com
 Warning: Not using cache on failed catalog
 Error: Could not retrieve catalog; skipping run
+
 ```
 
 Why did we get an error?
@@ -363,26 +375,27 @@ Do you remember why that is?  Because puppet will install modules, by default, i
 Take a peek again at where the ntp and timezone modules are installed:
 
 ```
-[root@puppet environments]# puppet module list --environment=production
-/etc/puppetlabs/puppet/environments/production/modules
-├── puppetlabs-ntp (v4.2.0)
-├── puppetlabs-stdlib (v4.13.1)
-└── saz-timezone (v3.3.0)
-/etc/puppetlabs/puppet/modules
-└── puppetlabs-stdlib (v4.10.0)
-[snip]
+     [root@puppet environments]# puppet module list --environment=production
+     /etc/puppetlabs/code/environments/production/modules
+     ├── puppetlabs-ntp (v6.0.0)
+     ├── puppetlabs-stdlib (v4.13.1)
+     └── saz-timezone (v3.3.0)
+     /etc/puppetlabs/code/modules
+     └── puppetlabs-stdlib (v4.12.0)
+     [snip]
 ```
 Confirm that you do not see the ntp and timezone modules in the development:
 
 ```
-[root@puppet environments]# puppet module list --environment=development
-/etc/puppetlabs/puppet/environments/development/modules
-├── puppetlabs-motd (v1.4.0)
-├── puppetlabs-registry (v1.1.3)
-└── puppetlabs-stdlib (v4.9.1)
-/etc/puppetlabs/puppet/modules
-└── puppetlabs-stdlib (v4.10.0)
-[snip]
+     [root@puppet environments]# puppet module list --environment=development
+     [root@puppet environments]# puppet module list --environment=development
+     /etc/puppetlabs/code/environments/development/modules
+     ├── puppetlabs-motd (v1.4.0)
+     ├── puppetlabs-registry (v1.1.3)
+     └── puppetlabs-stdlib (v4.9.1)
+     /etc/puppetlabs/code/modules
+     └── puppetlabs-stdlib (v4.12.0)
+     [snip]
 ```
 
 Okay, at this point we have a couple choices to fix our puppet run:
@@ -393,47 +406,49 @@ Okay, at this point we have a couple choices to fix our puppet run:
 Let's just install the modules:
 
 ```
-[root@puppet environments]# puppet module install --environment development puppetlabs/ntp
-Notice: Preparing to install into /etc/puppetlabs/puppet/environments/development/modules ...
-Notice: Downloading from https://forgeapi.puppetlabs.com ...
-Notice: Installing -- do not interrupt ...
-/etc/puppetlabs/puppet/environments/development/modules
-└─┬ puppetlabs-ntp (v4.2.0)
-  └── puppetlabs-stdlib (v4.9.1)
+     [root@puppet environments]# puppet module install --environment development puppetlabs/ntp
+     Notice: Preparing to install into /etc/puppetlabs/code/environments/development/modules ...
+     Notice: Downloading from https://forgeapi.puppetlabs.com ...
+     Notice: Installing -- do not interrupt ...
+     /etc/puppetlabs/code/environments/development/modules
+     └─┬ puppetlabs-ntp (v6.0.0)
+       └── puppetlabs-stdlib (v4.9.1 -> v4.13.1)
 
-[root@puppet environments]# puppet module install --environment development saz-timezone
-Notice: Preparing to install into /etc/puppetlabs/puppet/environments/development/modules ...
-Notice: Downloading from https://forgeapi.puppetlabs.com ...
-Notice: Installing -- do not interrupt ...
-/etc/puppetlabs/puppet/environments/development/modules
-└─┬ saz-timezone (v3.3.0)
-  └── puppetlabs-stdlib (v4.9.1)
+     [root@puppet environments]# puppet module install --environment development saz-timezone
+     Notice: Preparing to install into /etc/puppetlabs/code/environments/development/modules ...
+     Notice: Downloading from https://forgeapi.puppetlabs.com ...
+     Notice: Installing -- do not interrupt ...
+     /etc/puppetlabs/code/environments/development/modules
+     └─┬ saz-timezone (v3.3.0)
+       └── puppetlabs-stdlib (v4.13.1)
 
-[root@puppet environments]# puppet module list --environment=development
-/etc/puppetlabs/puppet/environments/development/modules
-├── puppetlabs-motd (v1.4.0)
-├── puppetlabs-ntp (v4.2.0)
-├── puppetlabs-registry (v1.1.3)
-├── puppetlabs-stdlib (v4.9.1)
-└── saz-timezone (v3.3.0)
-/etc/puppetlabs/puppet/modules
-└── puppetlabs-stdlib (v4.10.0)
-[snip]
+     [root@puppet environments]# puppet module list --environment=development
+     /etc/puppetlabs/code/environments/development/modules
+     ├── puppetlabs-motd (v1.4.0)
+     ├── puppetlabs-ntp (v6.0.0)
+     ├── puppetlabs-registry (v1.1.3)
+     ├── puppetlabs-stdlib (v4.13.1)
+     └── saz-timezone (v3.3.0)
+     /etc/puppetlabs/code/modules
+     └── puppetlabs-stdlib (v4.12.0)
+     [snip]
 ```
 
 Okay, they're installed, so let's try our puppet run again:
 
 ```
 [root@agent ~]# puppet agent -t --environment=development
+Info: Using configured environment 'development'
 Info: Retrieving pluginfacts
 Info: Retrieving plugin
-Notice: /File[/var/opt/lib/pe-puppet/lib/puppet/parser/functions/ntp_dirname.rb]/ensure: defined content as '{md5}ecb6cffe0dfbc914c137089d13501f60'
+Notice: /File[/opt/puppetlabs/puppet/cache/lib/facter/facter_dot_d.rb]/content:
+[snip]
 Info: Loading facts
 Info: Caching catalog for agent.example.com
-Info: Applying configuration version '1477340195'
+Info: Applying configuration version '1479251399'
 Notice: Location is: amsterdam
 Notice: /Stage[main]/Main/Notify[Location is: amsterdam]/message: defined 'message' as 'Location is: amsterdam'
-Notice: Finished catalog run in 0.56 seconds
+Notice: Applied catalog in 0.75 seconds
 ```
 
 Great, no errors!
@@ -442,8 +457,8 @@ Now, let's proceed to classify our node to use the **motd** module...
 
 ```
 [root@puppet environments]# pwd
-/etc/puppetlabs/puppet/environments
-[root@puppet environments]# cd development/data/node/
+/etc/puppetlabs/code/environments
+[root@puppet environments]# cd development/hieradata/node/
 [root@puppet node]# vi agent.example.com.yaml
 ```
 
@@ -465,24 +480,36 @@ timezone::timezone: 'US/Pacific'
 Now run puppet again...
 
 ```
-[root@agent ~]# puppet agent -t --environment=development
-Info: Retrieving pluginfacts
-Info: Retrieving plugin
-Info: Loading facts
-Info: Caching catalog for agent.example.com
-Info: Applying configuration version '1477340332'
-Notice: Location is: amsterdam
-Notice: /Stage[main]/Main/Notify[Location is: amsterdam]/message: defined 'message' as 'Location is: amsterdam'
-Notice: /Stage[main]/Motd/File[/etc/motd]/content:
---- /etc/motd    2013-06-07 07:31:32.000000000 -0700
-+++ /tmp/puppet-file20161024-12073-2z058m    2016-10-24 13:18:53.992901780 -0700
-@@ -0,0 +1,3 @@
-+The operating system is CentOS
-+The free memory is 254.93 MB
-+The domain is example.com
+     [root@agent ~]# puppet agent -t --environment=development
+     Info: Using configured environment 'development'
+     Info: Retrieving pluginfacts
+     Info: Retrieving plugin
+     Notice: /File[/opt/puppetlabs/puppet/cache/lib/puppet/provider/registry_key]/ensure: created
+     Notice: /File[/opt/puppetlabs/puppet/cache/lib/puppet/provider/registry_key/registry.rb]/ensure: defined content as '{md5}5c26c6cbb1669a01361e69fadbbb408d'
+     Notice: /File[/opt/puppetlabs/puppet/cache/lib/puppet/provider/registry_value]/ensure: created
+     Notice: /File[/opt/puppetlabs/puppet/cache/lib/puppet/provider/registry_value/registry.rb]/ensure: defined content as '{md5}92b54f65f5be3c130681cbb04b216e09'
+     Notice: /File[/opt/puppetlabs/puppet/cache/lib/puppet/type/registry_key.rb]/ensure: defined content as '{md5}bcf74b3a991cafdae54514b3c3c4a38c'
+     Notice: /File[/opt/puppetlabs/puppet/cache/lib/puppet/type/registry_value.rb]/ensure: defined content as '{md5}140295468b773a7ad709a532e496005c'
+     Notice: /File[/opt/puppetlabs/puppet/cache/lib/puppet_x]/ensure: created
+     Notice: /File[/opt/puppetlabs/puppet/cache/lib/puppet_x/puppetlabs]/ensure: created
+     Notice: /File[/opt/puppetlabs/puppet/cache/lib/puppet_x/puppetlabs/registry]/ensure: created
+     Notice: /File[/opt/puppetlabs/puppet/cache/lib/puppet_x/puppetlabs/registry.rb]/ensure: defined content as '{md5}e81ba7665aedbd5cb519d75a4a8dbbd2'
+     Notice: /File[/opt/puppetlabs/puppet/cache/lib/puppet_x/puppetlabs/registry/provider_base.rb]/ensure: defined content as '{md5}7d511743b5cec6b375b684b88396838a'
+     Info: Loading facts
+     Info: Caching catalog for agent.example.com
+     Info: Applying configuration version '1479251540'
+     Notice: Location is: amsterdam
+     Notice: /Stage[main]/Main/Notify[Location is: amsterdam]/message: defined 'message' as 'Location is: amsterdam'
+     Notice: /Stage[main]/Motd/File[/etc/motd]/content:
+     --- /etc/motd    2013-06-07 07:31:32.000000000 -0700
+     +++ /tmp/puppet-file20161115-9822-o29juw    2016-11-15 15:12:22.973018511 -0800
+     @@ -0,0 +1,3 @@
+     +The operating system is CentOS
+     +The free memory is 200.24 MiB
+     +The domain is example.com
 
-Notice: /Stage[main]/Motd/File[/etc/motd]/content: content changed '{md5}d41d8cd98f00b204e9800998ecf8427e' to '{md5}2936c2d8189d817ed442e0b9de4675e4'
-Notice: Finished catalog run in 0.55 seconds
+     Notice: /Stage[main]/Motd/File[/etc/motd]/content: content changed '{md5}d41d8cd98f00b204e9800998ecf8427e' to '{md5}a6ecca768e0149d03268b441b9774863'
+     Notice: Applied catalog in 0.80 seconds
 ```
 
 It did something!
@@ -492,7 +519,7 @@ Let's take a look at the contents of the motd file again...
 ```
 [root@agent ~]# cat /etc/motd
 The operating system is CentOS
-The free memory is 254.93 MB
+The free memory is 200.24 MiB
 The domain is example.com
 ```
 
@@ -501,26 +528,34 @@ Okay, now we see that the motd module wrote new content within the /etc/motd fil
 What if we want to customize how our motd looks?
 
 ```
-[root@puppet templates]# cd /etc/puppetlabs/puppet/environments/development/modules/motd/templates
+[root@puppet node]# cd /etc/puppetlabs/code/environments/development/modules/motd/templates
 [root@puppet templates]# ls -al
 total 12
-drwxr-xr-x 2 root root   36 Oct 24 13:02 .
-drwxr-xr-x 6 root root 4096 Jan 26  2016 ..
--r--r--r-- 1 root root  146 Jan 26  2016 motd.erb
--r--r--r-- 1 root root   24 Jan 26  2016 spec.erb
+drwxr-xr-x 2 pe-puppet pe-puppet   36 Nov 15 14:56 .
+drwxr-xr-x 6 pe-puppet pe-puppet 4096 Jan 26  2016 ..
+-rw-r--r-- 1 pe-puppet pe-puppet  146 Jan 26  2016 motd.erb
+-rw-r--r-- 1 pe-puppet pe-puppet   24 Jan 26  2016 spec.erb
+
 [root@puppet templates]# vi motd.erb
 ```
 
 Let's edit the template to look like this:
 
 ```
-
 ###########################################################################
-The operating system is <%= @operatingsystem %>
-The free memory is <%= @memoryfree %>
-<%- if @domain -%>
-The domain is <%= @domain %>
-<%- end -%>
+
+     OS Distro: <%= @operatingsystem %> <%= @operatingsystemrelease %>
+
+     MEMORY:
+          Total: <%= @memory['system']['total'] %>
+      Available: <%= @memory['system']['available'] %>
+      Swap used: <%= @memory['swap']['used'] %>
+
+     <%- if @domain -%>
+     My domain is <%= @domain %>
+     <%- end -%>
+     My location is: <%= @location %>
+
 ###########################################################################
 
 ```
@@ -533,36 +568,37 @@ Now, save your template, and run puppet again:
 
 ```
 [root@agent ~]# puppet agent -t --environment=development
+Info: Using configured environment 'development'
 Info: Retrieving pluginfacts
 Info: Retrieving plugin
 Info: Loading facts
 Info: Caching catalog for agent.example.com
-Info: Applying configuration version '1477340693'
+Info: Applying configuration version '1479253813'
 Notice: Location is: amsterdam
 Notice: /Stage[main]/Main/Notify[Location is: amsterdam]/message: defined 'message' as 'Location is: amsterdam'
 Notice: /Stage[main]/Motd/File[/etc/motd]/content:
---- /etc/motd    2016-10-24 13:18:53.997901666 -0700
-+++ /tmp/puppet-file20161024-12305-1v6590v    2016-10-24 13:24:56.062633410 -0700
-@@ -1,3 +1,7 @@
-+
-+###########################################################################
- The operating system is CentOS
--The free memory is 254.93 MB
-+The free memory is 255.02 MB
- The domain is example.com
+--- /etc/motd    2016-11-15 15:50:07.451576603 -0800
++++ /tmp/puppet-file20161115-11572-vzevz9    2016-11-15 15:50:16.274392880 -0800
+@@ -0,0 +1,14 @@
 +###########################################################################
 +
++     OS Distro: CentOS 7.2.1511
++
++     MEMORY:
++          Total: 489.03 MiB
++      Available: 200.29 MiB
++      Swap used: 18.31 MiB
++
++     My domain is example.com
++     My location is: amsterdam
++
++###########################################################################
++
 
-Notice: /Stage[main]/Motd/File[/etc/motd]/content: content changed '{md5}2936c2d8189d817ed442e0b9de4675e4' to '{md5}7ebdbe1a66017896c70e58c8a48a5f58'
-Notice: Finished catalog run in 0.56 seconds
-[root@agent ~]# cat /etc/motd
+Notice: /Stage[main]/Motd/File[/etc/motd]/content:
 
-###########################################################################
-The operating system is CentOS
-The free memory is 255.02 MB
-The domain is example.com
-###########################################################################
-
+Notice: /Stage[main]/Motd/File[/etc/motd]/content: content changed '{md5}d41d8cd98f00b204e9800998ecf8427e' to '{md5}ed131fae16df0e72f1a6144d053fa6cd'
+Notice: Applied catalog in 0.78 seconds
 ```
 
 Notice that your /etc/motd has been updated with the new content.
@@ -603,15 +639,16 @@ Notice: Installing -- do not interrupt ...
 Next, let's copy over our template:
 
 ```
-[root@puppet environments]# cp development/modules/motd/templates/motd.erb production/modules/motd/templates/
+[root@puppet ~]# cd /etc/puppetlabs/code/environments
+[root@puppet environments]# cp development/modules/motd/templates/motd.erb production/modules/motd/templates/motd.erb
 cp: overwrite ‘production/modules/motd/templates/motd.erb’? y
 ```
 
 Next, edit our Hiera data to classify all nodes...
 
 ```
-[root@puppet environments]# cd production/data
-[root@puppet data]# vi common.yaml
+[root@puppet environments]# cd production/hieradata
+[root@puppet hieradata]# vi common.yaml
 ```
 
 Let's classify all nodes to use this motd in our common.yaml
