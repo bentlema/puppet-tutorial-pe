@@ -232,7 +232,7 @@ Let's configure puppet to make sure certain packages are installed on our agent 
 Login to your puppet master node and become root
 
 ```
-     cd /etc/puppetlabs/puppet/environments/production/manifests
+     cd /etc/puppetlabs/code/environments/production/manifests
      vi common_packages.pp
 ```
 
@@ -278,8 +278,10 @@ class common_packages {
 }
 ```
 
-We've now defined a class, but this code will not do anything until we pin it to a node.
-Remember that thing called 'Node Classification'?
+We've now **defined** a class, but this code will not do anything until we pin it to a node.
+As soon as you save the manifest, puppet will *"see"* it on its next run.  It will know that
+the class has been **defined**, but wont apply the code to any node until we **declare**
+the class for a node.  Remember that thing called 'Node Classification'?
 
 Let's classify the **agent node** with the **common_packages class**.
 
@@ -300,30 +302,31 @@ node 'agent.example.com' {
 Save it, and then run 'puppet agent -t' on your agent VM, and you should see the packages get installed...
 
 ```
-[root@agent ~]# puppet agent -t
-Info: Retrieving pluginfacts
-Info: Retrieving plugin
-Info: Loading facts
-Info: Caching catalog for agent.example.com
-Info: Applying configuration version '1456430473'
-Notice: /Stage[main]/Common_packages/Package[bind-utils]/ensure: created
-Notice: /Stage[main]/Common_packages/Package[dstat]/ensure: created
-Notice: /Stage[main]/Common_packages/Package[git]/ensure: created
-Notice: /Stage[main]/Common_packages/Package[tcpdump]/ensure: created
-Notice: Finished catalog run in 20.14 seconds
+     [root@agent ~]# puppet agent -t
+     Info: Using configured environment 'production'
+     Info: Retrieving pluginfacts
+     Info: Retrieving plugin
+     Info: Loading facts
+     Info: Caching catalog for agent.example.com
+     Info: Applying configuration version '1479239887'
+     Notice: /Stage[main]/Common_packages/Package[bind-utils]/ensure: created
+     Notice: /Stage[main]/Common_packages/Package[dstat]/ensure: created
+     Notice: /Stage[main]/Common_packages/Package[git]/ensure: created
+     Notice: /Stage[main]/Common_packages/Package[tcpdump]/ensure: created
+     Notice: Applied catalog in 19.05 seconds
 ```
 
-Did you notice that only some of the packages were installed?  If you do a 'yum info net-tools'
+Did you notice that only some of the packages were installed?  If you do a `yum info net-tools`
 you'll notice that it was already installed, so puppet didn't do
 anything for that package.  Note:  net-tools is required for puppet, so when we
-installed puppet, that package was automatically installed.  DO NOT REMOVE IT.
+installed puppet, that package was automatically installed.
 
 Now that all 5 of these packages have been installed, if you run puppet again, no
 additional changes will be made.  The host is as it should be.
 
 ### The default node
 
-Now, I want to re-visit something we mentioned earlier.  Remember, the 'node default'
+Now, I want to re-visit something we mentioned earlier.  Remember, the **node default**
 only applies to a host **if no other** node definition matches it.  We've just added
 a node definition for 'agent.example.com', so the default node definition will no longer apply.
 The order of the node definitions doesn't matter.  To prove that this is the case,
@@ -371,14 +374,15 @@ Now re-run puppet agent -t on your agent node, and notice that the gitlab entry 
 
 ```
      [root@agent ~]# puppet agent -t
+     Info: Using configured environment 'production'
      Info: Retrieving pluginfacts
      Info: Retrieving plugin
      Info: Loading facts
-     Info: Caching catalog for agent
-     Info: Applying configuration version '1453330128'
+     Info: Caching catalog for agent.example.com
+     Info: Applying configuration version '1479240149'
      Notice: /Stage[main]/Common_hosts/Host[gitlab.example.com]/ensure: created
      Info: Computing checksum on file /etc/hosts
-     Notice: Finished catalog run in 1.22 seconds
+     Notice: Applied catalog in 0.69 seconds
 ```
 
 The important point we're illustrating here is that the default node definition ONLY applies
@@ -447,20 +451,22 @@ node default {
 
 Next time puppet runs on the puppet master, you'll notice that those packages get installed.
 
-
-Wow, that was a lot for just installing packages.  We've learned a bit more about
-node definitions in the site.pp
+### Top-level Scope
 
 Note:  node definitions can only be made at the top-level in the site.pp
 
-Also, any variable declared in the site.pp is automatically a top-scope variable.
+**Top-Scope** is another way of saying **Globally-visible**.
+
+Any variable declared in the `site.pp` is automatically a top-scope variable.
 Top-scope variables are accessible throughout all of your puppet code by referencing them with '$::varname'
 
-New in Puppet 3.8.x is that any manifest at the top level is automatically read,
-in additional to the site.pp, though I would recommend having ONLY a site.pp, and not
-introducing other manifests at the top level, as this can cause ordering issues if
+New in Puppet 3.8 (and later) is that any manifest at the top level is automatically read,
+in additional to the `site.pp`, though I would recommend having ONLY a site.pp, and not
+introducing other manifests at the top level as this can cause ordering issues if
 you are reading in hiera data to set top-scope variables, and trying to use those
 variables in other manifests at the top-scope.
+
+### Affecting resource parameter defaults
 
 Something else to simplify the code for our common_packages class:  Notice that we
 have several packages, and we are doing the "ensure => 'installed'" for all of them.
@@ -471,9 +477,9 @@ type like this:
 Package { ensure => 'installed' }
 ```
 
-And then this default would apply to any/every other package resource we declare
-if we DON'T specify the ensure attribute.  We can still override the default if
-we want on a per-resource basis.  So our code could look like this:
+This default would apply to any/every other package resource we declare within
+the manifest. We can still override the default on a per-resource basis if we
+want to.  So our code could look like this:
 
 ```puppet
 class common_packages {
@@ -503,7 +509,7 @@ When we say:
 attributes as defaults unless they are overridden by the individual resource declaration.
 
 We could even put the Package ensure installed bit in the site.pp, and then it would
-be a global default for packages.  Pretty cool, huh?
+be a global default for package resources everywhere.  Pretty cool, huh?
 
 We can override the default we just set by specifying the version string to the ensure parameter.
 Example of pinning to a specific version/release of a package:
@@ -564,7 +570,7 @@ accomplish many of the common things you'll want to do.
 
 [The Puppet Language Reference about Classes](https://docs.puppetlabs.com/puppet/latest/reference/lang_classes.html)
 
-[More about Catalog Compilation](https://docs.puppet.com/puppet/3.8/reference/subsystem_catalog_compilation.html)
+[More about Catalog Compilation](https://docs.puppet.com/puppet/latest/reference/subsystem_catalog_compilation.html)
 
 ---
 
