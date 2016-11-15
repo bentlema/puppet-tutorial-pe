@@ -66,31 +66,27 @@ Puppet comes with an example **hiera.yaml** as follows:
      ---
      :backends:
        - yaml
-
      :hierarchy:
-       - defaults
-       - "%{clientcert}"
-       - "%{environment}"
-       - global
+       - "nodes/%{::trusted.certname}"
+       - common
 
      :yaml:
      # datadir is empty here, so hiera uses its defaults:
-     # - /var/lib/hiera on *nix
-     # - %CommonAppData%\PuppetLabs\hiera\var on Windows
+     # - /etc/puppetlabs/code/environments/%{environment}/hieradata on *nix
+     # - %CommonAppData%\PuppetLabs\code\environments\%{environment}\hieradata on Windows
      # When specifying a datadir, make sure the directory exists.
        :datadir:
+
 ```
 
 In addition to the **'yaml'** backend option, you can use **'json'** if you like.
-*See Also:  [Hiera Data Sources](https://docs.puppetlabs.com/hiera/1/data_sources.html#yaml) )
+*See Also:  [Hiera Data Sources](https://docs.puppetlabs.com/hiera/3.2/data_sources.html#yaml) )
 
 The **hiera.yaml** provided is actually fully usable as-is except for that lack of **datadir** definition.  Let's define that, and make some other minor changes as follows:
 
-1. Change 'global' to 'common' ... just my own personal preference
-2. Delete 'defaults' and '%{environment}' as we wont use them
-3. Tweak the **clientcert** line to look for the yaml in a **node/** directory
-4. Set the **datadir** to the `%{environment}/data` directory as we will eventually have multiple environments
-5. Lets also add a couple other levels to our hierarchy for **role** and **location**
+1. Set the **datadir** to the `%{environment}/hieradata` directory as we will eventually have multiple environments
+2. Let's also add a couple other levels to our hierarchy for **role** and **location** (we will use them later)
+3. Also change **nodes** (plural) to just **node** (singular) to be consistant
 
 That should be good to get us started looking at how Hiera can be used...so our hiera.yaml
 will look like this:
@@ -105,13 +101,14 @@ will look like this:
   - yaml
 
 :hierarchy:
-  - "node/%{clientcert}"
-  - "role/%{role}"
-  - "location/%{location}"
+  - "node/%{::trusted.certname}"
+  - "role/%{::role}"
+  - "location/%{::location}"
   - common
 
 :yaml:
-  :datadir: "/etc/puppetlabs/puppet/environments/%{environment}/data"
+  :datadir: "/etc/puppetlabs/code/environments/%{environment}/hieradata"
+
 ```
 
 Go ahead and edit your hiera.yaml if you haven't already.
@@ -149,28 +146,28 @@ We've configured our hiera.yaml, but we still need to create the **datadir** as
 we've defined it within the hiera.yaml.  This is where Hiera will look for
 data when we make use of any of the hiera functions calls within our puppet code.
 
-Make sure you're still sitting in **/etc/puppetlabs/puppet** and make the following directories:
+Make sure you're still sitting in **/etc/puppetlabs/code** and make the following directories:
 
 ```
-     [root@puppet puppet]# pwd
-     /etc/puppetlabs/puppet
-     [root@puppet puppet]# mkdir environments/production/data
-     [root@puppet puppet]# mkdir environments/production/data/node
-     [root@puppet puppet]# mkdir environments/production/data/role
-     [root@puppet puppet]# mkdir environments/production/data/location
-     [root@puppet puppet]# tree environments
-     environments
-     └── production
-         ├── data
-         │   ├── location
-         │   ├── node
-         │   └── role
-         ├── manifests
-         │   ├── common_hosts.pp
-         │   ├── common_packages.pp
-         │   └── site.pp
-         └── modules
-     [snip]
+     [root@puppet code]# pwd
+     /etc/puppetlabs/code
+     [root@puppet code]# mkdir -p environments/production/hieradata
+     [root@puppet code]# mkdir -p environments/production/hieradata/node
+     [root@puppet code]# mkdir -p environments/production/hieradata/role
+     [root@puppet code]# mkdir -p environments/production/hieradata/location
+     [root@puppet code]# tree -L 2 environments/production
+     environments/production
+     ├── environment.conf
+     ├── hieradata
+     │   ├── location
+     │   ├── node
+     │   └── role
+     ├── manifests
+     │   ├── common_hosts.pp
+     │   ├── common_packages.pp
+     │   └── site.pp
+     └── modules
+         └── stdlib
 
 ```
 
@@ -186,9 +183,9 @@ and the rest of these options should have already been there):
 ```ini
      [master]
      node_terminus = classifier
-     reports = console,puppetdb
      storeconfigs = true
      storeconfigs_backend = puppetdb
+     reports = puppetdb
      certname = puppet.example.com
      always_cache_features = true
      hiera_config = /etc/puppetlabs/puppet/hiera.yaml
@@ -225,7 +222,7 @@ of the config it memory for fast access.
 **Yes!**   Here's what we've done to get to this point:
 
 1. Created a **hiera.yaml**
-2. Created a **data/** directory within the existing production environment directory
+2. Created a **hieradata/** directory within the existing production environment directory
 3. Created a few hiera data sub-directories to align with our hiera.yaml
 4. Updated the **puppet.conf** with the **hiera_config** option and value
 5. **Restarted** the Puppet Master so that it would re-read the puppet.conf and hiera.yaml
@@ -329,7 +326,7 @@ node default {
 
 Let's **delete** the node definitions for 'puppet.example.com' and 'agent.example.com'...They're not even used anyway.  And then let's add our call to **hiera_include**
 
-(Remember, the **site.pp** is in `/etc/puppetlabs/puppet/environments/production/manifests/` )
+(Remember, the **site.pp** is in `/etc/puppetlabs/code/environments/production/manifests/` )
 
 We want the end of our site.pp to end up looking like this:
 
@@ -361,15 +358,17 @@ Go ahead and try running puppet on the Puppet Master now, and see what happens..
 
 
 ```
-     [root@puppet ~]# cd /etc/puppetlabs/puppet/environments/production/manifests/
+     [root@puppet ~]# cd /etc/puppetlabs/code/environments/production/manifests/
      [root@puppet manifests]# vi site.pp
      [root@puppet manifests]# puppet agent -t
+     Info: Using configured environment 'production'
      Info: Retrieving pluginfacts
      Info: Retrieving plugin
      Info: Loading facts
-     Error: Could not retrieve catalog from remote server: Error 400 on SERVER: Could
+     Error: Could not retrieve catalog from remote server: Error 500 on SERVER:
+          Server Error: Evaluation Error: Error while evaluating a Function Call, Could
           not find data item classes in any Hiera data file and no default supplied at
-          /etc/puppetlabs/puppet/environments/production/manifests/site.pp:53
+          /etc/puppetlabs/code/environments/production/manifests/site.pp:41:1
           on node puppet.example.com
      Warning: Not using cache on failed catalog
      Error: Could not retrieve catalog; skipping run
@@ -381,8 +380,8 @@ we have not created any Hiera Data yet!
 
 ```
      [root@puppet manifests]# pwd
-     /etc/puppetlabs/puppet/environments/production/manifests
-     [root@puppet manifests]# cd ../data
+     /etc/puppetlabs/code/environments/production/manifests
+     [root@puppet manifests]# cd ../hieradata
      [root@puppet data]# vi common.yaml
 ```
 
@@ -433,12 +432,13 @@ So all we've done is configured Hiera and used it as a pseudo-ENC, created our f
 
 ```
      [root@puppet manifests]# puppet module install puppetlabs/ntp
-     Notice: Preparing to install into /etc/puppetlabs/puppet/environments/production/modules ...
+     Notice: Preparing to install into /etc/puppetlabs/code/environments/production/modules ...
      Notice: Downloading from https://forgeapi.puppetlabs.com ...
      Notice: Installing -- do not interrupt ...
-     /etc/puppetlabs/puppet/environments/production/modules
-     └─┬ puppetlabs-ntp (v4.2.0)
-       └── puppetlabs-stdlib (v4.12.0)
+     /etc/puppetlabs/code/environments/production/modules
+     └─┬ puppetlabs-ntp (v6.0.0)
+       └── puppetlabs-stdlib (v4.13.1)
+
 ```
 
 We now have the PuppetLab's NTP module installed.
@@ -448,8 +448,8 @@ Next, let's tell Puppet to declare this class for node **agent.example.com**
 
 ```
      [root@puppet production]# pwd
-     /etc/puppetlabs/puppet/environments/production
-     [root@puppet production]# cd data
+     /etc/puppetlabs/code/environments/production
+     [root@puppet production]# cd hieradata
      [root@puppet data]# tree
      .
      ├── common.yaml
@@ -481,6 +481,7 @@ Now on **agent.example.com** run puppet, and you should see Puppet configure NTP
 
 ```
      [root@agent ~]# puppet agent -t
+     Info: Using configured environment 'production'
      Info: Retrieving pluginfacts
      [snip] - removed all the output from the pluginfacts download
      Info: Retrieving plugin
@@ -592,7 +593,7 @@ Now on **agent.example.com** run puppet, and you should see Puppet configure NTP
      Notice: Finished catalog run in 35.90 seconds
 ```
 
-In the above output, where the ntp.conf edit is shown, any line with a minus sign in front is being removed by puppet, and any line with a plus sign in front is being added. (Similar to what you would see when use use the **diff** command)
+In the above output, where the ntp.conf edit is shown, any line with a minus sign (-) in front is being removed by puppet, and any line with a plus sign (+) in front is being added. (Similar to what you would see when use use the **diff** command)
 
 Notice that Puppet did a few things:
 
@@ -613,23 +614,24 @@ Notice that if you use **puppet resource** to check the current state of the ntp
 Has our time sync'ed yet?
 
 ```
-     [root@agent ~]# date
-     Thu Mar  3 23:52:53 UTC 2016
-     [root@agent ~]# timedatectl
-           Local time: Thu 2016-03-03 23:52:55 UTC
-       Universal time: Thu 2016-03-03 23:52:55 UTC
-             RTC time: Thu 2016-03-03 23:52:54
-            Time zone: UTC (UTC, +0000)
-          NTP enabled: yes
-     NTP synchronized: no
-      RTC in local TZ: no
-           DST active: n/a
+[root@agent ~]# date
+Tue Nov 15 21:15:30 UTC 2016
+
+[root@agent ~]# timedatectl
+      Local time: Tue 2016-11-15 21:15:37 UTC
+  Universal time: Tue 2016-11-15 21:15:37 UTC
+        RTC time: Tue 2016-11-15 21:15:36
+       Time zone: UTC (UTC, +0000)
+     NTP enabled: yes
+NTP synchronized: yes
+ RTC in local TZ: yes
+      DST active: n/a
 ```
 
-However, NTP isn't sync'ing, and I can't tell what time it really is because the timezone is set to UTC
+After a minute or so, NTP shows that it is synchronized, but I can't easily tell what time it is because the timezone is set to UTC
 How about we install a puppet module to manage the timezone for us?
 
-I found the saz-timezone module on the Puppet Forge ( <http://forge.puppetlabs.com/> )
+I found the **saz-timezone** module on the Puppet Forge ( <http://forge.puppetlabs.com/> )
 and even though it's not a puppetlabs-authored module, nor a puppetlabs-supported module,
 it does seem to be the most popular, and has a good user rating.  It also supports
 pretty much any/all linux flavor out there.  (Always make sure to check that
@@ -640,12 +642,12 @@ Let's go ahead and install the saz-timezone module...
 
 ```
      [root@puppet node]# puppet module install saz-timezone
-     Notice: Preparing to install into /etc/puppetlabs/puppet/environments/production/modules ...
+     Notice: Preparing to install into /etc/puppetlabs/code/environments/production/modules ...
      Notice: Downloading from https://forgeapi.puppetlabs.com ...
      Notice: Installing -- do not interrupt ...
-     /etc/puppetlabs/puppet/environments/production/modules
+     /etc/puppetlabs/code/environments/production/modules
      └─┬ saz-timezone (v3.3.0)
-       └── puppetlabs-stdlib (v4.11.0)
+       └── puppetlabs-stdlib (v4.13.1)
 ```
 
 ### Hiera auto-parameter lookup
@@ -671,41 +673,41 @@ This is a nice way to keep your site-specific data separated out from your code/
 
 ```
      [root@agent ~]# puppet agent -t
+     Info: Using configured environment 'production'
      Info: Retrieving pluginfacts
      Info: Retrieving plugin
      Info: Loading facts
      Info: Caching catalog for agent.example.com
-     Info: Applying configuration version '1457049735'
+     Info: Applying configuration version '1479244724'
      Notice: /Stage[main]/Timezone/File[/etc/localtime]/target: target changed '../usr/share/zoneinfo/UTC' to '/usr/share/zoneinfo/US/Pacific'
-     Notice: Finished catalog run in 0.65 seconds
+     Notice: Applied catalog in 0.71 seconds
 
      [root@agent ~]# date
-     Thu Mar  3 16:02:26 PST 2016
+     Tue Nov 15 13:19:50 PST 2016
 
      [root@agent ~]# timedatectl
-           Local time: Thu 2016-03-03 16:02:35 PST
-       Universal time: Fri 2016-03-04 00:02:35 UTC
-             RTC time: Fri 2016-03-04 00:02:35
+           Local time: Tue 2016-11-15 13:18:56 PST
+       Universal time: Tue 2016-11-15 21:18:56 UTC
+             RTC time: Tue 2016-11-15 21:18:54
             Time zone: US/Pacific (PST, -0800)
           NTP enabled: yes
      NTP synchronized: yes
-      RTC in local TZ: no
+      RTC in local TZ: yes
            DST active: no
       Last DST change: DST ended at
-                       Sun 2015-11-01 01:59:59 PDT
-                       Sun 2015-11-01 01:00:00 PST
+                       Sun 2016-11-06 01:59:59 PDT
+                       Sun 2016-11-06 01:00:00 PST
       Next DST change: DST begins (the clock jumps one hour forward) at
-                       Sun 2016-03-13 01:59:59 PST
-                       Sun 2016-03-13 03:00:00 PDT
-
+                       Sun 2017-03-12 01:59:59 PST
+                       Sun 2017-03-12 03:00:00 PDT
 ```
 
-Okay, that looks better.  Time date/time is correct, timezone has been set, and NTP is sync'ed.
+Okay, that looks great!  Time date/time is correct, timezone has been set, and NTP is sync'ed.
 
 Notice that we're pointing at the following NTP servers:
 
 ```
-     [vagrant@agent ~]$ grep 'server ' /etc/ntp.conf
+     [root@agent ~]# grep 'server ' /etc/ntp.conf
      # server - IP address or DNS name of upstream NTP server
      server 0.centos.pool.ntp.org
      server 1.centos.pool.ntp.org
@@ -756,18 +758,19 @@ The Hiera data to specify this would look like this:
 
 Let's add this to our **common.yaml** with the idea being we'd want these NTP servers set for any and every node using the ntp module.
 
-Run puppet on your training agent, and you'll notice that puppet updated your /etc/ntp.conf as well as restarted ntpd:
+Run puppet on your agent VM, and you'll notice that puppet updated your /etc/ntp.conf as well as restarted ntpd:
 
 ```
      [root@agent ~]# puppet agent -t
+     Info: Using configured environment 'production'
      Info: Retrieving pluginfacts
      Info: Retrieving plugin
      Info: Loading facts
      Info: Caching catalog for agent.example.com
-     Info: Applying configuration version '1457113052'
+     Info: Applying configuration version '1479245016'
      Notice: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]/content:
-     --- /etc/ntp.conf 2016-03-03 15:38:23.224932992 -0800
-     +++ /tmp/puppet-file20160304-5786-a8sfia  2016-03-04 09:37:35.936738602 -0800
+     --- /etc/ntp.conf    2016-11-15 13:13:09.543703681 -0800
+     +++ /tmp/puppet-file20161115-7122-y5vagy    2016-11-15 13:23:38.173358409 -0800
      @@ -23,9 +23,10 @@
       # prefer - select preferrable server
       # minpoll - set minimal update frequency
@@ -783,25 +786,39 @@ Run puppet on your training agent, and you'll notice that puppet updated your /e
 
       # Driftfile.
 
-     Info: Computing checksum on file /etc/ntp.conf
-     Info: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]: Filebucketed /etc/ntp.conf to main with sum c1d0e073779a9102773754cf972486be
-     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]/content: content changed '{md5}c1d0e073779a9102773754cf972486be' to '{md5}e2536ee231371aacd1d7020d863147c2'
+     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]/content: content changed '{md5}1f44e40bd99abd89f0a209e823285332' to '{md5}0921dc972e65220981482cbcbb31fb3c'
+     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp/step-tickers]/content:
+     --- /etc/ntp/step-tickers    2016-11-15 13:13:09.552699182 -0800
+     +++ /tmp/puppet-file20161115-7122-h0a82c    2016-11-15 13:23:38.188365298 -0800
+     @@ -1,5 +1,6 @@
+      # List of NTP servers used by the ntpdate service.
+
+     -0.centos.pool.ntp.org
+     -1.centos.pool.ntp.org
+     -2.centos.pool.ntp.org
+     +0.pool.ntp.org
+     +1.pool.ntp.org
+     +2.pool.ntp.org
+     +3.pool.ntp.org
+
+     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp/step-tickers]/content: content changed '{md5}413c531d0533c4dba18b9acf7a29ad5d' to '{md5}f60f392b1f3e1da01e2769e7d8a2a015'
      Info: Class[Ntp::Config]: Scheduling refresh of Class[Ntp::Service]
      Info: Class[Ntp::Service]: Scheduling refresh of Service[ntp]
      Notice: /Stage[main]/Ntp::Service/Service[ntp]: Triggered 'refresh' from 1 events
-     Notice: Finished catalog run in 0.83 seconds
+     Notice: Applied catalog in 0.76 seconds
 ```
 
 If you run puppet on your master, you'll notice that puppet doesn't make any changes...
 
 ```
-     [root@puppet data]# puppet agent -t
-     Info: Retrieving pluginfacts
-     Info: Retrieving plugin
-     Info: Loading facts
-     Info: Caching catalog for puppet.example.com
-     Info: Applying configuration version '1457113038'
-     Notice: Finished catalog run in 5.82 seconds
+[root@puppet hieradata]# puppet agent -t
+Info: Using configured environment 'production'
+Info: Retrieving pluginfacts
+Info: Retrieving plugin
+Info: Loading facts
+Info: Caching catalog for puppet.example.com
+Info: Applying configuration version '1479245117'
+Notice: Applied catalog in 16.01 seconds
 ```
 
 ...that because we've not configured the Puppet Master to use the NTP module.
@@ -817,7 +834,7 @@ array of classes under the **classes** key.
 Get into the right directory, and create your yaml file as follows...
 
 ```
-     [root@puppet ~]# cd /etc/puppetlabs/puppet/environments/production/data/node/
+     [root@puppet ~]# cd /etc/puppetlabs/code/environments/production/hieradata/node/
      [root@puppet node]# vi puppet.example.com.yaml
 ```
 
@@ -835,16 +852,17 @@ Now, run **puppet agent -t** and see what happens...
 
 ```
      [root@puppet node]# puppet agent -t
+     Info: Using configured environment 'production'
      Info: Retrieving pluginfacts
      Info: Retrieving plugin
      Info: Loading facts
      Info: Caching catalog for puppet.example.com
-     Info: Applying configuration version '1457373850'
+     Info: Applying configuration version '1479245256'
      Notice: /Stage[main]/Ntp::Install/Package[ntp]/ensure: created
      Notice: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]/content:
-     --- /etc/ntp.conf 2016-01-25 14:15:26.000000000 +0000
-     +++ /tmp/puppet-file20160307-10431-1q5565m  2016-03-07 18:04:29.771580255 +0000
-     @@ -1,58 +1,37 @@
+     --- /etc/ntp.conf    2016-05-31 10:11:10.000000000 +0000
+     +++ /tmp/puppet-file20161115-17085-15svzqc    2016-11-15 21:27:55.209687311 +0000
+     @@ -1,58 +1,41 @@
      -# For more information about this file, see the man pages
      -# ntp.conf(5), ntp_acc(5), ntp_auth(5), ntp_clock(5), ntp_misc(5), ntp_mon(5).
      +# ntp.conf: Managed by puppet.
@@ -885,6 +903,10 @@ Now, run **puppet agent -t** and see what happens...
      +
      +
      +
+     +
+     +
+     +
+     +
 
      -# Permit all access over the loopback interface.  This could
      -# be tightened as well, but to do so would effect some of
@@ -902,11 +924,11 @@ Now, run **puppet agent -t** and see what happens...
      -server 2.centos.pool.ntp.org iburst
      -server 3.centos.pool.ntp.org iburst
      -
-     -#broadcast 192.168.1.255 autokey # broadcast server
-     -#broadcastclient     # broadcast client
-     -#broadcast 224.0.1.1 autokey   # multicast server
-     -#multicastclient 224.0.1.1   # multicast client
-     -#manycastserver 239.255.254.254    # manycast server
+     -#broadcast 192.168.1.255 autokey    # broadcast server
+     -#broadcastclient            # broadcast client
+     -#broadcast 224.0.1.1 autokey        # multicast server
+     -#multicastclient 224.0.1.1        # multicast client
+     -#manycastserver 239.255.254.254        # manycast server
      -#manycastclient 239.255.254.254 autokey # manycast client
      -
      -# Enable public key cryptography.
@@ -936,29 +958,40 @@ Now, run **puppet agent -t** and see what happens...
      -# Note: Monitoring will not be disabled with the limited restriction flag.
      -disable monitor
 
-     Info: Computing checksum on file /etc/ntp.conf
-     Info: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]: Filebucketed /etc/ntp.conf to main with sum dc9e5754ad2bb6f6c32b954c04431d0a
-     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]/content: content changed '{md5}dc9e5754ad2bb6f6c32b954c04431d0a' to '{md5}e2536ee231371aacd1d7020d863147c2'
+     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]/content: content changed '{md5}dc9e5754ad2bb6f6c32b954c04431d0a' to '{md5}0921dc972e65220981482cbcbb31fb3c'
+     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp/step-tickers]/content:
+     --- /etc/ntp/step-tickers    2016-05-31 10:11:10.000000000 +0000
+     +++ /tmp/puppet-file20161115-17085-x7tamq    2016-11-15 21:27:55.302687311 +0000
+     @@ -1,3 +1,6 @@
+      # List of NTP servers used by the ntpdate service.
+
+     -0.centos.pool.ntp.org
+     +0.pool.ntp.org
+     +1.pool.ntp.org
+     +2.pool.ntp.org
+     +3.pool.ntp.org
+
+     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp/step-tickers]/content: content changed '{md5}9b77b3b3eb41daf0b9abb8ed01c5499b' to '{md5}f60f392b1f3e1da01e2769e7d8a2a015'
      Info: Class[Ntp::Config]: Scheduling refresh of Class[Ntp::Service]
      Info: Class[Ntp::Service]: Scheduling refresh of Service[ntp]
      Notice: /Stage[main]/Ntp::Service/Service[ntp]/ensure: ensure changed 'stopped' to 'running'
      Info: /Stage[main]/Ntp::Service/Service[ntp]: Unscheduling refresh on Service[ntp]
-     Notice: Finished catalog run in 10.84 seconds
-
+     Notice: Applied catalog in 21.47 seconds
 ```
 
 NTP has been configured, enabled, and started on the Puppet Master.
 
 ```
-     [root@puppet node]# timedatectl
-           Local time: Mon 2016-03-07 18:06:30 UTC
-       Universal time: Mon 2016-03-07 18:06:30 UTC
-             RTC time: Mon 2016-03-07 18:06:30
-            Time zone: UTC (UTC, +0000)
-          NTP enabled: yes
-     NTP synchronized: yes
-      RTC in local TZ: no
-           DST active: n/a
+[root@puppet node]# timedatectl
+      Local time: Tue 2016-11-15 21:29:26 UTC
+  Universal time: Tue 2016-11-15 21:29:26 UTC
+        RTC time: Tue 2016-11-15 21:29:24
+       Time zone: UTC (UTC, +0000)
+     NTP enabled: yes
+NTP synchronized: yes
+ RTC in local TZ: yes
+      DST active: n/a
+
 ```
 
 Oh, we forgot to set the timezone.  Let's do that now.  Add the **timezone** class to the array of classes (causing that class to be declared for the puppet.example.com node) and also set the timezone parameter to 'US/Pacific' as follows...
@@ -977,30 +1010,32 @@ timezone::timezone: 'US/Pacific'
 Okay, that looks better...
 
 ```
-     [root@puppet node]# puppet agent -t
-     Info: Retrieving pluginfacts
-     Info: Retrieving plugin
-     Info: Loading facts
-     Info: Caching catalog for puppet.example.com
-     Info: Applying configuration version '1457374071'
-     Notice: /Stage[main]/Timezone/File[/etc/localtime]/target: target changed '../usr/share/zoneinfo/UTC' to '/usr/share/zoneinfo/US/Pacific'
-     Notice: Finished catalog run in 5.37 seconds
+[root@puppet node]# puppet agent -t
+Info: Using configured environment 'production'
+Info: Retrieving pluginfacts
+Info: Retrieving plugin
+Info: Loading facts
+Info: Caching catalog for puppet.example.com
+Info: Applying configuration version '1479245400'
+Notice: /Stage[main]/Timezone/File[/etc/localtime]/target: target changed '../usr/share/zoneinfo/UTC' to '/usr/share/zoneinfo/US/Pacific'
+Notice: Applied catalog in 17.03 seconds
 
-     [root@puppet node]# timedatectl
-           Local time: Mon 2016-03-07 10:09:00 PST
-       Universal time: Mon 2016-03-07 18:09:00 UTC
-             RTC time: Mon 2016-03-07 18:09:01
-            Time zone: US/Pacific (PST, -0800)
-          NTP enabled: yes
-     NTP synchronized: yes
-      RTC in local TZ: no
-           DST active: no
-      Last DST change: DST ended at
-                       Sun 2015-11-01 01:59:59 PDT
-                       Sun 2015-11-01 01:00:00 PST
-      Next DST change: DST begins (the clock jumps one hour forward) at
-                       Sun 2016-03-13 01:59:59 PST
-                       Sun 2016-03-13 03:00:00 PDT
+[root@puppet node]# timedatectl
+      Local time: Tue 2016-11-15 13:30:54 PST
+  Universal time: Tue 2016-11-15 21:30:54 UTC
+        RTC time: Tue 2016-11-15 21:30:52
+       Time zone: US/Pacific (PST, -0800)
+     NTP enabled: yes
+NTP synchronized: yes
+ RTC in local TZ: yes
+      DST active: no
+ Last DST change: DST ended at
+                  Sun 2016-11-06 01:59:59 PDT
+                  Sun 2016-11-06 01:00:00 PST
+ Next DST change: DST begins (the clock jumps one hour forward) at
+                  Sun 2017-03-12 01:59:59 PST
+                  Sun 2017-03-12 03:00:00 PDT
+
 ```
 
 Okay, Let's summarize what we've done so far...
@@ -1015,9 +1050,9 @@ Okay, Let's summarize what we've done so far...
 Our Hiera data YAML files look like this:
 
 ```
-     [root@puppet data]# pwd
-     /etc/puppetlabs/puppet/environments/production/data
-     [root@puppet data]# tree
+     [root@puppet hieradata]# pwd
+     /etc/puppetlabs/code/environments/production/hieradata
+     [root@puppet hieradata]# tree
      .
      ├── common.yaml
      ├── location
@@ -1027,7 +1062,7 @@ Our Hiera data YAML files look like this:
      └── role
 
      3 directories, 3 files
-     [root@puppet data]# cat common.yaml
+     [root@puppet hieradata]# cat common.yaml
 ```
 
 ```yaml
@@ -1045,7 +1080,7 @@ ntp::servers:
 ```
 
 ```
-     [root@puppet data]# cat node/puppet.example.com.yaml
+     [root@puppet hieradata]# cat node/puppet.example.com.yaml
 ```
 
 ```yaml
@@ -1059,7 +1094,7 @@ timezone::timezone: 'US/Pacific'
 ```
 
 ```
-     [root@puppet data]# cat node/agent.example.com.yaml
+     [root@puppet hieradata]# cat node/agent.example.com.yaml
 ```
 
 ```yaml
@@ -1085,7 +1120,7 @@ differently on the hierarchy of data
 The **hiera_include('classes')** function searches **all** hiera data at
 **every level** for the key **"classes"** and builds an array of classes.
 So you can specify **classes** at the node level or common level and/or every
-level in-between, and the hiera_include function will pickup them all.
+level in-between, and the `hiera_include()` function will pickup them all.
 
 Hiera behaves differently for auto-parameter lookup, as well as arbitrary data
 lookup function **hiera()** which we are about to look at in the next section.
@@ -1142,109 +1177,332 @@ by simply running **facter** without any arguments.   You can tell facter
 to include some extra puppet-specific facts with the **-p** option:
 
 ```
-     [root@puppet data]# facter -p
-     architecture => x86_64
-     augeasversion => 1.3.0
-     bios_release_date => 12/01/2006
-     bios_vendor => innotek GmbH
-     bios_version => VirtualBox
-     blockdevice_sda_model => VBOX HARDDISK
-     blockdevice_sda_size => 21474836480
-     blockdevice_sda_vendor => ATA
-     blockdevices => sda
-     boardmanufacturer => Oracle Corporation
-     boardproductname => VirtualBox
-     boardserialnumber => 0
-     custom_auth_conf => false
-     dhcp_servers => {"system"=>"10.0.2.2", "enp0s3"=>"10.0.2.2"}
-     domain => example.com
-     facterversion => 2.4.4
-     filesystems => xfs
-     fqdn => puppet.example.com
-     gid => root
-     hardwareisa => x86_64
-     hardwaremodel => x86_64
-     hostname => puppet
-     id => root
-     interfaces => enp0s3,enp0s8,lo
-     ipaddress => 10.0.2.15
-     ipaddress_enp0s3 => 10.0.2.15
-     ipaddress_enp0s8 => 192.168.198.10
-     ipaddress_lo => 127.0.0.1
-     is_pe => true
-     is_virtual => true
-     kernel => Linux
-     kernelmajversion => 3.10
-     kernelrelease => 3.10.0-327.10.1.el7.x86_64
-     kernelversion => 3.10.0
-     macaddress => 08:00:27:39:18:3c
-     macaddress_enp0s3 => 08:00:27:39:18:3c
-     macaddress_enp0s8 => 08:00:27:60:30:a5
-     manufacturer => innotek GmbH
-     memoryfree => 625.75 MB
-     memoryfree_mb => 625.75
-     memorysize => 3.70 GB
-     memorysize_mb => 3791.46
-     mtu_enp0s3 => 1500
-     mtu_enp0s8 => 1500
-     mtu_lo => 65536
-     netmask => 255.255.255.0
-     netmask_enp0s3 => 255.255.255.0
-     netmask_enp0s8 => 255.255.255.0
-     netmask_lo => 255.0.0.0
-     network_enp0s3 => 10.0.2.0
-     network_enp0s8 => 192.168.198.0
-     network_lo => 127.0.0.0
-     operatingsystem => CentOS
-     operatingsystemmajrelease => 7
-     operatingsystemrelease => 7.2.1511
-     os => {"name"=>"CentOS", "family"=>"RedHat", "release"=>{"major"=>"7", "minor"=>"2", "full"=>"7.2.1511"}}
-     osfamily => RedHat
-     package_provider => yum
-     partitions => {"sda1"=>{"uuid"=>"39ce4ad1-4e9d-49a4-bce0-8a30b459490a", "size"=>"1024000", "mount"=>"/boot", "filesystem"=>"xfs"}, "sda2"=>{"size"=>"40916992", "filesystem"=>"LVM2_member"}}
-     path => /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
-     pe_build => 3.8.4
-     pe_concat_basedir => /var/opt/lib/pe-puppet/pe_concat
-     pe_major_version => 3
-     pe_minor_version => 8
-     pe_patch_version => 4
-     pe_version => 3.8.4
-     physicalprocessorcount => 1
-     platform_symlink_writable => true
-     platform_tag => el-7-x86_64
-     processor0 => Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz
-     processor1 => Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz
-     processor2 => Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz
-     processor3 => Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz
-     processorcount => 4
-     processors => {"models"=>["Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz", "Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz", "Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz", "Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz"], "count"=>4, "physicalcount"=>1}
-     productname => VirtualBox
-     ps => ps -ef
-     puppet_vardir => /var/opt/lib/pe-puppet
-     puppetversion => 3.8.5 (Puppet Enterprise 3.8.4)
-     root_home => /root
-     rubyplatform => x86_64-linux
-     rubysitedir => /opt/puppet/lib/ruby/site_ruby/1.9.1
-     rubyversion => 1.9.3
-     selinux => false
-     serialnumber => 0
-     service_provider => systemd
-     staging_http_get => curl
-     swapfree => 1.03 GB
-     swapfree_mb => 1056.00
-     swapsize => 1.03 GB
-     swapsize_mb => 1056.00
-     system_uptime => {"seconds"=>8362, "hours"=>2, "days"=>0, "uptime"=>"2:19 hours"}
-     timezone => PST
-     type => Other
-     uniqueid => a8c00ac6
-     uptime => 2:19 hours
-     uptime_days => 0
-     uptime_hours => 2
-     uptime_seconds => 8362
-     uuid => A187A2ED-AF80-4EDB-B3AA-2FA2189320A3
-     virtual => virtualbox
+[root@puppet node]# facter -p
+aio_agent_build => 1.7.1
+aio_agent_version => 1.7.1
+augeas => {
+  version => "1.4.0"
+}
+disks => {
+  sda => {
+    model => "VBOX HARDDISK",
+    size => "20.00 GiB",
+    size_bytes => 21474836480,
+    vendor => "ATA"
+  }
+}
+dmi => {
+  bios => {
+    release_date => "12/01/2006",
+    vendor => "innotek GmbH",
+    version => "VirtualBox"
+  },
+  board => {
+    manufacturer => "Oracle Corporation",
+    product => "VirtualBox",
+    serial_number => "0"
+  },
+  chassis => {
+    type => "Other"
+  },
+  manufacturer => "innotek GmbH",
+  product => {
+    name => "VirtualBox",
+    serial_number => "0",
+    uuid => "A717DB68-F0CF-4E12-8A40-3D6AEFB737F3"
+  }
+}
+facterversion => 3.4.1
+filesystems => xfs
+identity => {
+  gid => 0,
+  group => "root",
+  privileged => true,
+  uid => 0,
+  user => "root"
+}
+is_pe => false
+is_virtual => true
+kernel => Linux
+kernelmajversion => 3.10
+kernelrelease => 3.10.0-327.36.3.el7.x86_64
+kernelversion => 3.10.0
+load_averages => {
+  15m => 0.22,
+  1m => 0.04,
+  5m => 0.23
+}
+memory => {
+  swap => {
+    available => "299.02 MiB",
+    available_bytes => 313540608,
+    capacity => "70.80%",
+    total => "1.00 GiB",
+    total_bytes => 1073737728,
+    used => "724.98 MiB",
+    used_bytes => 760197120
+  },
+  system => {
+    available => "225.34 MiB",
+    available_bytes => 236290048,
+    capacity => "92.09%",
+    total => "2.78 GiB",
+    total_bytes => 2986229760,
+    used => "2.56 GiB",
+    used_bytes => 2749939712
+  }
+}
+mountpoints => {
+  / => {
+    available => "15.49 GiB",
+    available_bytes => 16635203584,
+    capacity => "16.05%",
+    device => "/dev/mapper/centos-root",
+    filesystem => "xfs",
+    options => [
+      "rw",
+      "relatime",
+      "attr2",
+      "inode64",
+      "noquota"
+    ],
+    size => "18.46 GiB",
+    size_bytes => 19815989248,
+    used => "2.96 GiB",
+    used_bytes => 3180785664
+  },
+  /boot => {
+    available => "330.43 MiB",
+    available_bytes => 346484736,
+    capacity => "33.47%",
+    device => "/dev/sda1",
+    filesystem => "xfs",
+    options => [
+      "rw",
+      "relatime",
+      "attr2",
+      "inode64",
+      "noquota"
+    ],
+    size => "496.67 MiB",
+    size_bytes => 520794112,
+    used => "166.23 MiB",
+    used_bytes => 174309376
+  }
+}
+networking => {
+  dhcp => "10.0.2.2",
+  domain => "example.com",
+  fqdn => "puppet.example.com",
+  hostname => "puppet",
+  interfaces => {
+    enp0s3 => {
+      bindings => [
+        {
+          address => "10.0.2.15",
+          netmask => "255.255.255.0",
+          network => "10.0.2.0"
+        }
+      ],
+      bindings6 => [
+        {
+          address => "fe80::a00:27ff:feb7:f3af",
+          netmask => "ffff:ffff:ffff:ffff::",
+          network => "fe80::"
+        }
+      ],
+      dhcp => "10.0.2.2",
+      ip => "10.0.2.15",
+      ip6 => "fe80::a00:27ff:feb7:f3af",
+      mac => "08:00:27:b7:f3:af",
+      mtu => 1500,
+      netmask => "255.255.255.0",
+      netmask6 => "ffff:ffff:ffff:ffff::",
+      network => "10.0.2.0",
+      network6 => "fe80::"
+    },
+    enp0s8 => {
+      bindings => [
+        {
+          address => "192.168.198.10",
+          netmask => "255.255.255.0",
+          network => "192.168.198.0"
+        }
+      ],
+      bindings6 => [
+        {
+          address => "fe80::a00:27ff:fec3:1131",
+          netmask => "ffff:ffff:ffff:ffff::",
+          network => "fe80::"
+        }
+      ],
+      dhcp => "192.168.56.100",
+      ip => "192.168.198.10",
+      ip6 => "fe80::a00:27ff:fec3:1131",
+      mac => "08:00:27:c3:11:31",
+      mtu => 1500,
+      netmask => "255.255.255.0",
+      netmask6 => "ffff:ffff:ffff:ffff::",
+      network => "192.168.198.0",
+      network6 => "fe80::"
+    },
+    lo => {
+      bindings => [
+        {
+          address => "127.0.0.1",
+          netmask => "255.0.0.0",
+          network => "127.0.0.0"
+        }
+      ],
+      bindings6 => [
+        {
+          address => "::1",
+          netmask => "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+          network => "::1"
+        }
+      ],
+      ip => "127.0.0.1",
+      ip6 => "::1",
+      mtu => 65536,
+      netmask => "255.0.0.0",
+      netmask6 => "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+      network => "127.0.0.0",
+      network6 => "::1"
+    }
+  },
+  ip => "10.0.2.15",
+  ip6 => "fe80::a00:27ff:feb7:f3af",
+  mac => "08:00:27:b7:f3:af",
+  mtu => 1500,
+  netmask => "255.255.255.0",
+  netmask6 => "ffff:ffff:ffff:ffff::",
+  network => "10.0.2.0",
+  network6 => "fe80::",
+  primary => "enp0s3"
+}
+os => {
+  architecture => "x86_64",
+  family => "RedHat",
+  hardware => "x86_64",
+  name => "CentOS",
+  release => {
+    full => "7.2.1511",
+    major => "7",
+    minor => "2"
+  },
+  selinux => {
+    enabled => false
+  }
+}
+package_provider => yum
+partitions => {
+  /dev/mapper/centos-root => {
+    filesystem => "xfs",
+    mount => "/",
+    size => "18.46 GiB",
+    size_bytes => 19826475008,
+    uuid => "c5e9538a-9f0f-4666-88e7-28bb52b62e43"
+  },
+  /dev/mapper/centos-swap => {
+    filesystem => "swap",
+    size => "1.00 GiB",
+    size_bytes => 1073741824,
+    uuid => "8e3c7c45-a31b-479f-bd47-25764cf80fab"
+  },
+  /dev/sda1 => {
+    filesystem => "xfs",
+    mount => "/boot",
+    size => "500.00 MiB",
+    size_bytes => 524288000,
+    uuid => "5dc0799f-b2a8-465e-8a47-60b677be09b3"
+  },
+  /dev/sda2 => {
+    filesystem => "LVM2_member",
+    size => "19.51 GiB",
+    size_bytes => 20949499904,
+    uuid => "PpSFVZ-SS3P-n3a6-ctPF-sb9H-6M85-i0TqBv"
+  }
+}
+path => /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/puppetlabs/bin:/root/bin
+pe_build => 2016.4.0
+pe_concat_basedir => /opt/puppetlabs/puppet/cache/pe_concat
+pe_razor_server_version => package pe-razor-server is not installed
+pe_server_version => 2016.4.0
+platform_symlink_writable => true
+platform_tag => el-7-x86_64
+processors => {
+  count => 2,
+  isa => "x86_64",
+  models => [
+    "Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz",
+    "Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz"
+  ],
+  physicalcount => 1
+}
+puppet_environmentpath => /etc/puppetlabs/code/environments
+puppet_files_dir_present => false
+puppet_vardir => /opt/puppetlabs/puppet/cache
+puppetversion => 4.7.0
+root_home => /root
+ruby => {
+  platform => "x86_64-linux",
+  sitedir => "/opt/puppetlabs/puppet/lib/ruby/site_ruby/2.1.0",
+  version => "2.1.9"
+}
+service_provider => systemd
+ssh => {
+   [snip]
+}
+staging_http_get => curl
+system_uptime => {
+  days => 0,
+  hours => 3,
+  seconds => 14113,
+  uptime => "3:55 hours"
+}
+timezone => PST
+virtual => virtualbox
+
 ```
+
+You can query the value of a fact from the command line like this:
+
+```
+[root@puppet node]# facter -p service_provider
+systemd
+
+[root@puppet node]# facter -p os
+{
+  architecture => "x86_64",
+  family => "RedHat",
+  hardware => "x86_64",
+  name => "CentOS",
+  release => {
+    full => "7.2.1511",
+    major => "7",
+    minor => "2"
+  },
+  selinux => {
+    enabled => false
+  }
+}
+
+[root@puppet node]# facter -p os.family
+RedHat
+
+[root@puppet node]# facter -p os.release
+{
+  full => "7.2.1511",
+  major => "7",
+  minor => "2"
+}
+
+[root@puppet node]# facter -p os.release.major
+7
+
+```
+
+When puppet runs, it takes all of these facts about the system, and makes them available as top-scope variables.  Pretty nice of it, eh?
 
 So if you want to use any of those facts in your puppet code, you can simply take the fact name and use it like you would a top-scope puppet variable like this:
 
@@ -1263,7 +1521,7 @@ Take a look at how many possible service providers there are:  [Service Provider
 
 What if you want to define a custom fact for use in your puppet code?
 Puppet+Facter allows you to write custom code to create a custom fact, but
-even simpler, you can also create a yaml file with [static facts](http://docs.puppetlabs.com/facter/2.4/custom_facts.html#external-facts) for that node
+even simpler, you can also create a yaml file with [static facts](http://docs.puppetlabs.com/facter/3.4/custom_facts.html#external-facts) for that node
 that would show up as top-scope puppet variables.
 
 The best way to define custom static agent-side facts is by including them in the facts.d directory within a module.
@@ -1296,15 +1554,15 @@ Let's take the time to setup the same custom fact on our Puppet Master as well,
 but let's give it a different location of 'seattle' ...
 
 ```
-     [root@puppet data]# mkdir -p /etc/puppetlabs/facter/facts.d
+     [root@puppet ~]# mkdir -p /etc/puppetlabs/facter/facts.d
 
-     [root@puppet data]# vi /etc/puppetlabs/facter/facts.d/static-facts.yaml
+     [root@puppet ~]# vi /etc/puppetlabs/facter/facts.d/static-facts.yaml
 
-     [root@puppet data]# cat /etc/puppetlabs/facter/facts.d/static-facts.yaml
+     [root@puppet ~]# cat /etc/puppetlabs/facter/facts.d/static-facts.yaml
      ---
      location: seattle
 
-     [root@puppet data]# facter location
+     [root@puppet ~]# facter location
      seattle
 ```
 
@@ -1332,35 +1590,36 @@ On **puppet.example.com** node we see:
 
 ```
      [root@puppet manifests]# puppet agent -t
+     Info: Using configured environment 'production'
      Info: Retrieving pluginfacts
      Info: Retrieving plugin
      Info: Loading facts
      Info: Caching catalog for puppet.example.com
-     Info: Applying configuration version '1457382149'
+     Info: Applying configuration version '1479246560'
      Notice: Location is: seattle
      Notice: /Stage[main]/Main/Notify[Location is: seattle]/message: defined 'message' as 'Location is: seattle'
-     Notice: Finished catalog run in 5.25 seconds
-
+     Notice: Applied catalog in 16.07 seconds
 ```
 
 And on **agent.example.com** node we see:
 
 ```
      [root@agent ~]# puppet agent -t
+     Info: Using configured environment 'production'
      Info: Retrieving pluginfacts
      Info: Retrieving plugin
      Info: Loading facts
      Info: Caching catalog for agent.example.com
-     Info: Applying configuration version '1457381961'
+     Info: Applying configuration version '1479246571'
      Notice: Location is: woodinville
      Notice: /Stage[main]/Main/Notify[Location is: woodinville]/message: defined 'message' as 'Location is: woodinville'
-     Notice: Finished catalog run in 0.49 seconds
+     Notice: Applied catalog in 0.77 seconds
 ```
 
 Now let's take advantage of this new top-scope variable with Hiera.  Create a **woodinville.yaml** and **seattle.yaml** in the data/location directory as follows:
 
 ```
-     [root@puppet puppet]# cd /etc/puppetlabs/puppet/environments/production/data/location/
+     [root@puppet puppet]# cd /etc/puppetlabs/code/environments/production/hieradata/location/
      [root@puppet location]# vi woodinville.yaml
      [root@puppet location]# cp woodinville.yaml seattle.yaml
 ```
@@ -1385,16 +1644,17 @@ Then run puppet, and see what happens...
 
 ```
      [root@puppet location]# puppet agent -t
+     Info: Using configured environment 'production'
      Info: Retrieving pluginfacts
      Info: Retrieving plugin
      Info: Loading facts
      Info: Caching catalog for puppet.example.com
-     Info: Applying configuration version '1457382556'
+     Info: Applying configuration version '1479246688'
      Notice: Location is: seattle
      Notice: /Stage[main]/Main/Notify[Location is: seattle]/message: defined 'message' as 'Location is: seattle'
      Notice: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]/content:
-     --- /etc/ntp.conf 2016-03-07 10:04:29.969580257 -0800
-     +++ /tmp/puppet-file20160307-25460-lxcrks 2016-03-07 12:29:29.717938219 -0800
+     --- /etc/ntp.conf    2016-11-15 13:27:55.261687311 -0800
+     +++ /tmp/puppet-file20161115-19736-n0ofpo    2016-11-15 13:51:41.292578048 -0800
      @@ -23,10 +23,10 @@
       # prefer - select preferrable server
       # minpoll - set minimal update frequency
@@ -1408,15 +1668,30 @@ Then run puppet, and see what happens...
      +server 2.us.pool.ntp.org
      +server 3.us.pool.ntp.org
 
+
       # Driftfile.
 
-     Info: Computing checksum on file /etc/ntp.conf
-     Info: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]: Filebucketed /etc/ntp.conf to main with sum e2536ee231371aacd1d7020d863147c2
-     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]/content: content changed '{md5}e2536ee231371aacd1d7020d863147c2' to '{md5}568159151d0a076ca61dc5e5c41b989f'
+     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]/content: content changed '{md5}0921dc972e65220981482cbcbb31fb3c' to '{md5}7647ce38234dc60f92b74fadcfe1a49f'
+     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp/step-tickers]/content:
+     --- /etc/ntp/step-tickers    2016-11-15 13:27:55.315687311 -0800
+     +++ /tmp/puppet-file20161115-19736-dan8wj    2016-11-15 13:51:41.333574867 -0800
+     @@ -1,6 +1,6 @@
+      # List of NTP servers used by the ntpdate service.
+
+     -0.pool.ntp.org
+     -1.pool.ntp.org
+     -2.pool.ntp.org
+     -3.pool.ntp.org
+     +0.us.pool.ntp.org
+     +1.us.pool.ntp.org
+     +2.us.pool.ntp.org
+     +3.us.pool.ntp.org
+
+     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp/step-tickers]/content: content changed '{md5}f60f392b1f3e1da01e2769e7d8a2a015' to '{md5}7fe1770afdb4f2d3f50a25dad7fd92e9'
      Info: Class[Ntp::Config]: Scheduling refresh of Class[Ntp::Service]
      Info: Class[Ntp::Service]: Scheduling refresh of Service[ntp]
      Notice: /Stage[main]/Ntp::Service/Service[ntp]: Triggered 'refresh' from 1 events
-     Notice: Finished catalog run in 5.36 seconds
+     Notice: Applied catalog in 14.79 seconds
 ```
 
 Notice that our **"location-level"** hiera data has overridden the hiera data in **common.yaml**
@@ -1427,7 +1702,7 @@ Let's create a new location for Amsterdam like this:
 
 ```
      [root@puppet location]# pwd
-     /etc/puppetlabs/puppet/environments/production/data/location
+     /etc/puppetlabs/code/environments/production/hieradata/location
      [root@puppet location]# cp woodinville.yaml amsterdam.yaml
      [root@puppet location]# vi amsterdam.yaml
      [root@puppet location]# cat amsterdam.yaml
@@ -1452,17 +1727,19 @@ We now have a new location setup in Hiera, so let's try changing our **agent** n
      ---
      location: amsterdam
 
+
      [root@agent ~]# puppet agent -t
+     Info: Using configured environment 'production'
      Info: Retrieving pluginfacts
      Info: Retrieving plugin
      Info: Loading facts
      Info: Caching catalog for agent.example.com
-     Info: Applying configuration version '1457383199'
+     Info: Applying configuration version '1479246847'
      Notice: Location is: amsterdam
      Notice: /Stage[main]/Main/Notify[Location is: amsterdam]/message: defined 'message' as 'Location is: amsterdam'
      Notice: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]/content:
-     --- /etc/ntp.conf 2016-03-07 12:29:27.028387168 -0800
-     +++ /tmp/puppet-file20160307-11029-1bedbos  2016-03-07 12:40:01.023326070 -0800
+     --- /etc/ntp.conf    2016-11-15 13:51:41.518139951 -0800
+     +++ /tmp/puppet-file20161115-7667-1t9r2tm    2016-11-15 13:54:09.972941140 -0800
      @@ -23,10 +23,10 @@
       # prefer - select preferrable server
       # minpoll - set minimal update frequency
@@ -1479,13 +1756,27 @@ We now have a new location setup in Hiera, so let's try changing our **agent** n
 
       # Driftfile.
 
-     Info: Computing checksum on file /etc/ntp.conf
-     Info: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]: Filebucketed /etc/ntp.conf to main with sum 568159151d0a076ca61dc5e5c41b989f
-     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]/content: content changed '{md5}568159151d0a076ca61dc5e5c41b989f' to '{md5}bd308381466e7050e0c9ca3e2f90c234'
+     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp.conf]/content: content changed '{md5}7647ce38234dc60f92b74fadcfe1a49f' to '{md5}606dacc879656797d591a909ecc5121a'
+     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp/step-tickers]/content:
+     --- /etc/ntp/step-tickers    2016-11-15 13:51:41.537138446 -0800
+     +++ /tmp/puppet-file20161115-7667-19a40gh    2016-11-15 13:54:09.987942799 -0800
+     @@ -1,6 +1,6 @@
+      # List of NTP servers used by the ntpdate service.
+
+     -0.us.pool.ntp.org
+     -1.us.pool.ntp.org
+     -2.us.pool.ntp.org
+     -3.us.pool.ntp.org
+     +0.nl.pool.ntp.org
+     +1.nl.pool.ntp.org
+     +2.nl.pool.ntp.org
+     +3.nl.pool.ntp.org
+
+     Notice: /Stage[main]/Ntp::Config/File[/etc/ntp/step-tickers]/content: content changed '{md5}7fe1770afdb4f2d3f50a25dad7fd92e9' to '{md5}99ae95e4ebb1c47d27ff1f507e4bda34'
      Info: Class[Ntp::Config]: Scheduling refresh of Class[Ntp::Service]
      Info: Class[Ntp::Service]: Scheduling refresh of Service[ntp]
      Notice: /Stage[main]/Ntp::Service/Service[ntp]: Triggered 'refresh' from 1 events
-     Notice: Finished catalog run in 0.65 seconds
+     Notice: Applied catalog in 0.83 seconds
 ```
 
 So what have we learned here?
@@ -1523,7 +1814,7 @@ instead.
 
 ```
      [root@puppet node]# pwd
-     /etc/puppetlabs/puppet/environments/production/data/node
+     /etc/puppetlabs/code/environments/production/hieradata/node
      [root@puppet node]# tree
      .
      ├── agent.example.com.yaml
@@ -1573,15 +1864,12 @@ Let's edit our site.pp to accomplish that...
 Now try running puppet on either node...
 
 ```
-     [root@puppet node]# pwd
-     /etc/puppetlabs/puppet/environments/production/data/node
-     [root@puppet node]# cd ../../manifests/
-     [root@puppet manifests]# vi site.pp
-     [root@puppet manifests]# puppet agent -t
+     [root@agent ~]# puppet agent -t
+     Info: Using configured environment 'production'
      Info: Retrieving pluginfacts
      Info: Retrieving plugin
      Info: Loading facts
-     Error: Could not retrieve catalog from remote server: Error 400 on SERVER: Cannot reassign variable location at /etc/puppetlabs/puppet/environments/production/manifests/site.pp:43 on node puppet.example.com
+     Error: Could not retrieve catalog from remote server: Error 500 on SERVER: Server Error: Evaluation Error: Cannot reassign variable '$location' at /etc/puppetlabs/code/environments/production/manifests/site.pp:31:11 on node agent.example.com
      Warning: Not using cache on failed catalog
      Error: Could not retrieve catalog; skipping run
 ```
@@ -1593,7 +1881,7 @@ variable.  Also, all facter facts become top-scope puppet variables.  In this
 case, we have both a facter fact **location** as well as a puppet variable
 assignment to **$location** happening in the site.pp, so we're getting an
 error because **$::location** is already defined when we try to assign to it
-a value.  Puppet only allows a variable to be set once, and only once. If you've
+a value.  *Puppet only allows a variable to be set once*, and only once. If you've
 done any scripting or programming, you may be surprised that in puppet once you
 assign a value to a variable, you can not re-assign to it again.  In fact,
 it doesn't make much sense to call it a "variable" because it can not vary!
@@ -1661,10 +1949,11 @@ Continue to **Lab #8** --> [Environments](08-Environments.md)
 
 ### Further Reading
 
-1. Hiera Lookup Functions: <https://docs.puppetlabs.com/hiera/1/puppet.html#hiera-lookup-functions>
-2. Hiera Automatic-Parameter Lookup: <https://docs.puppetlabs.com/hiera/1/puppet.html#automatic-parameter-lookup>
-3. External Facts: <http://docs.puppetlabs.com/facter/2.4/custom_facts.html#external-facts>
-4. What is Facter? <http://codingbee.net/tutorials/puppet/puppet-what-is-facter/>
+1. Hiera Configuration: <https://docs.puppet.com/hiera/3.2/configuring.html>
+2. Hiera Lookup Functions: <https://docs.puppet.com/hiera/3.2/puppet.html#hiera-lookup-functions>
+3. Hiera Automatic-Parameter Lookup: <https://docs.puppet.com/hiera/3.2/puppet.html#automatic-parameter-lookup>
+4. External Facts: <http://docs.puppet.com/facter/3.4/custom_facts.html#external-facts>
+5. What is Facter? <http://codingbee.net/tutorials/puppet/puppet-what-is-facter/>
 
 ---
 
