@@ -382,7 +382,7 @@ we have not created any Hiera Data yet!
      [root@puppet manifests]# pwd
      /etc/puppetlabs/code/environments/production/manifests
      [root@puppet manifests]# cd ../hieradata
-     [root@puppet data]# vi common.yaml
+     [root@puppet hieradata]# vi common.yaml
 ```
 
 
@@ -450,7 +450,7 @@ Next, let's tell Puppet to declare this class for node **agent.example.com**
      [root@puppet production]# pwd
      /etc/puppetlabs/code/environments/production
      [root@puppet production]# cd hieradata
-     [root@puppet data]# tree
+     [root@puppet hieradata]# tree
      .
      ├── common.yaml
      ├── location
@@ -458,7 +458,7 @@ Next, let's tell Puppet to declare this class for node **agent.example.com**
      └── role
 
      3 directories, 1 file
-     [root@puppet data]# cd node
+     [root@puppet hieradata]# cd node
      [root@puppet node]# vi agent.example.com.yaml
 ```
 
