@@ -51,7 +51,7 @@ Vagrant.configure("2") do |config|
   # Our Puppet Server (CA, Master compile host, puppetDB, PE Console, etc.)
   config.vm.define "puppet" do |puppet|
     config.vm.provider "virtualbox" do |vb|
-      vb.memory = "3072"
+      vb.memory = "4096"
       vb.cpus = "2"
     end
     puppet.vm.hostname = "puppet"
