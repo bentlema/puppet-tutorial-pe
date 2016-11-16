@@ -26,32 +26,27 @@ You should have already created your **gitlab** VM, but if not, go ahead and do 
 
 Although not required for our training environment, let's install the Puppet
 Agent on our GitLab VM so that our timezone is set, and NTP is configured to
-run.  Review [Lab #4](04-Install-Puppet-Agent.md) for instructions on how to
-install the agent, but it basically goes like this:
+run.  Review [Lab #4](04-Install-Puppet-Agent.md) for more details, but it's
+basically just this:
 
 ```
-[root@gitlab ~]# echo '
-127.0.0.1      localhost
-192.168.198.10 puppet.example.com  puppet
-192.168.198.11 agent.example.com   agent
-192.168.198.12 gitlab.example.com  gitlab' > /etc/hosts
-
-[root@gitlab ~]# cd /tmp
-[root@gitlab ~]# curl -k --tlsv1 https://192.168.198.10:8140/packages/current/install.bash
-[root@gitlab ~]# chmod a+rx install.bash
-[root@gitlab ~]# ./install.bash agent:certname=gitlab.example.com
+     curl -k --tlsv1 https://puppet:8140/packages/current/install.bash | bash -s main:certname=gitlab.example.com
 ```
 
 Sign the cert on the puppet master, and then run **puppet agent -t** on gitlab...
 
 ```
-Error: Could not retrieve catalog from remote server: Error 400 on SERVER: Could not find data item location in any Hiera data file and no default supplied at /etc/puppetlabs/puppet/environments/production/manifests/site.pp:43 on node gitlab.example.com
+     Error: Could not retrieve catalog from remote server: Error 500 on SERVER:
+     Server Error: Evaluation Error: Error while evaluating a Function Call, Could
+     not find data item location in any Hiera data file and no default supplied at
+     /etc/puppetlabs/code/environments/production/manifests/site.pp:31:13 on node
+     gitlab.example.com
 ```
 
 We need to create a node yaml file for **gitlab.example.com** on the puppet master...
 
 ```
-[root@puppet ~]# cd /etc/puppetlabs/puppet/environments/production/data/node/
+[root@puppet ~]# cd /etc/puppetlabs/code/environments/production/hieradata/node/
 [root@puppet node]# cp agent.example.com.yaml gitlab.example.com.yaml
 [root@puppet node]# cat gitlab.example.com.yaml
 ---
@@ -105,14 +100,14 @@ A summary of the minimal installation structions for GitLab follow...
 ```
 
 - Browse to <http://127.0.0.1:24080/> and login
-     - Login with:
-       - Username: root
-       - Password: 5iveL!fe
      - You'll be prompted to change the root password, so go ahead and do that.
+     - Then login with:
+       - Username: root
+       - Password: <the password you just set>
 
-- As the 'root' user, create a user account for yourself
+- As the 'root' user, create a non-root-user account for yourself
      - Click the `wrench` icon in the top-right corner called the **Admin Area**
-     - Click **Users** tab
+     - Click **Users** sub-tab in the **Overview** section
      - Click **New User** in the main pane and fill out the required info
        - Use a valid email, as the account creation process will send you a password reset link
        - In the **Access** section, check the **Admin** box to make this account and admin account
@@ -125,12 +120,18 @@ A summary of the minimal installation structions for GitLab follow...
        http://localhost:24080/users/password/edit?reset_password_token=Zo9b6dFY4Ld7YvvW7iCC
        ```
      - Next try logging in as yourself using the account you just created and set the password for
-       - Note:  if unable to get the reset link to work, you can also set the password via the webGUI
+       - Note:  if unable to get the reset link to work, you can also set the password via the webGUI as the root user
+       - Click on the **Wrench** icon again
+       - Click **Users**
+       - Click the **Edit** button next to your account
+       - Scroll a bit down, and you'll find where you can set your password
+       - Enter your choice of password twice, and click **Save Changes**
 
 - Once your are logged in as yourself (as the user you just created) the continue...
 
+- Click the GitLab icon top/center (the Orange Origami Fox Head thingy) to get to the Dashboard
+
 - Create a group called `puppet`
-     - If you click on the GitLab icon in the top-left, you should land on the main 'Your Projects' page, or for new accounts, you should see 'Greate New Group' link on the landing page
      - Click on **New Group**
      - Enter the group name `puppet`
      - Select **Public**
@@ -138,15 +139,16 @@ A summary of the minimal installation structions for GitLab follow...
      - Note: since you've created the group, you are the **Owner** and will have access to any projects (repos) within that group
 
 - Create a project called `control` and set the Namespace to be the `puppet` group
-     - Click on the GitLab icon in the top-left, to get back to the main 'Your Projects' page
      - Click **New Project** and change the Namespace to `puppet` instead of yourself
-     - The remaining options can be left at their defaults
      - Select **Public** visibility here too
+     - The remaining options can be left at their defaults
      - Click **Create Project**
 
--  Configure your GitLab account to allow you to clone/pull/push to the puppet/control repo
+-  Configure your GitLab account to allow you to clone/pull/push to the **puppet/control** repo
+     - You should see a notice that says *"You won't be able to pull or push project code via SSH until you add an SSH key to your profile"*
+     - Click the link [add an SSH key](http://127.0.0.1:24080/profile/keys)
      - If you already have your own personal public/private key pair for SSH, you may use it
-     - If you don't already have a key, you can generate one with ssh-keygen
+     - If you don't already have a key, you can generate one with `ssh-keygen`
      - Add your **public** key to your GitLab account under **Profile Settings -> SSH Keys**
      - Add a config section to your ~/.ssh/config to tell ssh what **private** key to use, as well as what user and port
 
@@ -169,7 +171,9 @@ git config --global user.email "bentlema@yahoo.com"
 Next, try to clone the puppet/control repo from GitLab:
 
 ```
-MBP-MARK:[/Users/Mark/Git/Puppet-Training] $ git clone ssh://localhost/puppet/control.git
+[/Users/Mark/Puppet-Tutorial] $ mkdir -p gitlab/puppet
+[/Users/Mark/Puppet-Tutorial] $ cd gitlab/puppet
+[/Users/Mark/Puppet-Tutorial/gitlab/puppet] $ git clone ssh://localhost/puppet/control.git
 Cloning into 'control'...
 The authenticity of host '[localhost]:24022 ([127.0.0.1]:24022)' can't be established.
 RSA key fingerprint is 25:cb:6c:9c:da:4e:6f:46:72:75:46:ac:18:19:31:ee.
@@ -178,26 +182,25 @@ Warning: Permanently added '[localhost]:24022' (RSA) to the list of known hosts.
 warning: You appear to have cloned an empty repository.
 Checking connectivity... done.
 
-MBP-MARK:[/Users/Mark/Git/Puppet-Training] $ cd control
-
-MBP-MARK:[/Users/Mark/Git/Puppet-Training/control] $ git remote -v
+[/Users/Mark/Puppet-Tutorial/gitlab/puppet] $ cd control
+[/Users/Mark/Puppet-Tutorial/gitlab/puppet/control] $ git remote -v
 origin  ssh://localhost/puppet/control.git (fetch)
 origin  ssh://localhost/puppet/control.git (push)
 
-MBP-MARK:[/Users/Mark/Git/Puppet-Training/control] $ vi README.md
+[/Users/Mark/Puppet-Tutorial/gitlab/puppet/control] $ vi README.md
 ```
 
 Put some text in to your README.md such as 'Hello World' then add that file and commit it.
 
 ```
-MBP-MARK:[/Users/Mark/Git/Puppet-Training/control] *$ git add README.md
+[/Users/Mark/Puppet-Tutorial/gitlab/puppet/control] *$ git add README.md
 
-MBP-MARK:[/Users/Mark/Git/Puppet-Training/control] *$ git commit -m 'First commit'
+[/Users/Mark/Puppet-Tutorial/gitlab/puppet/control] *$ git commit -m 'First commit'
 [master (root-commit) 276c800] First commit
  1 file changed, 2 insertions(+)
  create mode 100644 README.md
 
-MBP-MARK:[/Users/Mark/Git/Puppet-Training/control] (master)$ git push
+[/Users/Mark/Puppet-Tutorial/gitlab/puppet/control] (master)$ git push
 Counting objects: 3, done.
 Writing objects: 100% (3/3), 231 bytes | 0 bytes/s, done.
 Total 3 (delta 0), reused 0 (delta 0)
