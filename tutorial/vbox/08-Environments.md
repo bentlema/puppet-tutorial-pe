@@ -90,9 +90,11 @@ What I would call **"The Basic Use Case"** ...
   - Delete the test (feature) branch in Git
   - Next time R10K runs, it would remove that test environemnt from the code tree on the master
 
-So in the above use case, we have one "static" environment called "production".
-All other puppet environments would be created dynamically by R10K, and be
-short lived (just for testing code changes/additions to be introduced)
+So in the above use case, in addition to the "master" **production** environment, we may have
+other puppet environments that are created dynamically on-the-fly by R10K.  In Git, they would be
+short-lived feature branches that we introduce just for testing a new feature, or making a code
+change. We'd test our changes on a non-production system, and once all bugs have been worked out,
+we'd merge our feature branch in to the production branch.
 
 What I would call **"The Multi-Customer Use Case"** ...
 
@@ -182,11 +184,8 @@ From my own experience, I prefer the "Basic Use Case" I outlined above.
 I've used it at multiple companies, and it works well.  I would advise
 against using "static environments" that matches your development code
 flow (Dev, Int, Stg, Prod).  As you'll see later on, having long-lived
-branches in Git will cause you **"Merge Agnst"**. E.g. "The Puppetfile problem."
-I'm getting a little bit ahead of things, but trust me.  You will have
-something called a Puppetfile, and you may want different version of
-the Puppetfile in Dev, Stg, Prod, and you'll want to merge Dev into
-Stg, and Stg into Prod, and you will not like it.
+branches in Git can cause you some **"Merge Agnst"**, if for example
+you want to maintain permanent differences between each branch.
 
 ### Let's do something with Puppet Environments
 
