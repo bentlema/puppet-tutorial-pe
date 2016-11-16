@@ -53,13 +53,13 @@ installer script and then pipe it through bash.
 * To use **wget**
 
 ```
-     wget --no-check-certificate --secure-protocol=TLSv1 -O - https://puppet:8140/packages/current/install.bash | bash -s agent:certname=agent.example.com
+     wget --no-check-certificate --secure-protocol=TLSv1 -O - https://puppet:8140/packages/current/install.bash | bash -s main:certname=agent.example.com
 ```
 
 * To use **curl**
 
 ```
-     curl -k --tlsv1 https://puppet:8140/packages/current/install.bash | bash -s agent:certname=agent.example.com
+     curl -k --tlsv1 https://puppet:8140/packages/current/install.bash | bash -s main:certname=agent.example.com
 ```
 
 If you'd like to browse what else is accessible via that web server, try
@@ -178,6 +178,7 @@ You can pass in any config item that makes sense.  Just run `puppet config print
 to see the possibilities.
 
 Also, to read more about passing parameters to the agent installer, see:  https://docs.puppet.com/pe/latest/install_agents.html#passing-configuration-parameters-to-the-install-script
+
 
 ### Summary
 
