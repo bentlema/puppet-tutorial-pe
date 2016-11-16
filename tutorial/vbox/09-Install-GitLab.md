@@ -103,7 +103,7 @@ A summary of the minimal installation structions for GitLab follow...
      - You'll be prompted to change the root password, so go ahead and do that.
      - Then login with:
        - Username: root
-       - Password: <the password you just set>
+       - Password: `<the password you just set>`
 
 - As the 'root' user, create a non-root-user account for yourself
      - Click the `wrench` icon in the top-right corner called the **Admin Area**
