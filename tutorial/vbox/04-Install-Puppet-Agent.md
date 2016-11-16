@@ -179,7 +179,6 @@ to see the possibilities.
 
 Also, to read more about passing parameters to the agent installer, see:  https://docs.puppet.com/pe/latest/install_agents.html#passing-configuration-parameters-to-the-install-script
 
-
 ### Summary
 
 At this point we have:
