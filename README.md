@@ -62,7 +62,7 @@ click the bentlema/[puppet-tutorial-pe](/README.md) link at the top of the page.
 * The software we will use is available for Windows, Linux, and Mac OS X, so you should be able to use any platform.
 
 * Disk space:
-    - 2GB of free disk space to acomodate software and VM/Container images
+    - 20GB of free disk space to acomodate software and VM/Container images
 
 * Memory:
     - minimum 8GB of RAM if using Docker Containers
