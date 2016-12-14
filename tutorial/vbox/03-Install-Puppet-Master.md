@@ -10,7 +10,7 @@
 
 Time to complete:  45 minutes
 
-In this lab we will install Puppet Enterprise 2016.4.0
+In this lab we will install Puppet Enterprise 2016.5.2
 
 * PE is free to install and evaluate
 * When running PE without a license, you're limited to 10 agents
@@ -49,8 +49,8 @@ Change into the directory with the PE software:
 
 ```shell
      cd /share/software/puppet
-     tar xzvf puppet-enterprise-2016.4.0-el-7-x86_64.tar.gz
-     cd puppet-enterprise-2016.4.0-el-7-x86_64
+     tar xzvf puppet-enterprise-2016.5.2-el-7-x86_64.tar.gz
+     cd puppet-enterprise-2016.5.2-el-7-x86_64
 ```
 
 Then run the installer:
@@ -100,7 +100,7 @@ open a page in your web browser...
 ## We're preparing the Web Installer...
 
 2016-11-14 17:39:20,482 Running command: mkdir -p /opt/puppetlabs/puppet/share/installer/installer
-2016-11-14 17:39:20,487 Running command: cp -pR /share/software/puppet/puppet-enterprise-2016.4.0-el-7-x86_64/* /opt/puppetlabs/puppet/share/installer/installer/
+2016-11-14 17:39:20,487 Running command: cp -pR /share/software/puppet/puppet-enterprise-2016.5.2-el-7-x86_64/* /opt/puppetlabs/puppet/share/installer/installer/
 
 ## Go to https://puppet.example.com:3000 in your browser to continue installation.
 
@@ -240,12 +240,12 @@ A **Split** and/or **Large Environment Install** is a bit more work, as we'd be
 splitting up the various parts of PE on to separate VM's, as well as deploying
 multiple compile masters behind a loadbalancer.  If you're interested
 in learning more about a split install, you may read about it in the
-[PE Installation Guide](https://docs.puppet.com/pe/2016.4/install_pe_mono.html).
+[PE Installation Guide](https://docs.puppet.com/pe/2016.5/install_pe_mono.html).
 Here are the relevant pages:
 
-* [Split Installation](https://docs.puppetlabs.com/pe/2016.4/install_pe_split.html)
-* [Scale Compile Masters](https://docs.puppet.com/pe/2016.4/install_multimaster.html)
-* [Scale ActiveMQ](https://docs.puppet.com/pe/2016.4/install_add_activemq.html)
+* [Split Installation](https://docs.puppetlabs.com/pe/2016.5/install_pe_split.html)
+* [Scale Compile Masters](https://docs.puppet.com/pe/2016.5/install_multimaster.html)
+* [Scale ActiveMQ](https://docs.puppet.com/pe/2016.5/install_add_activemq.html)
 
 Okay, let's get back to the lab...
 
@@ -320,13 +320,13 @@ Continue to **Lab #4** --> [Install Puppet Agent on agent node, and do test pupp
 
 These links are not needed for this Lab, but for reference here's the PE Install Guide at the PuppetLabs web site:
 
-Quick Start Guide:  <https://docs.puppetlabs.com/pe/2016.4/quick_start_install_mono.html>
+Quick Start Guide:  <https://docs.puppetlabs.com/pe/2016.5/quick_start_install_mono.html>
 
-Detailed Install Guide:  <https://docs.puppetlabs.com/pe/2016.4/install_basic.html>
+Detailed Install Guide:  <https://docs.puppetlabs.com/pe/2016.5/install_basic.html>
 
-Split Install:   <https://docs.puppetlabs.com/pe/2016.4/install_pe_split.html>
+Split Install:   <https://docs.puppetlabs.com/pe/2016.5/install_pe_split.html>
 
-LEI Install:   <https://docs.puppetlabs.com/pe/2016.4/install_multimaster.html>
+LEI Install:   <https://docs.puppetlabs.com/pe/2016.5/install_multimaster.html>
 
 ---
 
