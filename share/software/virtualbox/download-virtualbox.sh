@@ -16,6 +16,10 @@
 VERSION="5.0.28"
 BUILD="111378"
 #
+#http://download.virtualbox.org/virtualbox/5.0.32/VirtualBox-5.0.32-112930-OSX.dmg
+VERSION="5.0.32"
+BUILD="112930"
+#
 # Don't use 5.1.x series until Vagrant 1.8.6+ comes out (1.8.5 is broken)
 # http://download.virtualbox.org/virtualbox/5.1.2/
 #VERSION="5.1.2"
