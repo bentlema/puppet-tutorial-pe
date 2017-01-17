@@ -100,7 +100,7 @@ open a page in your web browser...
 ## We're preparing the Web Installer...
 
 2016-11-14 17:39:20,482 Running command: mkdir -p /opt/puppetlabs/puppet/share/installer/installer
-2016-11-14 17:39:20,487 Running command: cp -pR /share/software/puppet/puppet-enterprise-2016.5.2-el-7-x86_64/* /opt/puppetlabs/puppet/share/installer/installer/
+2016-11-14 17:39:20,487 Running command: cp -pR /share/software/puppet/puppet-enterprise-2016.5.1-el-7-x86_64/* /opt/puppetlabs/puppet/share/installer/installer/
 
 ## Go to https://puppet.example.com:3000 in your browser to continue installation.
 
