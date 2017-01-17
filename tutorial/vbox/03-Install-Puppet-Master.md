@@ -49,8 +49,8 @@ Change into the directory with the PE software:
 
 ```shell
      cd /share/software/puppet
-     tar xzvf puppet-enterprise-2016.5.2-el-7-x86_64.tar.gz
-     cd puppet-enterprise-2016.5.2-el-7-x86_64
+     tar xzvf puppet-enterprise-2016.5.1-el-7-x86_64.tar.gz
+     cd puppet-enterprise-2016.5.1-el-7-x86_64
 ```
 
 Then run the installer:
