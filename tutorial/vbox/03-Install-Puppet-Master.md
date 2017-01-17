@@ -10,7 +10,7 @@
 
 Time to complete:  45 minutes
 
-In this lab we will install Puppet Enterprise 2016.5.2
+In this lab we will install Puppet Enterprise 2016.5.1
 
 * PE is free to install and evaluate
 * When running PE without a license, you're limited to 10 agents
