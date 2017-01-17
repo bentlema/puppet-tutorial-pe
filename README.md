@@ -79,7 +79,7 @@ As there can be compatibility issues between different versions of the software 
 
 | Vagrant | VirtualBox | Platform                  |
 | ------- | ---------- | ------------------------- |
-| 1.8.4   | 4.0.28     | Mac OS X 10.11 El Capitan |
+| 1.8.4   | 5.0.28     | Mac OS X 10.11 El Capitan |
 |         |            | Mac OS X 10.10 Yosemite   |
 |         |            | Mac OS X 10.9 Mavericks   |
 |         |            | Linux                     |
