@@ -173,7 +173,7 @@ git config --global user.name "Mark Bentley"
 git config --global user.email "bentlema@yahoo.com"
 ```
 
-Next, try to clone the puppet/control repo from GitLab:
+Next, try to clone the [puppet/control](http://127.0.0.1:24080/puppet/control) repo from GitLab:
 
 ```
 [/Users/Mark/Puppet-Tutorial] $ mkdir -p gitlab/puppet
@@ -219,9 +219,9 @@ You'll have to explore the GitLab WebGUI a bit, and figure out things on your ow
 Some key things:
 
 * Click on the orange oragami fox head icon to return to the main dashboard
-* Click on 'puppet/control' to see your new empty Puppet "Control Repo"
-* Click on the sub-tab 'Files' to see the files in the repo
-* Click on the sub-tab 'Commits' to see individual commit history
+* Click on [puppet/control](http://127.0.0.1:24080/puppet/control) to see your new empty Puppet "Control Repo"
+* Click on the sub-tab [Files](http://127.0.0.1:24080/puppet/control/tree/master) to see the files in the repo
+* Click on the sub-tab [Commits](http://127.0.0.1:24080/puppet/control/tree/master) to see individual commit history
 * Click on an individual commit to see what changed
 
 At this point you have a GitLab server running, and ready to be used.  You have a single
