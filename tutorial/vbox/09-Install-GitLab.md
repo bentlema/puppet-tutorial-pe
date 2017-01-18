@@ -210,6 +210,19 @@ To ssh://localhost/puppet/control.git
 
 Now go back to the GitLab webGUI and take a look at the file you just pushed.
 
+You'll have to explore the GitLab WebGUI a bit, and figure out things on your own.
+Some key things:
+
+* Click on the orange oragami fox head icon to return to the main dashboard
+* Click on 'puppet/control' to see your new empty Puppet "Control Repo"
+* Click on the sub-tab 'Files' to see the files in the repo
+* Click on the sub-tab 'Commits' to see individual commit history
+* Click on an individual commit to see what changed
+
+At this point you have a GitLab server running, and ready to be used.  You have a single
+group called 'puppet' containing a single project (or repo) called 'control'.  In the next
+lab we will work to move our puppet code in to GitLab so we don't have to make manual
+edits on the puppet master itself.
 
 ---
 
