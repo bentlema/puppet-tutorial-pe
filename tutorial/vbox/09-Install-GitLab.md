@@ -73,6 +73,10 @@ A summary of the minimal installation structions for GitLab follow...
 
 ```
      # Postfix should already be installed and running, but just in case...
+     puppet resource package postfix ensure=present
+     puppet resource service postfix ensure=running enable=true
+     
+     # The above puppet commands do the equivalent of the following, but abstract away from the OS flavor:
      yum install -y postfix
      systemctl enable postfix
      systemctl start postfix
@@ -81,6 +85,7 @@ A summary of the minimal installation structions for GitLab follow...
 - Open the host firewall to allow in-bound HTTP.  Although GitLab uses HTTP by default, it is possible to re-configure it to use HTTPS.  We won't go through that process in this training, but you may find the instructions [HERE](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/nginx.md)
 
 ```
+     # There is a firewall module that could help us do this with Puppet itself, but for now, let's just be lazy and...
      # Let inbound HTTP through the firewall so we can hit the GitLab web interface
      firewall-cmd --permanent --add-service=http
      systemctl reload firewalld
