@@ -387,7 +387,6 @@ Confirm that you do not see the ntp and timezone modules in the development:
 
 ```
      [root@puppet environments]# puppet module list --environment=development
-     [root@puppet environments]# puppet module list --environment=development
      /etc/puppetlabs/code/environments/development/modules
      ├── puppetlabs-motd (v1.4.0)
      ├── puppetlabs-registry (v1.1.3)
