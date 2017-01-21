@@ -503,14 +503,14 @@ We've also used some Git commands for the first time
 
 A summary of what we've just done would go like this:
 
-1.  Copy over our entire production codebase to `/share` within our VM
-2.  Change directory into our clone of the **puppet/control** Git repository on the host side
-3.  Rsync our entire production codebase **from** the `share/` directory **to** our **puppet/control** repo
-4.  Pull down the latest code from GitLab (with **git pull**) since we created our **production** branch via GitLab's WebGUI
-5.  Checkout (switch to) the production branch (with **git checkout production**)
-6.  Select our `hieradata/`, `manifests/`, and `modules/` directories to be staged for a commit to our control repo
-7.  Commit the staged changes to our control repo (with **git commit**)
-8.  Push our local changes to the remote repository hosted within GitLab (with **git push**)
+1.  We copied over our entire production codebase to `/share` within our VM
+2.  Changed directory into our clone of the **puppet/control** Git repository on the host side
+3.  Rsync'ed our entire production codebase **from** the `share/` directory **to** our **puppet/control** repo
+4.  Pulled down the latest code from GitLab (with **git pull**) since we created our **production** branch via GitLab's WebGUI
+5.  Checked out (switched to) the production branch (with **git checkout production**)
+6.  Selected our `hieradata/`, `manifests/`, and `modules/` directories to be staged for a commit to our control repo
+7.  Commited the staged changes to our control repo (with **git commit**)
+8.  Pushed our local changes to the remote repository hosted within GitLab (with **git push**)
 
 We will look at all of these commands in more depth in the next lab.
 
