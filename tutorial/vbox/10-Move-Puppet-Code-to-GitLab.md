@@ -991,24 +991,39 @@ Let's look at how we can setup a post-receive hook...
 Let's setup a **post-receive hook** which will ssh from GitLab to the puppet master and run r10k for us.
 This way, every time we do a **git push** to GitLab, it will automatically run R10K on the master for us.
 
-There's more than one way to do this:
+There's more than one way to do this, but a few that come to mind are:
 
 1. setup the *git* account as an MCollective client, and use the r10k module to enable the 'mco r10k sync' command
 2. setup ssh keys to allow the git user to run commands on the puppet master password-less
-3. configure webhook
-4. other?
+3. configure a webhook within GitLab to trigger an R10K run
 
-We will setup SSH keys.  Make sure you **trust** the GitLab server, as we will
-be giving it the ability to ssh in as root on our puppet master!
+In a production environment, you'd likely want to setup a [webhook](http://127.0.0.1:24080/help/web_hooks/web_hooks), but...
+
+To keep things simple, let's just setup SSH keys.  Make sure you **trust** the GitLab server, as we will
+be giving it the ability to ssh in as root on our puppet master! (Take care to understand the security
+implications here.)
 
 On the GitLab VM...
 
+Become the **git** user this time (as we don't need to be root)
+
 ```
-root@gitlab ~]# cd /var/opt/gitlab/git-data/repositories/puppet/control.git
-[root@gitlab control.git]# mkdir custom_hooks
-[root@gitlab control.git]# cd custom_hooks/
+sudo su - git
 ```
-Make a bash script called **post-receive** with this content:
+
+```
+git@gitlab ~]# cd /var/opt/gitlab/git-data/repositories/puppet/control.git
+[git@gitlab control.git]# mkdir custom_hooks
+[git@gitlab control.git]# cd custom_hooks/
+```
+
+Make a bash script called **post-receive** ...
+
+```
+vi post-receive
+```
+
+...and copy-and-paste in this content:
 
 ```
 #!/bin/bash
@@ -1032,25 +1047,27 @@ echo
 Make sure to give read/execute perms on the post-receive script
 
 ```
-[root@gitlab custom_hooks]# chmod a+rx post-receive
+[git@gitlab custom_hooks]# chmod a+rx post-receive
 ```
 
 All that does is iterate through a list of puppet masters, and ssh as root to each one and run r10k.
 (We only have one puppet master in our training environment, but most production environments would have 2 or more for load-balancing.)
 
-Become the git user, create and ssh key pair, and then copy the public key to the root user's ~/.ssh/authorized_keys on the puppet master...
+Make sure you are the git user (not root), and create an ssh key pair, and then copy the public key to the root user's ~/.ssh/authorized_keys on the puppet master...
 
 ```
-[root@gitlab ~]# su - git
-Last login: Wed Mar 16 12:47:07 PDT 2016 on pts/0
+-sh-4.2$ cd     # get back to git's home dir
+
+-sh-4.2$ pwd
+/var/opt/gitlab
+
 -sh-4.2$ ls -al .ssh
 total 8
 drwx------  2 git  git    55 Mar  9 13:35 .
 drwxr-xr-x 13 root root 4096 Mar  9 10:59 ..
 -rw-------  1 git  git  1087 Mar  9 14:58 authorized_keys
 -rw-r--r--  1 git  git     0 Mar  9 14:58 authorized_keys.lock
--sh-4.2$ pwd
-/var/opt/gitlab
+
 -sh-4.2$ ssh-keygen -t rsa -b 2048 -N ''
 Generating public/private rsa key pair.
 Enter file in which to save the key (/var/opt/gitlab/.ssh/id_rsa):
@@ -1070,6 +1087,7 @@ The key's randomart image is:
 |     o.          |
 |    oo..         |
 +-----------------+
+
 -sh-4.2$ ls -al .ssh
 total 16
 drwx------  2 git  git    85 Mar 16 12:55 .
@@ -1078,18 +1096,26 @@ drwxr-xr-x 13 root root 4096 Mar  9 10:59 ..
 -rw-r--r--  1 git  git     0 Mar  9 14:58 authorized_keys.lock
 -rw-------  1 git  git  1679 Mar 16 12:55 id_rsa
 -rw-r--r--  1 git  git   392 Mar 16 12:55 id_rsa.pub
+
 -sh-4.2$ cat .ssh/id_rsa.pub
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQqKmxWCjcBllO+BnZLVRd+rhzXlm/6S5ccspvbeBEH/zST5DhKNGLwtJn0yz8u1cWyYztkyjZIPwuJzBbap3vU/Lx6juVaoAUK8AnDIeCY+nZFN6oZaSfpBEJunno1FPlVVja1sCoYSMqmsnCY/kcLawq3ui9zdx25NFWc7hG9jOqUcmIdJgGFcy5/GsCgJtKvS/UkJ22xaxKWKJMHT0/KHb+0mw/RClhqWsJD9PFI0+Psnh/D2XFuG7eoZooenSFV3bVQoWe5AgwNIX5/B0/0xlUWcPjTyWfa7MhffHTCmTzUauEytkqScfH3ArtBNL6vRd8uCPi7pTrRFwo9jWl git@gitlab
 ```
 
-Add that public key to root's ~root/.ssh/authorized_keys file on the master, and `chmod 600 ~root/.ssh/authorized_keys`
-
-One the puppet master...
+Add that public key to root's ~root/.ssh/authorized_keys file on the master using the ssh-copy-id command:
 
 ```
-[root@puppet .ssh]# echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQqKmxWCjcBllO+BnZLVRd+rhzXlm/6S5ccspvbeBEH/zST5DhKNGLwtJn0yz8u1cWyYztkyjZIPwuJzBbap3vU/Lx6juVaoAUK8AnDIeCY+nZFN6oZaSfpBEJunno1FPlVVja1sCoYSMqmsnCY/kcLawq3ui9zdx25NFWc7hG9jOqUcmIdJgGFcy5/GsCgJtKvS/UkJ22xaxKWKJMHT0/KHb+0mw/RClhqWsJD9PFI0+Psnh/D2XFuG7eoZooenSFV3bVQoWe5AgwNIX5/B0/0xlUWcPjTyWfa7MhffHTCmTzUauEytkqScfH3ArtBNL6vRd8uCPi7pTrRFwo9jWl git@gitlab' >> ~root/.ssh/authorized_keys
+-sh-4.2$ ssh-copy-id -i .ssh/id_rsa.pub root@puppet
+The authenticity of host 'puppet (192.168.198.10)' can't be established.
+ECDSA key fingerprint is 1e:67:49:63:1f:80:8b:a4:19:16:1e:f8:b1:28:82:8d.
+Are you sure you want to continue connecting (yes/no)? yes
+/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+root@puppet's password: vagrant
 
-[root@puppet .ssh]# chmod 600 ~root/.ssh/authorized_keys
+Number of key(s) added: 1
+
+Now try logging into the machine, with:   "ssh 'root@puppet'"
+and check to make sure that only the key(s) you wanted were added.
 ```
 
 Now test sshing from the git@gitlab account to root@puppet ...
@@ -1135,6 +1161,10 @@ remote:
 To ssh://localhost/puppet/control.git
    f193b1d..625fe7e  production -> production
 ```
+
+Those lines beginning with **remote:** are the actual output from your post-receive hook.  
+
+There are several [other Git hooks](https://docs.gitlab.com/ce/administration/custom_hooks.html) you could configure as well, including pre-commit, post-commit, update, etc.
 
 ### Summary
 
