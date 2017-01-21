@@ -1012,7 +1012,7 @@ sudo su - git
 ```
 
 ```
-git@gitlab ~]# cd /var/opt/gitlab/git-data/repositories/puppet/control.git
+[git@gitlab ~]# cd /var/opt/gitlab/git-data/repositories/puppet/control.git
 [git@gitlab control.git]# mkdir custom_hooks
 [git@gitlab control.git]# cd custom_hooks/
 ```
@@ -1162,7 +1162,7 @@ To ssh://localhost/puppet/control.git
    f193b1d..625fe7e  production -> production
 ```
 
-Those lines beginning with **remote:** are the actual output from your post-receive hook.  
+Those lines beginning with **"remote:"** are the actual output from your post-receive hook.  
 
 There are several [other Git hooks](https://docs.gitlab.com/ce/administration/custom_hooks.html) you could configure as well, including pre-commit, post-commit, update, etc.
 
