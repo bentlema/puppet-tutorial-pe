@@ -175,9 +175,16 @@ puppet code and hiera data.
 
 ### Let's Setup root SSH access to GitLab
 
-So, to recap...
+Since Puppet runs as root, and needs to pull code out of GitLab, we need to configure
+the root account on our Puppet Master with read-only access to the control repo.
 
-- Puppet executes the **postrun_command** as root
+Once this is done, we
+will take advantage of a **puppet.conf** config item called **postrun_command** which
+will run a command or script after every Puppet agent run.  Since the Puppet agent
+runs every 30 minutes, so would our postrun_command.  We will set our postrun_command
+to run R10K.  It goes like this:
+
+- Puppet executes the **postrun_command** as root every 30 minutes (by default)
 - We use **postrun_command** to run `r10k` to build puppet environments from Git branches
 - R10K uses the git command to clone and pull repos down to the puppet master
 - The git command will use ssh keys to authenticate with the GitLab server
