@@ -201,14 +201,14 @@ we wouldn't have to deal with the Puppetfile anymore (for in-house modules).
 
 Our strategy to implement the Roles & Profiles Pattern:
 
-1.  Create new **site/** directory within our control repo which will house
+1.  Create new `site/` directory within our control repo which will house
     role and profile modules
-2.  Create an **environment.conf** that inserts **site** at the head of the
+2.  Create an `environment.conf` that inserts **"site"** at the head of the
     module search path
-3.  Create a **base** profile, and move the common_hosts.pp and common_packages.pp
-    classes out of **manifests/** dir
+3.  Create a **base** profile, and move the `common_hosts.pp` and `common_packages.pp`
+    classes out of `manifests/` dir
 
-Why do we create a new **site/** directory? (By the way, you can call it
+Why do we create a new `site/` directory? (By the way, you can call it
 whatever you like.)
 
 Because we've configured R10K to populate the **modules/** directory on the
