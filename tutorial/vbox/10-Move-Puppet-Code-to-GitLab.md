@@ -903,6 +903,8 @@ cd /etc/puppetlabs/r10k
 vi r10k.yaml
 ```
 
+Update the **basedir** as follows...
+
 ```yaml
 ---
 cachedir: '/var/cache/r10k'
