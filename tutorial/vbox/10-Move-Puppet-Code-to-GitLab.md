@@ -682,6 +682,7 @@ There's another feature of R10K that allows us to specify other Git repositories
 Back on your workstation in your **puppet/control** repo, create a **Puppetfile** at the top level
 
 Put these lines in your Puppetfile (in the **development** branch)
+(Change the versions to match what you have on your VM)
 
 ```
 moduledir 'modules'
