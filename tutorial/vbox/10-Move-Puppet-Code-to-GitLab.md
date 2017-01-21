@@ -378,7 +378,7 @@ drwxr-xr-x 5 root      root        47 Oct 21 14:49 production
 Now on the host side (outside of the VM) copy those files using **rsync** to your repo like this:
 
 ```
-# Check where we are at (out current working dir)
+# Check where we are at (our current working dir)
 mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (master)$ pwd
 /Users/mbentle8/gitlab/puppet/control
 
