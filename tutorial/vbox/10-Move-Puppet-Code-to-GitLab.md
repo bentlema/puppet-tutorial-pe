@@ -975,6 +975,17 @@ Your branch is up-to-date with 'origin/master'.
 nothing to commit, working directory clean
 ```
 
+### R10K Notes
+
+So we've configured R10K, but it's not going to magically run itself.
+
+We previously talked about configuring the **postrun_command** in the **puppet.conf** to run our 
+`r10k deploy environment` command every 30 minutes, and we could certainly do that, but something
+more interesting would be to setup GitLab to trigger R10K automatically every time someone 
+pushes to the control repo.
+
+Let's look at how we can setup a post-receive hook...
+
 ### Git post-receive hook
 
 Let's setup a **post-receive hook** which will ssh from GitLab to the puppet master and run r10k for us.
