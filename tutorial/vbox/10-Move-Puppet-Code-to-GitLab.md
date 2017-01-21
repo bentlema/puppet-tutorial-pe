@@ -898,6 +898,11 @@ Finally!
 
 Update the **r10k.yaml** so that **basedir** points to the real PE environments dir like this:
 
+```
+cd /etc/puppetlabs/r10k
+vi r10k.yaml
+```
+
 ```yaml
 ---
 cachedir: '/var/cache/r10k'
