@@ -12,6 +12,7 @@ So where are we at now?
 
 1.  We've moved our Puppet code and Hiera data into Git
 2.  We've configured R10K to pull our Puppet code and Hiera data over to the Puppet Master
+3.  We've configured a post-receive hook to trigger an R10K run automatically when we `git push`
 3.  We've also configured a Puppetfile within our control repo to pull in some external Puppet Modules
 
 Where do we want to go?
@@ -20,7 +21,6 @@ Where do we want to go?
 2.  We want to learn more about the **Roles & Profiles** pattern
 3.  We want to do some more Puppet coding to get practice
 4.  We want to learn how to **test our puppet code** prior to pushing to production (develop a Workflow)
-5.  We want to **automate R10K** so that it updates the master automatically after we push new code
 
 We will see some Git usage as we move through this lab, and will cover the basics in the following lab.
 Let's start by looking at the **"Roles & Profiles Pattern"**...
@@ -52,7 +52,7 @@ We're going to look at the 4th option:  Roles and Profiles
 
 There's already been *a lot* written on the Roles & Profiles Pattern...
 
-See:  [Further Reading](/share/YY-Further-Reading.md)
+See:  [Further Reading](../YY-Further-Reading.md)
 
 Roles and Profiles are just puppet manifests containing a class definitions
 and some code.  There's nothing special about them from Puppet's point of
