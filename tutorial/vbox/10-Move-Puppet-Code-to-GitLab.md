@@ -857,9 +857,11 @@ To ssh://localhost/puppet/control.git
 error: failed to push some refs to 'ssh://localhost/puppet/control.git'
 ```
 
-Hmmm, not sure why it thinks the current branch is **master**.  I clearly have the **production** branch checked out.  Let's try deleting the branch via the WebGUI instead.
+The **master** branch is still configured as the **default** branch within
+GitLab, but we've deleted it. To fix this, go into the Project Settings, and
+change the default branch to **production**
 
-Ahh, I see.  The **master** branch is still configured as the **default** branch within GitLab.  Go into the Project Settings, and change the default branch to **production**  (Settings-->Edit Project-->Default Branch(select 'production')
+- Settings --> Edit Project --> Default Branch --> Select 'production'
 
 ```
 mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Training/control] (production)$ git push origin --delete master
