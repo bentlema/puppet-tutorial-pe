@@ -54,10 +54,10 @@ There's already been *a lot* written on the Roles & Profiles Pattern...
 
 See:  [Further Reading](../YY-Further-Reading.md)
 
-Roles and Profiles are just puppet manifests containing a class definitions
+Roles and Profiles are just puppet manifests containing a set of class definitions
 and some code.  There's nothing special about them from Puppet's point of
-view.  Puppet doesn't have any knowledge about something called a Role or
-something called a Profile.  We, as the Puppet Code Maintainer, have simply
+view.  Puppet doesn't have any knowledge about something called a "Role" or
+something called a "Profile".  We, as the Puppet Code Maintainer, have simply
 chosen to use those names, and it **us** that enforces their use.  To puppet, a
 role class or a profile class is just another class.  You could just as easily
 replace 'Role' with 'Foo' and 'Profile' with 'Bar', and you could acomplish
