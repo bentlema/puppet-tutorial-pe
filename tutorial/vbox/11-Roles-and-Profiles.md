@@ -205,23 +205,23 @@ Our strategy to implement the Roles & Profiles Pattern:
     role and profile modules
 2.  Create an `environment.conf` that inserts **"site"** at the head of the
     module search path
-3.  Create a **base** profile, and move the `common_hosts.pp` and `common_packages.pp`
+3.  Create a **"base"** profile, and move the `common_hosts.pp` and `common_packages.pp`
     classes out of `manifests/` dir
 
 Why do we create a new `site/` directory? (By the way, you can call it
 whatever you like.)
 
-Because we've configured R10K to populate the **modules/** directory on the
-puppet master, if we create a **modules/** directory in our control repo,
+Because we've configured R10K to populate the `modules/` directory on the
+puppet master, if we create a `modules/` directory in our control repo,
 anything in it will get pulled down to the master, but then when R10K pulls
 down the modules as configured in the Puppetfile, it will blow away anything
-in that directory, and plop the modules down in it.  To avoid that, we will
-create another directory for modules called **site/** because these will be
+in that directory, and plop the modules down in to it.  To avoid that, we will
+create another directory for modules called **"site"** because these will be
 our own site's modules (vs 3rd-party modules).   Another option for such a
-directory might be **local/** for "my local code" but I'm not going to lose
-any sleep over naming, and continue on...
+directory might be **"local"** for "my local code" but I'm not going to lose
+any sleep over naming and continue on...
 
-So, change dir to your puppet/control repo, and...
+So, change dir to your **puppet/control** repo, and...
 
 ```
 mbp-mark:[/Users/mbentle8] $ cd ~/Documents/Git/Puppet-Tutorial/control
