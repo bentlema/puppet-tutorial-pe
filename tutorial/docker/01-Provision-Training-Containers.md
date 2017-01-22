@@ -2,7 +2,7 @@
 
 ---
 
-# **Lab #1** - Install and use Docker to deploy 3 training Containers
+### **Lab #1** - Install software, and use Docker to deploy 3 training Containers
 
 ---
 
