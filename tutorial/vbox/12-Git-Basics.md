@@ -702,24 +702,25 @@ branch setup properly.
 
 ```
 mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (production)$ git branch -a
+  development
+  foo
 * production
-  remotes/origin/HEAD -> origin/production
   remotes/origin/development
+  remotes/origin/foo
   remotes/origin/production
+
 mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (production)$ git checkout development
 Branch development set up to track remote branch development from origin.
 Switched to a new branch 'development'
+
 mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)$ git diff --stat production
- Puppetfile                                |  2 +-
- README.md                                 |  2 +-
- data/common.yaml                          |  5 ++---
- data/node/agent.example.com.yaml          |  1 +
- environment.conf                          |  1 -
- manifests/common_hosts.pp                 | 13 +++++++++++++
- manifests/common_packages.pp              | 11 +++++++++++
- site/profile/manifests/common_hosts.pp    | 13 -------------
- site/profile/manifests/common_packages.pp | 11 -----------
- 9 files changed, 29 insertions(+), 30 deletions(-)
+ environment.conf                                         | 20 ++++++++++++++++++--
+ hiera.yaml                                               | 13 -------------
+ hieradata/common.yaml                                    |  5 ++---
+ hieradata/node/agent.example.com.yaml                    |  1 +
+ {site/profile/manifests => manifests}/common_hosts.pp    |  2 +-
+ {site/profile/manifests => manifests}/common_packages.pp |  2 +-
+ 6 files changed, 23 insertions(+), 20 deletions(-)
 ```
 
 Notice that there are a bunch of differences between **production** and **development** branches.
@@ -730,14 +731,12 @@ Let's try to merge the **production** changes in to the current branch, which is
 mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)$ git merge --no-commit production
 Auto-merging site/profile/manifests/common_packages.pp
 Auto-merging site/profile/manifests/common_hosts.pp
-Auto-merging data/common.yaml
-CONFLICT (content): Merge conflict in data/common.yaml
-Auto-merging Puppetfile
-CONFLICT (add/add): Merge conflict in Puppetfile
+Auto-merging hieradata/common.yaml
+CONFLICT (content): Merge conflict in hieradata/common.yaml
 Automatic merge failed; fix conflicts and then commit the result.
 ```
 
-Hmmm, we got a couple conflicts.  Let's look at each.
+Hmmm, we got a merge conflict with our common.yaml.  Let's look at that.
 
 ```
 mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git status
@@ -745,63 +744,37 @@ On branch development
 Your branch is up-to-date with 'origin/development'.
 You have unmerged paths.
   (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
 
 Changes to be committed:
 
-    modified:   README.md
-    new file:   environment.conf
+    modified:   environment.conf
+    new file:   hiera.yaml
     renamed:    manifests/common_hosts.pp -> site/profile/manifests/common_hosts.pp
     renamed:    manifests/common_packages.pp -> site/profile/manifests/common_packages.pp
 
 Unmerged paths:
   (use "git add <file>..." to mark resolution)
 
-    both added:      Puppetfile
-    both modified:   data/common.yaml
+    both modified:   hieradata/common.yaml
 
 ```
 
-Looks like our `Puppetfile` and `common.yaml` have conflicts.  Since we know that the version
+Looks like our `common.yaml` has conflicts.  Since we know that the version
 we have in the **production** branch is correct, let's just checkout that version.  If we
-really wanted to, we could also just edit the files with conflicts, and make the desired
+really wanted to, we could also just edit the file with conflicts, and make the desired
 changes, git add them, commit, and push, and be done with it.
 
-Follow along and see how we can resolve the two conflicts...
+Follow along and see how we can resolve the conflict(s)...
+
+Let's look at our `common.yaml` ...
 
 ```
-mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git diff Puppetfile
-diff --cc Puppetfile
-index 958b475,372c77e..0000000
---- a/Puppetfile
-+++ b/Puppetfile
-@@@ -2,6 -2,6 +2,10 @@@ moduledir 'modules
-  mod 'puppetlabs/motd',     'v1.4.0'
-  mod 'puppetlabs/ntp',      'v4.2.0'
-  mod 'puppetlabs/registry', 'v1.1.3'
-++<<<<<<< HEAD
- +mod 'puppetlabs/stdlib',   'v4.9.1'
-++=======
-+ mod 'puppetlabs/stdlib',   'v4.13.1'
-++>>>>>>> production
-  mod 'saz/timezone',        'v3.3.0'
-
-```
-
-We see that the conflict is that there are two different versions of the stdlib module specified.
-Let's take the version that is in the production Puppetfile...
-
-```
-mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git checkout --theirs Puppetfile
-```
-
-Let's look at our `common.yaml` now too...
-
-```
-mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git diff data/common.yaml
-diff --cc data/common.yaml
-index f4a902d,708bf7f..0000000
---- a/data/common.yaml
-+++ b/data/common.yaml
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git diff hieradata/common.yaml
+diff --cc hieradata/common.yaml
+index 05bee3b,bc84197..0000000
+--- a/hieradata/common.yaml
++++ b/hieradata/common.yaml
 @@@ -1,8 -1,9 +1,14 @@@
   ---
 
@@ -818,16 +791,40 @@ index f4a902d,708bf7f..0000000
   ntp::servers:
      - '0.pool.ntp.org'
 ```
+
 Okay, we see that the conflict is in the common_hosts and common_packages classes.
 We moved them, but hadn't updated the development branch.  Since we want what is
 in production, let's simply checkout the production version, git add, commit, and push.
 
 
 ```
-mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git checkout --theirs data/common.yaml
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git checkout --theirs hieradata/common.yaml
+
 mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git status
-mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git add Puppetfile
-mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git add data/common.yaml
+On branch development
+Your branch is up-to-date with 'origin/development'.
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Changes to be committed:
+
+    modified:   environment.conf
+    new file:   hiera.yaml
+    renamed:    manifests/common_hosts.pp -> site/profile/manifests/common_hosts.pp
+    renamed:    manifests/common_packages.pp -> site/profile/manifests/common_packages.pp
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+
+    both modified:   hieradata/common.yaml
+```
+
+Okay, now add it and do a `git status` again...
+
+```
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git add hieradata/common.yaml
+
 mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git status
 On branch development
 Your branch is up-to-date with 'origin/development'.
@@ -836,36 +833,45 @@ All conflicts fixed but you are still merging.
 
 Changes to be committed:
 
-    modified:   Puppetfile
-    modified:   README.md
-    modified:   data/common.yaml
-    new file:   environment.conf
+    modified:   environment.conf
+    new file:   hiera.yaml
+    modified:   hieradata/common.yaml
     renamed:    manifests/common_hosts.pp -> site/profile/manifests/common_hosts.pp
     renamed:    manifests/common_packages.pp -> site/profile/manifests/common_packages.pp
+```
 
+You fixed the conflict, and are ready to commit...
+
+```
 mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git commit -m 'merge production in to development'
 [development 9a8ba50] merge production in to development
+
 mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)$ git push
 Counting objects: 3, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 345 bytes | 0 bytes/s, done.
+Writing objects: 100% (3/3), 346 bytes | 0 bytes/s, done.
 Total 3 (delta 2), reused 0 (delta 0)
+remote:
+remote: To create a merge request for development, visit:
+remote:   http://gitlab.example.com/puppet/control/merge_requests/new?merge_request%5Bsource_branch%5D=development
+remote:
 remote:
 remote: Running post-receive hook...
 remote: [puppet] Updating...
 remote: [puppet] Done.
 remote:
-To git@localhost:puppet/control
-   4ad9bb1..9a8ba50  development -> development
+To ssh://localhost/puppet/control.git
+   5053c6f..eee0234  development -> development
 ```
 
-Now run R10K on the master, and we should be good to go...
+Let's compare the production and development environments on the master and see what we see...
 
 ```
-[root@puppet ~]# cd /etc/puppetlabs/puppet/environments
-[root@puppet environments]# (cd production && tree data manifests site)
-data
+[root@puppet ~]# cd /etc/puppetlabs/code/environments
+
+[root@puppet environments]# (cd production && tree hieradata manifests site)
+hieradata
 ├── common.yaml
 ├── location
 │   ├── amsterdam.yaml
@@ -884,8 +890,9 @@ site
         └── common_packages.pp
 
 4 directories, 10 files
-[root@puppet environments]# (cd development && tree data manifests site)
-data
+
+[root@puppet environments]# (cd development && tree hieradata manifests site)
+hieradata
 ├── common.yaml
 ├── location
 │   ├── amsterdam.yaml
@@ -910,19 +917,21 @@ Now let's see if we have any other differences between production and developmen
 
 ```
 mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)$ git diff --stat production
- data/node/agent.example.com.yaml | 1 +
+ hieradata/node/agent.example.com.yaml | 1 +
  1 file changed, 1 insertion(+)
+
 mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)$ git diff production
-diff --git a/data/node/agent.example.com.yaml b/data/node/agent.example.com.yaml
-index a77d8aa..b9f256e 100644
---- a/data/node/agent.example.com.yaml
-+++ b/data/node/agent.example.com.yaml
-@@ -5,6 +5,7 @@ location: 'amsterdam'
+diff --git a/hieradata/node/agent.example.com.yaml b/hieradata/node/agent.example.com.yaml
+index 63453d9..7d07440 100644
+--- a/hieradata/node/agent.example.com.yaml
++++ b/hieradata/node/agent.example.com.yaml
+@@ -5,5 +5,6 @@ location: 'amsterdam'
  classes:
     - ntp
     - timezone
 +   - motd
 
+ timezone::timezone: 'US/Pacific'
 ```
 
 We do have one difference.  We have the **motd** class in our `agent.example.com.yaml` in the development branch,
@@ -938,11 +947,13 @@ commit the changes.
 mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)$ git checkout production
 Switched to branch 'production'
 Your branch is up-to-date with 'origin/production'.
+
 mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (production)$ git merge development
-Updating 02c52fe..9a8ba50
+Updating 95d7b55..eee0234
 Fast-forward
- data/node/agent.example.com.yaml | 1 +
+ hieradata/node/agent.example.com.yaml | 1 +
  1 file changed, 1 insertion(+)
+
 mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (production)$ git push
 Total 0 (delta 0), reused 0 (delta 0)
 remote:
