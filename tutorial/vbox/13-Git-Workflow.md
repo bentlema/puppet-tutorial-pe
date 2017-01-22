@@ -13,13 +13,12 @@
 We will work on a few things in this lab:
 
 - Introduce a workflow for deploying puppet code to your puppet infrastructure
-- Setup post-receive hook to support our workflow
-- Intermmediate-level Git topics (Branching, Merging, etc.)
+- More on Git branching and merging
 
 ### What the heck is a Workflow?
 
 Well, it's just the order of tasks we perform to accomplish some work.  In our
-case the work is making changes to our puppet code to affect our infrastructure,
+case, the work is making changes to our puppet code to affect our infrastructure,
 while not breaking the production environment.
 
 The high level description of a puppet workflow goes like this:
@@ -43,8 +42,8 @@ complete copy of the repo, and identical to the remote repo as of the time
 it was cloned.  However, the second your clone is created, it will diverge
 from the remote as other developers push their changes up to the remote.
 
-You do not automatically receive changes that are committed to the "upstream"
-tracking repo.  So commands like *git status* that tell you if you're ahead
+You do not automatically receive changes that are committed/pushed to the "upstream"
+Git repo.  So commands like *git status* that tell you if you're ahead
 or behind the remote tracking repo will probably only be useful if you're
 truely up-to-date with the remote.
 
@@ -58,6 +57,8 @@ To bring your local repository up-to-date with the remote, there are a few comma
 The *git fetch* command will fetch all objects and refs from a remote repository.
 
 The *git pull* command will implicitely fetch, but will also merge in any new commits.
+
+### STILL UNDER DEVELOPMENT ...
 
 
 ---
