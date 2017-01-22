@@ -14,8 +14,8 @@ change to your Puppet code.
 
 What is Git?
 
-Simply put, Git is a distributed version control system.  The book *[Pro Git](https://git-scm.com/book/en/v2)* describes
-Git as a mini-filesystem with snapshot capabilities, and all of the Git commands you
+Simply put, Git is a distributed version control system.  The book *[Pro Git](https://git-scm.com/book/en/v2)*
+describes Git as a mini-filesystem with snapshot capabilities, and all of the Git commands you
 utilize manipulate that mini-filesystems and its [stream of snapshots](https://git-scm.com/book/en/v2/Getting-Started-Git-Basics#Snapshots,-Not-Differences).
 
 Git is the tool that will...
@@ -31,7 +31,7 @@ want to learn more about a specific feature of Git, then use it as a reference.
 
 ### The Repository
 
-A "Git Repo" is just just a self-contained bundle of files along with its commit history.
+A "Git Repo" is just a self-contained bundle of files along with its commit history.
 As mentioned previously, this *commit history* is like a stream of snapshots.
 Typically the files in a Git Repo are source code--in our case: Puppet Manifests.
 However, a Git repo can contain any text and/or binary files.  Usually binary files
@@ -49,7 +49,9 @@ We are using one called GitLab for this training.
 Some well known Git servers available are:
 - [GitHub](http://github.com)
 - [Atlassian BitBucket](https://bitbucket.org/)
+- [GitLab](https://gitlab.com/explore)
 - [Gitolite](http://gitolite.com/)
+- [Gerrit Code Review](https://www.gerritcodereview.com)
 
 Let's talk about the basics of Git...
 
