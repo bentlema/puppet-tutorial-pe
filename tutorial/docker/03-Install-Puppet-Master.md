@@ -124,7 +124,7 @@ Login as **admin** and enter the admin password you chose during the install.
 If you forgot (or not sure what you typed) you can find the password in the answers file:
 
 ```
-     grep q_puppet_enterpriseconsole_auth_password /opt/puppet/share/installer/answers/*.answers
+     grep console_admin_password /opt/puppetlabs/puppet/share/installer/conf.d/puppet.example.com.conf
 ```
 
 Probabbly a good idea to **change it**...!
@@ -133,12 +133,6 @@ Probabbly a good idea to **change it**...!
 
 Believe it or not, that's all there is to installing a 'Monolithic' puppet
 server.
-
-A 'Split' and/or 'Large Environment Install' is a bit more work, as we'd be
-splitting up the various parts of PE on to separate VM's, as well as deploying
-multiple compile masters behind a loadbalancer.  If you're interested
-in learning more about a splint install, you may read about it in the
-[PE Installation Guide](https://docs.puppetlabs.com/pe/3.8/install_pe_split.html)
 
 Look around the PE console.  You should see 1 agent is registered called **puppet.example.com**.  This is your Puppet Master!
 
@@ -186,15 +180,13 @@ Continue to **Lab #4** --> [Install Puppet Agent on agent node, and do test pupp
 
 These links are not needed for this Lab, but for reference here's the PE Install Guide at the PuppetLabs web site:
 
-Quick Start Guide:  <https://docs.puppetlabs.com/pe/3.8/quick_start_install_mono.html>
+Quick Start Guide:  <https://docs.puppetlabs.com/pe/2016.5/quick_start_install_mono.html>
 
-Detailed Install Guide:  <https://docs.puppetlabs.com/pe/3.8/install_basic.html>
+Detailed Install Guide:  <https://docs.puppetlabs.com/pe/2016.5/install_basic.html>
 
-Split Install:   <https://docs.puppetlabs.com/pe/3.8/install_pe_split.html>
+Split Install:   <https://docs.puppetlabs.com/pe/2016.5/install_pe_split.html>
 
-LEI Install:   <https://docs.puppetlabs.com/pe/3.8/install_multimaster.html>
-
-LEI Wrapper for PE 3.8.x:  <https://github.com/pizzaops/pizzaops-lei_wrapper>
+LEI Install:   <https://docs.puppetlabs.com/pe/2016.5/install_multimaster.html>
 
 ---
 
