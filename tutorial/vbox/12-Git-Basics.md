@@ -578,7 +578,8 @@ On your master...
 ```
 
 Now on your workstation where you are hosting your own clone of the control repo,
-let's create the hiera.yaml at the top-level of your repo...
+let's create the **hiera.yaml** at the **top-level** of your repo.  (It should
+be at the same level as your **environment.conf**)
 
 ```
 [/Users/Mark/Git/Puppet-Training/control] (production)$ echo '
@@ -602,15 +603,21 @@ let's create the hiera.yaml at the top-level of your repo...
   - yaml
 
 :hierarchy:
-  - "node/%{clientcert}"
-  - "role/%{role}"
-  - "location/%{location}"
+  - "node/%{::trusted.certname}"
+  - "role/%{::role}"
+  - "location/%{::location}"
   - common
 
 :yaml:
-  :datadir: "/etc/puppetlabs/puppet/environments/%{environment}/hieradata"
+  :datadir: "/etc/puppetlabs/code/environments/%{environment}/hieradata"
 
+```
+
+Okay, now let's add, commit, and push it...
+
+```
 [/Users/Mark/Git/Puppet-Training/control] (production)*$ git add hiera.yaml
+
 [/Users/Mark/Git/Puppet-Training/control] (production)*$ git status
 On branch production
 Your branch is up-to-date with 'origin/production'.
@@ -624,6 +631,7 @@ Changes to be committed:
 [production 522c89a] put under git control
  1 file changed, 15 insertions(+)
  create mode 100644 hiera.yaml
+
 [/Users/Mark/Git/Puppet-Training/control] (production)$ git push
 Counting objects: 5, done.
 Delta compression using up to 8 threads.
