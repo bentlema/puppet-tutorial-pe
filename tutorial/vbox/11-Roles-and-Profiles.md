@@ -222,13 +222,18 @@ directory might be **"local"** for "my local code" but I'm not going to lose
 any sleep over naming and continue on...
 
 So, change dir to your **puppet/control** repo, and...
+(Note: the path to your control repo will be different than shown here.)
 
 ```
-mbp-mark:[/Users/mbentle8] $ cd ~/Documents/Git/Puppet-Tutorial/control
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ mkdir -p site/role/manifests
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ mkdir -p site/profile/manifests
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ cp manifests/common_*.pp site/profile/manifests
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)*$ find site
+$ cd ~/puppet/control    # location of where you cloned your puppet control repo
+
+(production)$ mkdir -p site/role/manifests
+
+(production)$ mkdir -p site/profile/manifests
+
+(production)$ cp manifests/common_*.pp site/profile/manifests
+
+(production)*$ find site
 site
 site/profile
 site/profile/manifests
@@ -264,11 +269,15 @@ to have the correct class name, then  add/commit/push, and then run r10k on
 the master...
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)*$ cd site/profile/manifests/
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/site/profile/manifests] (production)*$ vi common_hosts.pp
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/site/profile/manifests] (production)*$ vi common_packages.pp
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/site/profile/manifests] (production)*$ git add *.pp
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/site/profile/manifests] (production)*$ git status
+(production)*$ cd site/profile/manifests/
+
+(production)*$ vi common_hosts.pp
+
+(production)*$ vi common_packages.pp
+
+(production)*$ git add *.pp
+
+(production)*$ git status
 On branch production
 Your branch is up-to-date with 'origin/production'.
 Changes to be committed:
@@ -277,12 +286,13 @@ Changes to be committed:
     new file:   common_hosts.pp
     new file:   common_packages.pp
 
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/site/profile/manifests] (production)*$ git commit -m 'update class name'
+(production)*$ git commit -m 'update class name'
 [production d91192d] update class name
  2 files changed, 24 insertions(+)
  create mode 100644 site/profile/manifests/common_hosts.pp
  create mode 100644 site/profile/manifests/common_packages.pp
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/site/profile/manifests] (production)$ git push
+
+(production)$ git push
 Counting objects: 7, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (5/5), done.
@@ -317,22 +327,22 @@ So, back to your control repo...and let's add it...
 Get back to the top level of your control repo:
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/site/profile/manifests] (production)$ pwd
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/site/profile/manifests] (production)$ pwd
 /Users/mbentle8/Documents/Git/Puppet-Tutorial/control/site/profile/manifests
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/site/profile/manifests] (production)$ cd ../../..
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/site/profile/manifests] (production)$ cd ../../..
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$
 ```
 
 Then add the new file `environment.conf` ...
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ echo 'modulepath = site:modules:$basemodulepath' > environment.conf
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)*$ git add environment.conf
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)*$ git commit -m 'create environment.conf to modify modulepath'
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ echo 'modulepath = site:modules:$basemodulepath' > environment.conf
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)*$ git add environment.conf
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)*$ git commit -m 'create environment.conf to modify modulepath'
 [production c0aeb1a] create environment.conf to modify modulepath
  1 file changed, 1 insertion(+)
  create mode 100644 environment.conf
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ git push
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ git push
 Counting objects: 3, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (2/2), done.
@@ -365,13 +375,13 @@ ntp::servers:
 Commit/push that, and run r10k on the master...
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ cd data
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ cd data
 /Users/mbentle8/Documents/Git/Puppet-Tutorial/control/data
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/data] (production)$ vi common.yaml
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/data] (production)*$ git commit -a -m 'point to new location for common_hosts and common_packages'
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/data] (production)$ vi common.yaml
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/data] (production)*$ git commit -a -m 'point to new location for common_hosts and common_packages'
 [production 9af5aa4] point to new location for common_hosts and common_packages
  1 file changed, 2 insertions(+), 2 deletions(-)
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/data] (production)$ git push
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/data] (production)$ git push
 Counting objects: 4, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (4/4), done.
@@ -407,22 +417,22 @@ for now just get in the habit of running it by hand...
 Next, let's remove the old common_hosts.pp and common_packages.pp, as we're no longer using them...
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/data] (production)$ cd ../manifests/
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)$ ls -al
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/data] (production)$ cd ../manifests/
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)$ ls -al
 total 24
 drwxr-xr-x   5 mbentle8  staff   170 Oct 25 12:11 .
 drwxr-xr-x  10 mbentle8  staff   340 Oct 28 06:48 ..
 -rw-r--r--   1 mbentle8  staff   447 Oct 25 12:11 common_hosts.pp
 -rw-r--r--   1 mbentle8  staff   189 Oct 25 12:11 common_packages.pp
 -rw-r--r--   1 mbentle8  staff  1687 Oct 25 12:11 site.pp
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)$ rm -f common_hosts.pp
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)*$ rm -f common_packages.pp
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)*$ git commit -a -m 'no longer used'
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)$ rm -f common_hosts.pp
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)*$ rm -f common_packages.pp
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)*$ git commit -a -m 'no longer used'
 [production 02c52fe] no longer used
  2 files changed, 24 deletions(-)
  delete mode 100644 manifests/common_hosts.pp
  delete mode 100644 manifests/common_packages.pp
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)$ git push
+[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)$ git push
 Counting objects: 3, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (2/2), done.
