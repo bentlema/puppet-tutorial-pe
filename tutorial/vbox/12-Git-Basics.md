@@ -499,17 +499,19 @@ To ssh://localhost/puppet/control.git
 
 ### More about branches
 
-Let's do a **git branch -a** to see all of our local and remote branches...
+Let's do a `git branch -a` to see all of our local and remote branches...
 
+```
 [/Users/Mark/Git/Puppet-Training/control] (production)$ git branch -a
+  development
   foo
-  master
 * production
-  remotes/origin/master
+  remotes/origin/development
   remotes/origin/production
+```
 
-Notice that even after we did a push, the foo branch is local only.  If we
-want a remote tracking branch for foo, we could push it as well...
+Notice that even after we did a push, the *foo* branch is local only.  If we
+want a remote tracking branch for *foo*, we could push it as well...
 
 ```
 [/Users/Mark/Git/Puppet-Training/control] (production)$ git checkout foo
@@ -534,10 +536,8 @@ Branch foo set up to track remote branch foo from origin.
 
 [/Users/Mark/Git/Puppet-Training/control] (foo)$ git branch -a
 * foo
-  master
   production
   remotes/origin/foo
-  remotes/origin/master
   remotes/origin/production
 
 ```
@@ -674,46 +674,6 @@ lrwxrwxrwx 1 root root  34 Mar 16 11:30 hiera.yaml -> environments/production/hi
 -rw-r--r-- 1 root root 314 Mar  2 15:27 hiera.yaml.orig
 
 ```
-
-By the way, noticed that now R10K is pulling down the *foo* branch, and creating a *foo* environment.  Nice!
-
-That reminds me, we should really delete the *master* branch, as we won't use it, and we don't want to leave cruft laying around.
-
-1. Login to the GitLab Web interface (should be <http://localhost:23080/puppet/control>) and then...
-2. Click on *Branches* in the middle of the main pane ( or get there directly via <http://localhost:23080/puppet/control/branches> )
-3. Notice how the *master* branch says it's the *default* and that it's *protected*, so we will need to un-protect, and un-default
-4. Click on *Settings* in the left sidebar, and for the *Default Branch* option select *production*
-5. Scroll down on that page, and click *Save Changes*
-6. In the left sidebar, click on *Protected Branches*
-7. Select a new branch to protect in the dropdown list.  Select *production* and click *Protect*
-8. You will see *production* pop down in the protected list, and also notice that it's the default branch
-9. Next, click the *Unprotect* button next to the *master* branch to un-protect it
-10. Now that the master branch is un-protected, we can delete it
-11. Go back to the project branches ( <http://localhost:23080/puppet/control/branches> )
-12. Notice the red trash can icon next to the master branch, and click it.
-13. Click the *Ok* in the confirmation dialog
-
-Now, in the list of branches you should see only:
-- foo
-- production
-- development
-
-Back on the master, run R10K again, and you'll notice that it no longer creates a *master* environment...
-
-```
-[root@puppet puppet]# r10k deploy environment -vp
-INFO   -> Deploying environment /etc/puppetlabs/puppet/environments/foo
-INFO   -> Deploying module /etc/puppetlabs/puppet/environments/foo/modules/stdlib
-INFO   -> Deploying module /etc/puppetlabs/puppet/environments/foo/modules/ntp
-INFO   -> Deploying module /etc/puppetlabs/puppet/environments/foo/modules/timezone
-INFO   -> Deploying environment /etc/puppetlabs/puppet/environments/production
-INFO   -> Deploying module /etc/puppetlabs/puppet/environments/production/modules/stdlib
-INFO   -> Deploying module /etc/puppetlabs/puppet/environments/production/modules/ntp
-INFO   -> Deploying module /etc/puppetlabs/puppet/environments/production/modules/timezone
-INFO   -> Removing unmanaged path /etc/puppetlabs/puppet/environments/master
-```
-
-Notice the last line where it says *Removing unmanaged path environments/master*
 
 
 ---
