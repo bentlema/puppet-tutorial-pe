@@ -296,13 +296,22 @@ Changes to be committed:
 Counting objects: 7, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (5/5), done.
-Writing objects: 100% (7/7), 776 bytes | 0 bytes/s, done.
+Writing objects: 100% (7/7), 838 bytes | 0 bytes/s, done.
 Total 7 (delta 1), reused 0 (delta 0)
-To git@localhost:puppet/control
-   70d3f12..d91192d  production -> production
+remote:
+remote: Running post-receive hook...
+remote: [puppet] Updating...
+remote: [puppet] Done.
+remote:
+To ssh://localhost/puppet/control.git
+   1b8679a..936baf3  production -> production
+
 ```
 
-Now pop over to your master, and run r10k...
+Notice that your post-receive hook ran, so it would have run R10K automatically for you.
+You shouldn't have to run R10K manually on the puppet master any longer, but if for some
+reason you didn't complete the post-receive hook config in the previous lab, you can
+still run it manually on the master like always:
 
 ```
 [root@puppet ~]# r10k deploy environment -vp
@@ -320,43 +329,49 @@ INFO     -> Deploying module /etc/puppetlabs/puppet/environments/production/modu
 INFO     -> Deploying module /etc/puppetlabs/puppet/environments/production/modules/timezone
 ```
 
-But wait, how do we let puppet know to look in this new **site/** directory for puppet modules/classes?  We have to create an **environment.conf** and modify the modulepath to include this additional directory.
+But wait, how do we let Puppet know to look in this new **"site"** directory for
+puppet modules/classes?  We have to create an **environment.conf** and modify
+the modulepath to include this additional directory.
 
 So, back to your control repo...and let's add it...
 
 Get back to the top level of your control repo:
 
 ```
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/site/profile/manifests] (production)$ pwd
-/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/site/profile/manifests
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/site/profile/manifests] (production)$ cd ../../..
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$
+(production)$ cd ../../..
 ```
 
-Then add the new file `environment.conf` ...
+Then create the new file `environment.conf` (if it doesn't already exist) and add a line to set the **modulepath**
 
 ```
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ echo 'modulepath = site:modules:$basemodulepath' > environment.conf
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)*$ git add environment.conf
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)*$ git commit -m 'create environment.conf to modify modulepath'
+(production)$ echo 'modulepath = site:modules:$basemodulepath' >> environment.conf
+
+(production)*$ git add environment.conf
+
+(production)*$ git commit -m 'create environment.conf to modify modulepath'
 [production c0aeb1a] create environment.conf to modify modulepath
  1 file changed, 1 insertion(+)
  create mode 100644 environment.conf
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ git push
+
+(production)$ git push
 Counting objects: 3, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (2/2), done.
-Writing objects: 100% (3/3), 337 bytes | 0 bytes/s, done.
+Writing objects: 100% (3/3), 310 bytes | 0 bytes/s, done.
 Total 3 (delta 1), reused 0 (delta 0)
-To git@localhost:puppet/control
-   d91192d..c0aeb1a  production -> production
-```
+remote:
+remote: Running post-receive hook...
+remote: [puppet] Updating...
+remote: [puppet] Done.
+remote:
+To ssh://localhost/puppet/control.git
+   936baf3..9d64f56  production -> production
 
-Okay, now run r10k again on the master...
+```
 
 Now the real test is **can we update our common.yaml** in Hiera data to use the new **profile::common_hosts** and **profile::common_packages** ?  Let's try and see if it works...
 
-Edit your common.yaml to look like this:
+Edit your `common.yaml` to look like this:
 ```
 ---
 
@@ -375,79 +390,75 @@ ntp::servers:
 Commit/push that, and run r10k on the master...
 
 ```
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ cd data
-/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/data
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/data] (production)$ vi common.yaml
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/data] (production)*$ git commit -a -m 'point to new location for common_hosts and common_packages'
+(production)$ cd hieradata
+
+(production)$ vi common.yaml
+
+(production)*$ git commit -a -m 'point to new location for common_hosts and common_packages'
 [production 9af5aa4] point to new location for common_hosts and common_packages
  1 file changed, 2 insertions(+), 2 deletions(-)
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/data] (production)$ git push
+
+(production)$ git push
 Counting objects: 4, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (4/4), done.
-Writing objects: 100% (4/4), 494 bytes | 0 bytes/s, done.
+Writing objects: 100% (4/4), 474 bytes | 0 bytes/s, done.
 Total 4 (delta 1), reused 0 (delta 0)
-To git@localhost:puppet/control
-   c0aeb1a..9af5aa4  production -> production
+remote:
+remote: Running post-receive hook...
+remote: [puppet] Updating...
+remote: [puppet] Done.
+remote:
+To ssh://localhost/puppet/control.git
+   9d64f56..4a5909a  production -> production
 
 ```
-
-Again, run r10k on the master after you push updates to the control repo...
-
-```
-[root@puppet ~]# r10k deploy environment -vp
-INFO     -> Deploying environment /etc/puppetlabs/puppet/environments/development
-INFO     -> Deploying module /etc/puppetlabs/puppet/environments/development/modules/motd
-INFO     -> Deploying module /etc/puppetlabs/puppet/environments/development/modules/ntp
-INFO     -> Deploying module /etc/puppetlabs/puppet/environments/development/modules/registry
-INFO     -> Deploying module /etc/puppetlabs/puppet/environments/development/modules/stdlib
-INFO     -> Deploying module /etc/puppetlabs/puppet/environments/development/modules/timezone
-INFO     -> Deploying environment /etc/puppetlabs/puppet/environments/production
-INFO     -> Deploying module /etc/puppetlabs/puppet/environments/production/modules/motd
-INFO     -> Deploying module /etc/puppetlabs/puppet/environments/production/modules/ntp
-INFO     -> Deploying module /etc/puppetlabs/puppet/environments/production/modules/registry
-INFO     -> Deploying module /etc/puppetlabs/puppet/environments/production/modules/stdlib
-INFO     -> Deploying module /etc/puppetlabs/puppet/environments/production/modules/timezone
-```
-
-This will be the last itme I show the r10k output, as we're going to do this
-every time we update our control repo.  Eventually we'll automate this, but
-for now just get in the habit of running it by hand...
 
 Next, let's remove the old common_hosts.pp and common_packages.pp, as we're no longer using them...
 
 ```
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/data] (production)$ cd ../manifests/
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)$ ls -al
+(production)$ cd ../manifests/
+
+(production)$ ls -al
 total 24
 drwxr-xr-x   5 mbentle8  staff   170 Oct 25 12:11 .
 drwxr-xr-x  10 mbentle8  staff   340 Oct 28 06:48 ..
 -rw-r--r--   1 mbentle8  staff   447 Oct 25 12:11 common_hosts.pp
 -rw-r--r--   1 mbentle8  staff   189 Oct 25 12:11 common_packages.pp
 -rw-r--r--   1 mbentle8  staff  1687 Oct 25 12:11 site.pp
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)$ rm -f common_hosts.pp
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)*$ rm -f common_packages.pp
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)*$ git commit -a -m 'no longer used'
-[production 02c52fe] no longer used
+
+(production)$ rm -f common_hosts.pp
+
+(production)*$ rm -f common_packages.pp
+
+(production)*$ git commit -a -m 'no longer used in this location'
+[production 02c52fe] no longer used in this location
  2 files changed, 24 deletions(-)
  delete mode 100644 manifests/common_hosts.pp
  delete mode 100644 manifests/common_packages.pp
-[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control/manifests] (production)$ git push
+
+(production)$ git push
 Counting objects: 3, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (2/2), done.
-Writing objects: 100% (3/3), 298 bytes | 0 bytes/s, done.
+Writing objects: 100% (3/3), 296 bytes | 0 bytes/s, done.
 Total 3 (delta 1), reused 0 (delta 0)
-To git@localhost:puppet/control
-   9af5aa4..02c52fe  production -> production
+remote:
+remote: Running post-receive hook...
+remote: [puppet] Updating...
+remote: [puppet] Done.
+remote:
+To ssh://localhost/puppet/control.git
+   4a5909a..28151ab  production -> production
+
 ```
 
-Okay, great, after an r10k run, here's what our files/dirs look like now on the master:
+Okay, great, here's what our files/dirs look like now on the master:
 
 ```
-[root@puppet environments]# cd /etc/puppetlabs/puppet/environments/production/
-[root@puppet production]# tree data manifests site
-data
+[root@puppet environments]# cd /etc/puppetlabs/code/environments/production/
+[root@puppet production]# tree hieradata manifests site
+hieradata
 ├── common.yaml
 ├── location
 │   ├── amsterdam.yaml
