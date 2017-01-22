@@ -2,46 +2,25 @@
 
 ---
 
-# **Lab #4** - Install the Puppet Agent
+### **Lab #4:** Install the Puppet Agent
 
 ---
 
 ### Overview ###
 
-Time to complete:  10-15 minutes
+Time to complete:  10 minutes
 
 In this lab we will:
--  Manually edit the /etc/hosts to prepare for the agent install
--  install the Puppet Agent on the **agent** node
+-  install the Puppet Agent on the **agent** container
 
 ### Pre-installation Steps ###
 
-Make sure your **agent** VM or container is started, and get logged in.
-
-If using Vagrant, start your VM, and connect to it via ssh:
-
-```
-     vagrant up agent
-     vagrant ssh agent
-```
-
-If using Docker, start your Container, and connect with an exec of bash:
+Make sure your **agent** container is started, and get logged in.
 
 ```
      docker start agent
      docker exec -it agent /bin/bash
 ```
-
-### Edit the hosts file ###
-
-Edit **/etc/hosts** and make sure it looks exactly like this (delete any other lines):
-
-    127.0.0.1      localhost
-    192.168.198.10 puppet.example.com puppet
-    192.168.198.11 agent.example.com  agent
-    192.168.198.12 gitlab.example.com gitlab
-
-In a later lab we will write the puppet code to maintain the /etc/hosts entries, but for now we add them manually.
 
 ### Install the Agent ###
 
