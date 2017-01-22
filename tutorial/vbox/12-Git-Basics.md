@@ -714,15 +714,15 @@ branch setup properly.
 
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ git branch -a
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (production)$ git branch -a
 * production
   remotes/origin/HEAD -> origin/production
   remotes/origin/development
   remotes/origin/production
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ git checkout development
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (production)$ git checkout development
 Branch development set up to track remote branch development from origin.
 Switched to a new branch 'development'
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)$ git diff --stat production
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)$ git diff --stat production
  Puppetfile                                |  2 +-
  README.md                                 |  2 +-
  data/common.yaml                          |  5 ++---
@@ -740,7 +740,7 @@ Notice that there are a bunch of differences between **production** and **develo
 Let's try to merge the **production** changes in to the current branch, which is the **development** branch.
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)$ git merge --no-commit production
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)$ git merge --no-commit production
 Auto-merging site/profile/manifests/common_packages.pp
 Auto-merging site/profile/manifests/common_hosts.pp
 Auto-merging data/common.yaml
@@ -753,7 +753,7 @@ Automatic merge failed; fix conflicts and then commit the result.
 Hmmm, we got a couple conflicts.  Let's look at each.
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)*$ git status
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git status
 On branch development
 Your branch is up-to-date with 'origin/development'.
 You have unmerged paths.
@@ -782,7 +782,7 @@ changes, git add them, commit, and push, and be done with it.
 Follow along and see how we can resolve the two conflicts...
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)*$ git diff Puppetfile
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git diff Puppetfile
 diff --cc Puppetfile
 index 958b475,372c77e..0000000
 --- a/Puppetfile
@@ -804,13 +804,13 @@ We see that the conflict is that there are two different versions of the stdlib 
 Let's take the version that is in the production Puppetfile...
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)*$ git checkout --theirs Puppetfile
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git checkout --theirs Puppetfile
 ```
 
 Let's look at our `common.yaml` now too...
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)*$ git diff data/common.yaml
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git diff data/common.yaml
 diff --cc data/common.yaml
 index f4a902d,708bf7f..0000000
 --- a/data/common.yaml
@@ -837,11 +837,11 @@ in production, let's simply checkout the production version, git add, commit, an
 
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)*$ git checkout --theirs data/common.yaml
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)*$ git status
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)*$ git add Puppetfile
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)*$ git add data/common.yaml
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)*$ git status
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git checkout --theirs data/common.yaml
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git status
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git add Puppetfile
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git add data/common.yaml
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git status
 On branch development
 Your branch is up-to-date with 'origin/development'.
 All conflicts fixed but you are still merging.
@@ -856,9 +856,9 @@ Changes to be committed:
     renamed:    manifests/common_hosts.pp -> site/profile/manifests/common_hosts.pp
     renamed:    manifests/common_packages.pp -> site/profile/manifests/common_packages.pp
 
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)*$ git commit -m 'merge production in to development'
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)*$ git commit -m 'merge production in to development'
 [development 9a8ba50] merge production in to development
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)$ git push
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)$ git push
 Counting objects: 3, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (3/3), done.
@@ -922,10 +922,10 @@ site
 Now let's see if we have any other differences between production and development:
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)$ git diff --stat production
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)$ git diff --stat production
  data/node/agent.example.com.yaml | 1 +
  1 file changed, 1 insertion(+)
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)$ git diff production
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)$ git diff production
 diff --git a/data/node/agent.example.com.yaml b/data/node/agent.example.com.yaml
 index a77d8aa..b9f256e 100644
 --- a/data/node/agent.example.com.yaml
@@ -948,15 +948,15 @@ I'm going to do the merge **without** the `--no-commit` option.  Doing the merge
 commit the changes.
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (development)$ git checkout production
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (development)$ git checkout production
 Switched to branch 'production'
 Your branch is up-to-date with 'origin/production'.
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ git merge development
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (production)$ git merge development
 Updating 02c52fe..9a8ba50
 Fast-forward
  data/node/agent.example.com.yaml | 1 +
  1 file changed, 1 insertion(+)
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ git push
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (production)$ git push
 Total 0 (delta 0), reused 0 (delta 0)
 remote:
 remote: Running post-receive hook...
@@ -975,7 +975,7 @@ specifying the **"source"** branch.
 Now, if you do another `git diff` you'll see that there are no more differences:
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Tutorial/control] (production)$ git diff --stat development
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Tutorial/control] (production)$ git diff --stat development
 ```
 
 ---

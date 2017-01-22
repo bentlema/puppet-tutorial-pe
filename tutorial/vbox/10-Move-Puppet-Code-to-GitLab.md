@@ -351,8 +351,8 @@ So, in my case, this 2-stage copy will look like this:
 ```
 **Stage 2**: On my host workstation, Copy each environment directory...
 ```
-   From: /Users/mbentle8/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share
-   To:   /Users/mbentle8/gitlab/puppet/control
+   From: /Users/bentlema/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share
+   To:   /Users/bentlema/gitlab/puppet/control
 ```
 
 Note that when we get to the **Stage 2** copy, we eliminate the actual
@@ -379,42 +379,42 @@ Now on the host side (outside of the VM) copy those files using **rsync** to you
 
 ```
 # Check where we are at (our current working dir)
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (master)$ pwd
-/Users/mbentle8/gitlab/puppet/control
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (master)$ pwd
+/Users/bentlema/gitlab/puppet/control
 
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (master)$ ls -al
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (master)$ ls -al
 total 8
-drwxr-xr-x   4 mbentle8  staff  136 Nov 16 12:27 .
-drwxr-xr-x   3 mbentle8  staff  102 Nov 16 12:23 ..
-drwxr-xr-x  13 mbentle8  staff  442 Nov 16 13:34 .git
--rw-r--r--   1 mbentle8  staff   12 Nov 16 12:27 README.md
+drwxr-xr-x   4 bentlema  staff  136 Nov 16 12:27 .
+drwxr-xr-x   3 bentlema  staff  102 Nov 16 12:23 ..
+drwxr-xr-x  13 bentlema  staff  442 Nov 16 13:34 .git
+-rw-r--r--   1 bentlema  staff   12 Nov 16 12:27 README.md
 
 # Take a peek at the dir we will be copying from
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (master)$ ls -al /Users/mbentle8/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (master)$ ls -al /Users/bentlema/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share
 total 32
-drwxr-xr-x   6 mbentle8  staff   204 Nov 16 13:34 .
-drwxr-xr-x  15 mbentle8  staff   510 Nov 16 07:56 ..
--rw-r--r--@  1 mbentle8  staff  8196 Nov 11 14:07 .DS_Store
--rw-r--r--   1 mbentle8  staff   137 Nov 11 10:50 README.md
-drwxr-xr-x   6 mbentle8  staff   204 Nov 16 13:34 production
-drwxr-xr-x   8 mbentle8  staff   272 Nov 11 13:01 software
+drwxr-xr-x   6 bentlema  staff   204 Nov 16 13:34 .
+drwxr-xr-x  15 bentlema  staff   510 Nov 16 07:56 ..
+-rw-r--r--@  1 bentlema  staff  8196 Nov 11 14:07 .DS_Store
+-rw-r--r--   1 bentlema  staff   137 Nov 11 10:50 README.md
+drwxr-xr-x   6 bentlema  staff   204 Nov 16 13:34 production
+drwxr-xr-x   8 bentlema  staff   272 Nov 11 13:01 software
 
 # Okay, we see the production directory we just copied over within our VM
 # Let's checkout the production branch, and copy the production code over to it
 
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (master)$ git checkout production
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (master)$ git checkout production
 error: pathspec 'production' did not match any file(s) known to git.
 
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (master)$ git pull
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (master)$ git pull
 From ssh://localhost/puppet/control
  * [new branch]      production -> origin/production
 Already up-to-date.
 
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (master)$ git checkout production
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (master)$ git checkout production
 Branch production set up to track remote branch production from origin.
 Switched to a new branch 'production'
 
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)$ rsync -acv /Users/mbentle8/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share/production/* .
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (production)$ rsync -acv /Users/bentlema/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share/production/* .
 building file list ... done
 environment.conf
 hieradata/
@@ -437,16 +437,16 @@ sent 1179660 bytes  received 15020 bytes  2389360.00 bytes/sec
 total size is 1122664  speedup is 0.94
 
 
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)*$ ls -al
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (production)*$ ls -al
 total 16
-drwxr-xr-x   8 mbentle8  staff  272 Nov 16 13:42 .
-drwxr-xr-x   3 mbentle8  staff  102 Nov 16 12:23 ..
-drwxr-xr-x  15 mbentle8  staff  510 Nov 16 13:43 .git
--rw-r--r--   1 mbentle8  staff   12 Nov 16 12:27 README.md
--rw-r--r--   1 mbentle8  staff  879 Nov 16 13:34 environment.conf
-drwxr-xr-x   6 mbentle8  staff  204 Nov 16 13:34 hieradata
-drwxr-xr-x   5 mbentle8  staff  170 Nov 16 13:34 manifests
-drwxr-xr-x   7 mbentle8  staff  238 Nov 16 13:34 modules
+drwxr-xr-x   8 bentlema  staff  272 Nov 16 13:42 .
+drwxr-xr-x   3 bentlema  staff  102 Nov 16 12:23 ..
+drwxr-xr-x  15 bentlema  staff  510 Nov 16 13:43 .git
+-rw-r--r--   1 bentlema  staff   12 Nov 16 12:27 README.md
+-rw-r--r--   1 bentlema  staff  879 Nov 16 13:34 environment.conf
+drwxr-xr-x   6 bentlema  staff  204 Nov 16 13:34 hieradata
+drwxr-xr-x   5 bentlema  staff  170 Nov 16 13:34 manifests
+drwxr-xr-x   7 bentlema  staff  238 Nov 16 13:34 modules
 
 ```
 
@@ -455,12 +455,12 @@ Okay, we just copied over the entire production environment (Hiera data, manifes
 Next we need to commit it to our Git repo...
 
 ```
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)*$ git add environment.conf
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)*$ git add hieradata
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)*$ git add manifests
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)*$ git add modules
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (production)*$ git add environment.conf
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (production)*$ git add hieradata
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (production)*$ git add manifests
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (production)*$ git add modules
 
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)*$ git commit -m 'initial add of production env'
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (production)*$ git commit -m 'initial add of production env'
 [production 1ead2c1] initial add of production env
  654 files changed, 31627 insertions(+)
  create mode 100644 environment.conf
@@ -476,7 +476,7 @@ mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)*$ git commit -m 'i
  create mode 100644 manifests/site.pp
 [snip]
 
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)$ git push
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (production)$ git push
 Counting objects: 741, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (704/704), done.
@@ -532,7 +532,7 @@ We've just copied over our Hiera data and manifests from the **development** env
 Next, back on the host (outside the VM) we will rsync the files over to our **puppet/control** repo
 
 ```
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)$ git branch -a
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (production)$ git branch -a
   master
 * production
   remotes/origin/master
@@ -544,14 +544,14 @@ repo.  Rather than creating a new branch via the GitLab WebGUI, let's create it
 using the **-b** option to **git checkout**
 
 ```
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)$ git checkout -b development
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (production)$ git checkout -b development
 Switched to a new branch 'development'
 ```
 
 Okay, now copy the `hieradata/` and `manifests/` directories over...
 
 ```
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (development)$ rsync -acv /Users/mbentle8/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share/development/* .
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (development)$ rsync -acv /Users/bentlema/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share/development/* .
 building file list ... done
 hieradata/
 hieradata/common.yaml
@@ -564,30 +564,30 @@ manifests/
 sent 950 bytes  received 136 bytes  2172.00 bytes/sec
 total size is 2650  speedup is 2.44
 
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (development)*$ ls -al hieradata
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (development)*$ ls -al hieradata
 total 8
-drwxr-xr-x  6 mbentle8  staff  204 Nov 15 14:57 .
-drwxr-xr-x  8 mbentle8  staff  272 Nov 16 13:42 ..
--rw-r--r--  1 mbentle8  staff  153 Nov 15 14:57 common.yaml
-drwxr-xr-x  5 mbentle8  staff  170 Nov 15 14:57 location
-drwxr-xr-x  5 mbentle8  staff  170 Nov 15 15:12 node
-drwxr-xr-x  2 mbentle8  staff   68 Nov 15 14:57 role
+drwxr-xr-x  6 bentlema  staff  204 Nov 15 14:57 .
+drwxr-xr-x  8 bentlema  staff  272 Nov 16 13:42 ..
+-rw-r--r--  1 bentlema  staff  153 Nov 15 14:57 common.yaml
+drwxr-xr-x  5 bentlema  staff  170 Nov 15 14:57 location
+drwxr-xr-x  5 bentlema  staff  170 Nov 15 15:12 node
+drwxr-xr-x  2 bentlema  staff   68 Nov 15 14:57 role
 
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (development)*$ ls -al manifests
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (development)*$ ls -al manifests
 total 24
-drwxr-xr-x  5 mbentle8  staff   170 Nov 15 14:57 .
-drwxr-xr-x  8 mbentle8  staff   272 Nov 16 13:42 ..
--rw-r--r--  1 mbentle8  staff   446 Nov 15 14:57 common_hosts.pp
--rw-r--r--  1 mbentle8  staff   189 Nov 15 14:57 common_packages.pp
--rw-r--r--  1 mbentle8  staff  1326 Nov 15 14:57 site.pp
+drwxr-xr-x  5 bentlema  staff   170 Nov 15 14:57 .
+drwxr-xr-x  8 bentlema  staff   272 Nov 16 13:42 ..
+-rw-r--r--  1 bentlema  staff   446 Nov 15 14:57 common_hosts.pp
+-rw-r--r--  1 bentlema  staff   189 Nov 15 14:57 common_packages.pp
+-rw-r--r--  1 bentlema  staff  1326 Nov 15 14:57 site.pp
 ```
 
 Next, let's add those files to our commit.
 
 ```
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (development)*$ git add hieradata
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (development)*$ git add manifests
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (development)*$ git status
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (development)*$ git add hieradata
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (development)*$ git add manifests
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (development)*$ git status
 On branch development
 Changes to be committed:
   (use "git reset HEAD <file>..." to unstage)
@@ -599,16 +599,16 @@ Changes to be committed:
 Remember, only files that are different from the **production** branch will be added.  Since we branched off of the **production** branch, we already have all of the files that were in the production branch, and now we are just committing the differences between **development** and **production**
 
 ```
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (development)*$ git commit -a -m 'initial commit'
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (development)*$ git commit -a -m 'initial commit'
 [development 6852c44] initial commit
  2 files changed, 1 insertion(+), 1 deletion(-)
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (development)$ git push
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (development)$ git push
 fatal: The current branch development has no upstream branch.
 To push the current branch and set the remote as upstream, use
 
     git push --set-upstream origin development
 
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (development)$     git push --set-upstream origin development
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (development)$     git push --set-upstream origin development
 Counting objects: 6, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (6/6), done.
@@ -696,13 +696,13 @@ mod 'saz/timezone',        '3.3.0'
 Save, add, commit, and push your new Puppetfile ...
 
 ```
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (development)$ vi Puppetfile
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (development)*$ git add Puppetfile
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (development)*$ git commit -a -m 'initial commit'
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (development)$ vi Puppetfile
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (development)*$ git add Puppetfile
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (development)*$ git commit -a -m 'initial commit'
 [development bcde4e5] initial commit
  1 file changed, 6 insertions(+)
  create mode 100644 Puppetfile
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (development)$ git push
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (development)$ git push
 Counting objects: 3, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (3/3), done.
@@ -740,7 +740,7 @@ Notice how R10K pulled down all of the modules we specified in the **development
 Next let's copy our **development** `Puppetfile` in to the **production** branch, so that our **production** environment gets the modules as well.
 
 ```
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (development)$ git checkout production
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (development)$ git checkout production
 Switched to branch 'production'
 Your branch is up-to-date with 'origin/production'.
 ```
@@ -748,7 +748,7 @@ Your branch is up-to-date with 'origin/production'.
 We switch to the **production** branch, getting ready to create/edit the Puppetfile in that branch...
 
 ```
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)$ git diff --stat development
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (production)$ git diff --stat development
  Puppetfile                            | 6 ------
  hieradata/common.yaml                 | 1 +
  hieradata/node/agent.example.com.yaml | 1 -
@@ -760,20 +760,20 @@ Remember, we've created a Puppetfile in the **development** branch, but not the 
 Let's simply checkout the development branch'es Puppetfile in to the **production** branch (which is our current branch) and edit it...
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Training/control] (production)$ git checkout development Puppetfile
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Training/control] (production)$ git checkout development Puppetfile
 ```
 
 Add it, commit and push it...
 
 ```
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)*$ git add Puppetfile
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (production)*$ git add Puppetfile
 
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)*$ git commit -a -m 'initial commit'
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (production)*$ git commit -a -m 'initial commit'
 [production 2230b9e] initial commit
  1 file changed, 6 insertions(+)
  create mode 100644 Puppetfile
 
-mbp-mark:[/Users/mbentle8/gitlab/puppet/control] (production)$ git push
+mbp-mark:[/Users/bentlema/gitlab/puppet/control] (production)$ git push
 Counting objects: 3, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (3/3), done.
@@ -818,16 +818,16 @@ Delete the **remote master branch** with: `git push origin --delete master`
 Try it now...
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Training/control] (production)$ git branch -a
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Training/control] (production)$ git branch -a
   development
   master
 * production
   remotes/origin/development
   remotes/origin/master
   remotes/origin/production
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Training/control] (production)$ git branch -d master
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Training/control] (production)$ git branch -d master
 Deleted branch master (was 056f697).
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Training/control] (production)$ git push origin --delete master
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Training/control] (production)$ git push origin --delete master
 remote: GitLab: You are not allowed to delete protected branches from this project.
 To ssh://localhost/puppet/control.git
  ! [remote rejected] master (pre-receive hook declined)
@@ -842,7 +842,7 @@ Okay, darn.  Normally that would work, but our **master** branch is **protected*
 - Now let's re-try our **git push**
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Training/control] (production)$ git push origin --delete master
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Training/control] (production)$ git push origin --delete master
 remote: error: By default, deleting the current branch is denied, because the next
 remote: error: 'git clone' won't result in any file checked out, causing confusion.
 remote: error:
@@ -864,7 +864,7 @@ change the default branch to **production**
 - Settings --> Edit Project --> Default Branch --> Select 'production'
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/Puppet-Training/control] (production)$ git push origin --delete master
+mbp-mark:[/Users/bentlema/Documents/Git/Puppet-Training/control] (production)$ git push origin --delete master
 To ssh://localhost/puppet/control.git
  - [deleted]         master
 ```
@@ -950,9 +950,9 @@ If you also have the **agent** VM up and running, you should get a clean run on 
 Remember that we used the `share/` directory as a temporary staging directory.  Let's clean that up so Git doesn't bug us about untracked files there...
 
 ```
-mbp-mark:[/Users/mbentle8/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share] (master)*$ pwd
-/Users/mbentle8/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share
-mbp-mark:[/Users/mbentle8/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share] (master)*$ git status
+mbp-mark:[/Users/bentlema/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share] (master)*$ pwd
+/Users/bentlema/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share
+mbp-mark:[/Users/bentlema/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share] (master)*$ git status
 On branch master
 Your branch is up-to-date with 'origin/master'.
 Changes not staged for commit:
@@ -968,8 +968,8 @@ Untracked files:
 no changes added to commit (use "git add" and/or "git commit -a")
 
 
-mbp-mark:[/Users/mbentle8/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share] (master)*$ rm -rf development production
-mbp-mark:[/Users/mbentle8/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share] (master)$ git status
+mbp-mark:[/Users/bentlema/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share] (master)*$ rm -rf development production
+mbp-mark:[/Users/bentlema/Documents/Git/GitHub/bentlema/puppet-tutorial-pe/share] (master)$ git status
 On branch master
 Your branch is up-to-date with 'origin/master'.
 nothing to commit, working directory clean

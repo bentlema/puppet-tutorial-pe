@@ -421,11 +421,11 @@ Next, let's remove the old common_hosts.pp and common_packages.pp, as we're no l
 
 (production)$ ls -al
 total 24
-drwxr-xr-x   5 mbentle8  staff   170 Oct 25 12:11 .
-drwxr-xr-x  10 mbentle8  staff   340 Oct 28 06:48 ..
--rw-r--r--   1 mbentle8  staff   447 Oct 25 12:11 common_hosts.pp
--rw-r--r--   1 mbentle8  staff   189 Oct 25 12:11 common_packages.pp
--rw-r--r--   1 mbentle8  staff  1687 Oct 25 12:11 site.pp
+drwxr-xr-x   5 bentlema  staff   170 Oct 25 12:11 .
+drwxr-xr-x  10 bentlema  staff   340 Oct 28 06:48 ..
+-rw-r--r--   1 bentlema  staff   447 Oct 25 12:11 common_hosts.pp
+-rw-r--r--   1 bentlema  staff   189 Oct 25 12:11 common_packages.pp
+-rw-r--r--   1 bentlema  staff  1687 Oct 25 12:11 site.pp
 
 (production)$ rm -f common_hosts.pp
 
