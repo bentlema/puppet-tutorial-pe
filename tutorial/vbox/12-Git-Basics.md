@@ -341,30 +341,34 @@ On branch production
 Your branch is up-to-date with 'origin/production'.
 
 nothing to commit, working directory clean
+
 [/Users/Mark/Git/Puppet-Training/control] (production)$ git branch foo
+
 [/Users/Mark/Git/Puppet-Training/control] (production)$ git status
 On branch production
 Your branch is up-to-date with 'origin/production'.
 
 nothing to commit, working directory clean
+
 [/Users/Mark/Git/Puppet-Training/control] (production)$ git branch
+  development
   foo
-  master
 * production
+
 [/Users/Mark/Git/Puppet-Training/control] (production)$ git checkout foo
 Switched to branch 'foo'
+
 [/Users/Mark/Git/Puppet-Training/control] (foo)$ git branch
+  development
 * foo
-  master
   production
-[/Users/Mark/Git/Puppet-Training/control] (foo)$
 ```
 
-We've just created a new branch called *foo*, then checked it out to work on.
+We've just created a new branch called **"foo"**, then checked it out to work on.
 
-Notice that *checkout* is just another way of saying *switch to this branch*
+Notice that **checkout** is just another way of saying **switch to this branch**
 
-Also, notice we've seen the new command *git branch* which shows us the branches
+Also, notice we've seen the new command **git branch** which shows us the branches
 in the repo, and puts an asterisk next to the currently-checked-out branch.
 
 ---
@@ -381,6 +385,7 @@ Let's add a silly comment to our environment.conf again...
 
 ```
 [/Users/Mark/Git/Puppet-Training/control] (foo)$ vi environment.conf
+
 [/Users/Mark/Git/Puppet-Training/control] (foo)*$ cat environment.conf
 # site hosts local modules, while modules hosts R10K-managed modules
 modulepath = site:modules:$basemodulepath
@@ -399,6 +404,7 @@ Changes not staged for commit:
   modified:   environment.conf
 
 no changes added to commit (use "git add" and/or "git commit -a")
+
 [/Users/Mark/Git/Puppet-Training/control] (foo)*$ git commit -a -m 'a silly comment'
 [foo eb20962] a silly comment
  1 file changed, 1 insertion(+)
@@ -535,8 +541,10 @@ To ssh://localhost/puppet/control.git
 Branch foo set up to track remote branch foo from origin.
 
 [/Users/Mark/Git/Puppet-Training/control] (foo)$ git branch -a
+  development
 * foo
   production
+  remotes/origin/development
   remotes/origin/foo
   remotes/origin/production
 
@@ -674,6 +682,10 @@ lrwxrwxrwx 1 root root  34 Mar 16 11:30 hiera.yaml -> environments/production/hi
 -rw-r--r-- 1 root root 314 Mar  2 15:27 hiera.yaml.orig
 
 ```
+
+Note:  even though we've moved our **hiera.yaml** under Git control, gaining the ability
+to track changes, don't forget that a restart of the puppet master is required in
+order to re-read the file and "activate" the changes.
 
 
 ---
