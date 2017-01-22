@@ -4,3 +4,5 @@ Git Repo: https://github.com/jreese/markdown-pp
 
 At top level run:  markdown-pp README.mdpp -o README.md
 
+../markdown-pp/bin/markdown-pp README.mdpp -o README.md
+
