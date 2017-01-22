@@ -60,6 +60,16 @@ Open up a new Finder window (on Mac) or an Explorer window (on Windows) and navi
 * If you're running Linux, Docker runs natively, so you just need to install the **docker-engine** package.
   See:  <https://docs.docker.com/engine/installation/linux/>
 
+### Set Maximum Memory Usage
+
+Docker utilizes a VM to run docker images in, and it needs to be told the maximum memory and virtual CPUs to use.
+Open up the Docker Settings / Preferences, and under the Advanced Tab, change the number of vCPUs and Memory
+to 4 CPUs and 8.0GB Memory.  If you dont do this, your Docker containers will begin to swap and appear to run
+very slowly.
+
+![Docker Preferences](images/Docker-Prefs.png)
+
+
 ### Some Docker Basics ###
 
 Here are some of the Docker commands you will be using.
