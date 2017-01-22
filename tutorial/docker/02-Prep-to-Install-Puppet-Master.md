@@ -64,6 +64,21 @@ just to show that it's possible.
 
 ---
 
+### If something goes wrong...
+
+If something goes wrong, and you want to try starting over, you may simply
+stop and delete (remove) your container(s) using:
+
+* docker stop ***container-name***
+* docker rm ***container-name***
+
+You can use the container name or hash ID to identify the container you want to stop/rm.
+After removing a container, you can re-run the **docker run** command to fire up the 
+container fresh.
+
+
+---
+
 Continue to **Lab #3** --> [Install Puppet Master](03-Install-Puppet-Master.md#lab-3)
 
 ---
