@@ -28,9 +28,13 @@ In this lab you will install the following software:
 
 * Download the needed software for this training...
 
+From the top-level of the cloned repo, you'll find a script which will
+download the necessary software...
+
 ```
-     [puppet-training/share]$ cd software
-     [puppet-training/share/software]$ ./download-all.sh
+     [puppet-tutorial-pe]$ cd share
+     [puppet-tutorial-pe/share]$ cd software
+     [puppet-tutorial-pe/share/software]$ ./download-all.sh
 ```
 
 ### Installing Docker ###
@@ -39,8 +43,8 @@ After running the **download-all.sh** Find the appropriate installer for
 Mac or Windows in the **share/software/docker** folder.
 
 ```
-     [puppet-training/share/software]$ cd docker
-     [puppet-training/share/software/docker]$ ls -l
+     [puppet-tutorial-pe/share/software]$ cd docker
+     [puppet-tutorial-pe/share/software/docker]$ ls -l
 
      total 426328
      -rw-r--r--  1 bentlema  staff  115214630 Aug 20 16:08 Docker.dmg
@@ -94,11 +98,11 @@ sometimes reverse lookups just dont work at all.  No matter, we push on!
 
 ### Setup environment variable with your BASEDIR ###
 
-I don't know where you've cloned this puppet-training repo to on your
+I don't know where you've cloned this puppet-tutorial-pe repo to on your
 workstation.  So, let's make our lives simpler, and set an environment variable
 to contain the absolute path to your working tree (top level of the repo)
 
-Make sure your current working directory is the top level of the puppet-training
+Make sure your current working directory is the top level of the puppet-tutorial-pe
 repo, and then just type this:
 
 If using Windows:
@@ -122,12 +126,12 @@ And you should see something like this:
 
 ```
      $ pwd
-     /Users/bentlema/Documents/Git/Bitbucket/puppet-training
+     /Users/bentlema/Documents/Git/Bitbucket/puppet-tutorial-pe
 
      $ export BASEDIR=$(pwd)
 
      $ echo $BASEDIR
-     /Users/bentlema/Documents/Git/Bitbucket/puppet-training
+     /Users/bentlema/Documents/Git/Bitbucket/puppet-tutorial-pe
 
 ```
 
