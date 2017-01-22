@@ -597,6 +597,12 @@ be at the same level as your **environment.conf**)
   :datadir: "/etc/puppetlabs/code/environments/%{environment}/hieradata"
 ' >> hiera.yaml
 
+```
+
+Now cat your new hiera.yaml and make sure it looks correct (comparing it to
+the one you just copied)...
+
+```
 [/Users/Mark/Git/Puppet-Training/control] (production)*$ cat hiera.yaml
 ---
 :backends:
