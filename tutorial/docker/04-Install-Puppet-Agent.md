@@ -118,12 +118,32 @@ here:
 
 ---
 
-At this point we have:
+At this point we have 3 running containers, but only 2 running the puppet agent:
 
 - a **Puppet Master node** (hostname **puppet.example.com**) that also runs an agent to configure itself
 - a **Puppet Agent node** (hostnamne **agent.example.com**) that runs an agent, and where we will test code and learn more about PE
+- a **GitLab server** that we haven't used yet, but will in a later lab...
 
-If you login to the [PE Console](https://127.0.0.1:22443/nodes), you should see these two agents on the 'Nodes' page
+If you login to the [PE Console](https://127.0.0.1:22443/nodes), you should see these two agents on the 'Nodes' page.
+We will not install the puppet agent on the GitLab container at this time, as it is running in an Ubuntu-based container,
+and our Puppet Master is running un a CentOS 6 container, and only has the centos packages available out-of-the-box.
+We can update the Puppet Master to download packages for other operating systems though.  Since the GitLab container
+is based on an Ubuntu 16.04 image, we can add the following class to our PE Master via the PE Console:
+
+```
+     pe_repo::platform::ubuntu_1604_amd64
+```
+
+1. Navigate to:  Nodes --> Classification --> All Nodes --> PE Infrastructure --> PE Master
+2. Click **Classes** Tab
+3. Add new class:  ***pe_repo::platform::ubuntu_1604_amd64*** and click **"Add Class"**
+4. Click **"Commit 1 change"** at the bottom right of the page
+5. Run puppet on the Puppet Master with:   `puppet agent -t`
+
+When Puppet runs, it will download the installation packages for Ubuntu, and then you should
+be able to install the Puppet Agent on your GitLab container as well.
+
+
 
 ---
 
