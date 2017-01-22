@@ -141,9 +141,15 @@ is based on an Ubuntu 16.04 image, we can add the following class to our PE Mast
 5. Run puppet on the Puppet Master with:   `puppet agent -t`
 
 When Puppet runs, it will download the installation packages for Ubuntu, and then you should
-be able to install the Puppet Agent on your GitLab container as well.
+be able to install the Puppet Agent on your GitLab container as well.  However!
 
+We're using Docker in a way it's not really intended to be used.  A docker container does
+not necessarily contain a full operating systems release.   In fact, it would be rare to.
+Docker container images are built to contain only the minimum packages to run the application.
 
+In the case of the GitLab container image, it doesn't come with **systemd**, which is 
+assumed to be there by Puppet.  Puppet wont be able to manage servies, without **systemd**
+installed in the container.  Oh well...
 
 ---
 
