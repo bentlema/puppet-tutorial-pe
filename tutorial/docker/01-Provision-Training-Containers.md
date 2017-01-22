@@ -282,8 +282,8 @@ Give GitLab a minute or two to configure itself, and then try connecting to the 
 
 You will be prompted to set a new password, so go ahead and do that, and then login:
 
-- Username: root
-- Password: **\<the password you just set\>**
+- Username: ***root***
+- Password: ***\<the password you just set\>***
 
 That's all we're going to do with GitLab for now.  We'll come back to it in a later lab...
 
