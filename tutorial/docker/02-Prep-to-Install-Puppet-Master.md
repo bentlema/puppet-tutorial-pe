@@ -11,7 +11,7 @@
 
 Time to complete:  5 minutes
 
-In this lab we will prepare to install Puppet Enterprise 3.8.X
+In this lab we will prepare to install Puppet Enterprise 2016.5.1
 
 * Make sure your containers started / running
 * Get connected to your **puppet** container
