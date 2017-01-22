@@ -308,11 +308,15 @@ A good habit to get into is to also do a *git pull* prior to doing any work
 in your local clone of a repo.  This ensures you're pulling down any changes
 other folks have made, and will potentially avoid merge conflicts in the future.
 
-When you do a *git pull** Git will pull down changes to the current branch,
-and bring your branch up-to-date with the remote.  Git can also be configured
-to fetch all changes in other branches as well.  Depending on the version of
-Git your using, this behavior may differ, so just to be safe, it's also good
-to *git pull* after switching to a different branch.
+When you do a **git pull** Git will pull down changes to the current branch,
+and bring your branch up-to-date with the remote.  It will do this by mergeing
+in those changes automatically for you.  It is possible if you've changed
+the same file as someone else, you could get a merge conflict, and have to
+resolve that conflict, and then manually add and commit the changes.
+
+Git can also be configured to fetch all changes in other branches as well.
+Depending on the version of Git your using, this behavior may differ, so just
+to be safe, it's also good to *git pull* after switching to a different branch.
 
 ---
 
@@ -400,7 +404,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
  1 file changed, 1 insertion(+)
 ```
 
-Now let's look at the differences between our *production* branch and our *foo* branch
+Now let's look at the differences between our **production** branch and our **foo** branch
 
 ```
 [/Users/Mark/Git/Puppet-Training/control] (foo)$ git diff production environment.conf
@@ -416,13 +420,15 @@ index 0de3371..6c2bae3 100644
 
 You could also explicitely specify the two branches like this:
 
-*git diff production..foo environment.conf*
+```
+git diff production..foo environment.conf
+```
 
 ...but if you don't explicitely specify the second branch, git will compare
 the currently-checked-out branch with the one specified.
 
-Now, to do a merge, we have to *checkout the branch we want to merge in to*
-first, so *git checkout production*
+Now, to do a merge, we have to **checkout the branch we want to merge *in* to**
+first, so **git checkout production**
 
 ```
 [/Users/Mark/Git/Puppet-Training/control] (foo)$ git checkout production
@@ -449,13 +455,14 @@ nothing to commit, working directory clean
 ```
 
 A few things happened there:
+
 1. We checked out production
 2. We merged foo in to production
 3. Because the merge didn't encounter any conflicts, it was automatically committed
 4. Notice our production branch is 1 commit behind origin/production
 
 Now that we've merged foo back in to production, we likely want to update the
-remote repo as well with a *git push*, but first, let's use *git diff* to compare
+remote repo as well with a **git push**, but first, let's use **git diff** to compare
 our local repo with the remote repo:
 
 ```
@@ -492,7 +499,7 @@ To ssh://localhost/puppet/control.git
 
 ### More about branches
 
-Let's do a *git branch -a* to see all of our local and remote branches...
+Let's do a **git branch -a** to see all of our local and remote branches...
 
 [/Users/Mark/Git/Puppet-Training/control] (production)$ git branch -a
   foo
@@ -535,8 +542,8 @@ Branch foo set up to track remote branch foo from origin.
 
 ```
 
-Cool, now we see a *remotes/origin/foo* in the list, which means our branch
-exists on the remote called *origin* and our local branch is tracking it
+Cool, now we see a **remotes/origin/foo** in the list, which means our branch
+exists on the remote called **origin** and our local branch is tracking it
 
 
 ---
@@ -545,47 +552,49 @@ exists on the remote called *origin* and our local branch is tracking it
 
 We configured Hiera in an earlier lab, but one thing we left un-done was the
 location of the **hiera.yaml**.  It's fine sitting where it's at, but it's
-outside of Git control.  Wouldn't we like our hiera.yaml to be safely located
+outside of Git control.  Wouldn't we like our **hiera.yaml** to be safely located
 in our Git control repo along with the actual Hiera Data?  Let's move it...
 
-The hiera.yaml is a pretty small text file, so let's just cut-and-paste
+The **hiera.yaml** is a pretty small YAML text file, so let's just copy-and-paste
 to pull it off of our master, and get it in our Git repo..
 
 On your master...
 
 ```
-[root@puppet production]# cat /etc/puppetlabs/puppet/hiera.yaml
+[root@puppet ~]# cat /etc/puppetlabs/puppet/hiera.yaml
 ---
 :backends:
   - yaml
 
 :hierarchy:
-  - "node/%{clientcert}"
-  - "role/%{role}"
-  - "location/%{location}"
+  - "node/%{::trusted.certname}"
+  - "role/%{::role}"
+  - "location/%{::location}"
   - common
 
 :yaml:
-  :datadir: "/etc/puppetlabs/puppet/environments/%{environment}/data"
+  :datadir: "/etc/puppetlabs/code/environments/%{environment}/hieradata"
+
 ```
 
 Now on your workstation where you are hosting your own clone of the control repo...
 
 ```
 [/Users/Mark/Git/Puppet-Training/control] (production)$ echo '
-> ---
-> :backends:
->   - yaml
->
-> :hierarchy:
->   - "node/%{clientcert}"
->   - "role/%{role}"
->   - "location/%{location}"
->   - common
->
-> :yaml:
->   :datadir: "/etc/puppetlabs/puppet/environments/%{environment}/data"
-> ' >> hiera.yaml
+[root@puppet ~]# cat /etc/puppetlabs/puppet/hiera.yaml
+---
+:backends:
+  - yaml
+
+:hierarchy:
+  - "node/%{::trusted.certname}"
+  - "role/%{::role}"
+  - "location/%{::location}"
+  - common
+
+:yaml:
+  :datadir: "/etc/puppetlabs/code/environments/%{environment}/hieradata"
+' >> hiera.yaml
 
 [/Users/Mark/Git/Puppet-Training/control] (production)*$ cat hiera.yaml
 ---
@@ -599,7 +608,7 @@ Now on your workstation where you are hosting your own clone of the control repo
   - common
 
 :yaml:
-  :datadir: "/etc/puppetlabs/puppet/environments/%{environment}/data"
+  :datadir: "/etc/puppetlabs/puppet/environments/%{environment}/hieradata"
 
 [/Users/Mark/Git/Puppet-Training/control] (production)*$ git add hiera.yaml
 [/Users/Mark/Git/Puppet-Training/control] (production)*$ git status
@@ -631,8 +640,7 @@ To ssh://localhost/puppet/control.git
 
 ```
 
-Next, we should move the original hiera.yaml off to the side, and then make a symlink to the new location.
-
+Next, we should move the original **hiera.yaml** off to the side, and then make a symlink to the new location.
 
 
 ```
@@ -642,18 +650,7 @@ Next, we should move the original hiera.yaml off to the side, and then make a sy
 -rw-r--r-- 1 root root 198 Mar  2 15:43 hiera.yaml
 -rw-r--r-- 1 root root 314 Mar  2 15:27 hiera.yaml.orig
 
-[root@puppet puppet]# mv hiera.yaml hiera.yaml-2016-03-16
-
-[root@puppet puppet]# r10k deploy environment -vp
-INFO   -> Deploying environment /etc/puppetlabs/puppet/environments/foo
-INFO   -> Deploying module /etc/puppetlabs/puppet/environments/foo/modules/stdlib
-INFO   -> Deploying module /etc/puppetlabs/puppet/environments/foo/modules/ntp
-INFO   -> Deploying module /etc/puppetlabs/puppet/environments/foo/modules/timezone
-INFO   -> Deploying environment /etc/puppetlabs/puppet/environments/master
-INFO   -> Deploying environment /etc/puppetlabs/puppet/environments/production
-INFO   -> Deploying module /etc/puppetlabs/puppet/environments/production/modules/stdlib
-INFO   -> Deploying module /etc/puppetlabs/puppet/environments/production/modules/ntp
-INFO   -> Deploying module /etc/puppetlabs/puppet/environments/production/modules/timezone
+[root@puppet puppet]# mv hiera.yaml hiera.yaml-2017-01-21
 
 [root@puppet puppet]# ln -s environments/production/hiera.yaml
 
@@ -682,9 +679,10 @@ That reminds me, we should really delete the *master* branch, as we won't use it
 12. Notice the red trash can icon next to the master branch, and click it.
 13. Click the *Ok* in the confirmation dialog
 
-Now, in the list of branches you should see only two:
+Now, in the list of branches you should see only:
 - foo
 - production
+- development
 
 Back on the master, run R10K again, and you'll notice that it no longer creates a *master* environment...
 
