@@ -278,7 +278,7 @@ running without any fuss.
 
 Give GitLab a minute or two to configure itself, and then try connecting to the web GUI:
 
-- [GitLab](http://127.0.0.1:24080/)
+- GitLab Server: <http://127.0.0.1:24080/>
 
 You will be prompted to set a new password, so go ahead and do that, and then login:
 
