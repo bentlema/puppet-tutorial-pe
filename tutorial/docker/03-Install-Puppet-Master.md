@@ -10,38 +10,22 @@
 
 Time to complete:  30 minutes
 
-In this lab we will install Puppet Enterprise 3.8.X
+In this lab we will install Puppet Enterprise 2016.5.1
 
 * PE is free to install and evaluate
 * When running PE without a license, you're limited to 10 agents
 
 ---
 
-### Get logged in to your puppet VM or Container ###
+### Get logged in to your puppet Container ###
 
-We are about to install Puppet Enterprise, and make sure you're
-logged into our puppet master host.
+We are about to install Puppet Enterprise, so make sure you're
+logged into our puppet master container.
 
 ### Note about root ###
 
 If you're using Docker, and getting in to your container with an exec of bash,
-you will already be the root user.  If you're using Vagrant to deploy your VMs,
-you may or may not be root, as the **vagrant ssh** command drops you into the
-vagrant user account.
-
-In order to simplify the commands we run in the following sections, I will assume
-you know how to use sudo, and when to use it.  All puppet commands need to be run
-as root, so the easiet thing to do would just to become root.  We're in a training
-environment after all, and if you mess something up, you can just delete it and
-start over.
-
-So, if you're already root, Great!
-
-If you're not the root user yet, then become root, and be happy!
-
-```
-     sudo su -
-```
+you will already be the root user.  That's what we want...
 
 ### Run The Installer ###
 
@@ -54,17 +38,11 @@ Change into the directory with the PE software:
 ```
 Note:  There are two different installation tarballs.  One for EL6 and one for EL7.
 
-* If following the Docker track, use the EL6 tarball
+* If following the Docker track, we will use the EL6 tarball
 
 ```
-     tar xzvf puppet-enterprise-3.8.5-el-6-x86_64.tar.gz
-     cd puppet-enterprise-3.8.5-el-6-x86_64
-```
-
-* If following the Vagrant track, use the EL7 tarball
-```
-     tar xzvf puppet-enterprise-3.8.5-el-7-x86_64.tar.gz
-     cd puppet-enterprise-3.8.5-el-7-x86_64
+     tar xzvf puppet-enterprise-2016.5.1-el-6-x86_64.tar.gz
+     cd puppet-enterprise-2016.5.1-el-6-x86_64
 ```
 
 Then run the installer:
@@ -76,10 +54,10 @@ Then run the installer:
 The installer will prompt you:
 
 ```
-     ?? Install packages and perform a guided install? [Y/n]
+      How to proceed? [1]:
 ```
 
-Press Enter to accept the default 'Y' and then you'll see:
+Press Enter to accept the default and then you'll see:
 
 ```
      Installing setup packages.
@@ -108,7 +86,7 @@ You will see this:
      Verify root access on puppet.
      Verify that DNS is properly configured for puppet.
      Verify that your hardware meets requirements on puppet.
-     [puppet] We found 3,792 MB RAM. We recommend at least 6,144 MB.
+     [puppet] We found 1,992 MB RAM. We recommend at least 4,096 MB.
      Verify that 127.0.0.1 has a PE installer that matches puppet's OS.
      Verify that '/opt' and '/var' contain enough free space on puppet.
      [puppet] Insufficient space in '/opt' (16 GB); we recommend at least 100 GB for a production environment.
@@ -139,7 +117,7 @@ VM/Container to our localhost.  Use the link below instead.
 
 ### Login to the PE Console ###
 
-We've forwarded port 443 from our puppet VM/Container to port 22443 on our hosting workstation, so you should be able to connect to the PE Console via the URL:
+We've forwarded port 443 from our puppet container to port 22443 on our hosting workstation, so you should be able to connect to the PE Console via the URL:
 
 * PE Console URL:  **<https://127.0.0.1:22443/>**
 
