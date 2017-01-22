@@ -71,7 +71,6 @@ Remember that we have **forwarded port 3000 to 22000** on our workstation, so...
 * Click **Monolithic Install**
 * For FQDN, enter **puppet.example.com**
 * For DNS alias, enter **puppet**
-* Use the Puppet 4 parser:  Leave **un-checked**
 * Select: Install PostgreSQL on the PuppetDB host for me.
 * Click **Submit**
 * Click **Continue**
@@ -86,7 +85,6 @@ You will see this:
      Verify root access on puppet.
      Verify that DNS is properly configured for puppet.
      Verify that your hardware meets requirements on puppet.
-     [puppet] We found 1,992 MB RAM. We recommend at least 4,096 MB.
      Verify that 127.0.0.1 has a PE installer that matches puppet's OS.
      Verify that '/opt' and '/var' contain enough free space on puppet.
      [puppet] Insufficient space in '/opt' (16 GB); we recommend at least 100 GB for a production environment.
