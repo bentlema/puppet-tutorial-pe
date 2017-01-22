@@ -577,11 +577,11 @@ On your master...
 
 ```
 
-Now on your workstation where you are hosting your own clone of the control repo...
+Now on your workstation where you are hosting your own clone of the control repo,
+let's create the hiera.yaml at the top-level of your repo...
 
 ```
 [/Users/Mark/Git/Puppet-Training/control] (production)$ echo '
-[root@puppet ~]# cat /etc/puppetlabs/puppet/hiera.yaml
 ---
 :backends:
   - yaml
