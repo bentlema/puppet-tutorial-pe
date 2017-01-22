@@ -145,7 +145,7 @@ change, it's there forever in the commit history.
 
 To see what changes we've made in the working tree that are not yet staged,
 use *git diff* or *git diff <filename>* for a specific file.   In our example,
-if you od *git diff environment.conf* we'll see the comment we added with a
+if you do *git diff environment.conf* we'll see the comment we added with a
 *plus* at the beginning of the line indicating that it was added.  If you're
 on a ANSI color terminal, it will also be in *GREEN*.  Any lines removed would
 be in *RED*.  Unchanged lines displayed for context, would just be in your
@@ -219,6 +219,7 @@ We will go over all of these in a later lab...
 
 Now that we're run the *git add* on our file, and the *git status* shows that
 it's staged (ready to be committed), we can go ahead and either:
+
 1. commit the change
 2. un-stage the change
 
