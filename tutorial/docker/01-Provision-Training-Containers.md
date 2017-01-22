@@ -166,6 +166,24 @@ To start up the container for the Puppet Master:
       /sbin/init
 ```
 
+You will see someoutput like this:
+
+```
+Unable to find image 'bentlema/centos6-puppet-nocm:latest' locally
+latest: Pulling from bentlema/centos6-puppet-nocm
+b6d7b2ebc0a7: Pull complete
+f8d0a70b3a37: Pull complete
+3a45149aa462: Pull complete
+ed8f8a2946b2: Pull complete
+14dd1ef04b2a: Pull complete
+7c6783c108f4: Pull complete
+7d3711267225: Pull complete
+c4e780c655e7: Pull complete
+Digest: sha256:321205a84c4340f0d24b56cb8def669ac5e769704d8d26921ba9af039c290833
+Status: Downloaded newer image for bentlema/centos6-puppet-nocm:latest
+1e728f78568bf155963a222f4aee9524c82d32a524449908158d3b924e687d44
+```
+
 You've just started up your **puppet** container, and left it running in the background.
 
 To see your running containers do:
@@ -251,49 +269,29 @@ running without any fuss.
       --network-alias gitlab.example.com \
       --env GITLAB_DATABASE_POOL="3;"    \
       --env GITLAB_OMNIBUS_CONFIG="gitlab_rails['db_pool'] = 3" \
+      --volume "${BASEDIR}/gitlab/config:/etc/gitlab"   \
+      --volume "${BASEDIR}/gitlab/logs:/var/log/gitlab" \
+      --volume "${BASEDIR}/gitlab/data:/var/opt/gitlab" \
       gitlab/gitlab-ce:latest
 
 ```
 
-At this point, all 3 of your Containers should be up and running.  Woot.
+Give GitLab a minute or two to configure itself, and then try connecting to the web GUI:
+
+- [GitLab](http://127.0.0.1:24080/)
+
+You will be prompted to set a new password, so go ahead and do that, and then login:
+
+- Username: root
+- Password: <the password you just set>
+
+That's all we're going to do with GitLab for now.  We'll come back to it in a later lab...
 
 ---
 
-**BUG ALERT**
+At this point, all 3 of your Docker containers should be up and running.  Woot!
 
-For this training, we will simply **NOT** use volumes to keep GitLab's important data outside
-of the container.  If you were going to run GitLab for real (in production) using the
-official Docker container, you would want to use a few volume mappings like this:
-
-```
-     --volume "${BASEDIR}/gitlab/config:/etc/gitlab"   \
-     --volume "${BASEDIR}/gitlab/logs:/var/log/gitlab" \
-     --volume "${BASEDIR}/gitlab/data:/var/opt/gitlab" \
-```
-
-Initially I used ${BASEDIR} at the front of my volume paths, but ran into a bug
-where GitLab was failing to start due to an error 'filename too long'.  After
-changing to a shorter pathname under just /opt, everything worked fine.
-
-The specific error I observed was found in /var/log/gitlab/unicorn/unicorn_stderr.log
-
-```
-     I, [2016-08-23T02:40:03.851012 #586]  INFO -- : listening on addr=127.0.0.1:8080 fd=13
-     F, [2016-08-23T02:40:03.855662 #586] FATAL -- : error adding listener addr=/var/opt/gitlab/gitlab-rails/sockets/gitlab.socket
-     Errno::ENAMETOOLONG: File name too long - connect(2) for /var/opt/gitlab/gitlab-rails/sockets/gitlab.socket
-     [snip]
-     bundler: failed to load command: unicorn (/opt/gitlab/embedded/service/gem/ruby/2.3.0/bin/unicorn)
-     2016-08-23_02:40:04.89988 failed to start a new unicorn master
-```
-
-I tested this with GitLab 8.8.8, 8.9.x, 8.10.x, and 8.11.x, and all exhibit this issue.
-
-TODO:  Google a bit and see if I can find an already open bug report on this.
-I'm not sure if the issue is related to the entire length of the docker command, or just
-the length of the absolute paths used in the **--volume** options.  I did read that there
-is some 252 character limit somewhere, but need to do a little more research. All of the
-space characters between the **backslashes** count as chars in the command line, so if
-that's the issue, we could lose our nice straight column of backslashes to save chars.
+---
 
 ### Test network connectivity and name resolution between your containers ###
 
