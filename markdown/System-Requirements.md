@@ -24,13 +24,13 @@
 
 As there can be compatibility issues between different versions of the software we will use (e.g. Vagrant and Virtualbox), I would recommend sticking to the versions that have been tested to work together nicely.
 
-| Vagrant | VirtualBox | Platform                  |
-| ------- | ---------- | ------------------------- |
-| 1.8.4   | 5.0.28     | Mac OS X 10.11 El Capitan |
-|         |            | Mac OS X 10.10 Yosemite   |
-|         |            | Mac OS X 10.9 Mavericks   |
-|         |            | Linux                     |
-|         |            | Windows                   |
+| Docker | Vagrant | VirtualBox | Platform                  |
+| ------ | ------- | ---------- | ------------------------- |
+| 1.13.0 | 1.8.4   | 5.0.28     | Mac OS X 10.11 El Capitan |
+|        |         |            | Mac OS X 10.10 Yosemite   |
+|        |         |            | Mac OS X 10.9 Mavericks   |
+|        |         |            | Linux                     |
+|        |         |            | Windows                   |
 
 All of my initial testing has been done using Mac OS X 10.11 El Capitan, Vagrant 1.8.4, and VirtualBox 4.0.28.
 Feel free to test other version/platform combinations, and contribute your results here.
