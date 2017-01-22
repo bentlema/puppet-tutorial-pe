@@ -87,9 +87,10 @@ And that role would be assigned to a particular node in order to make it a 'FooA
 
 ```puppet
 class role::foo_app {
-  include profile::foo_app::apache
-  include profile::foo_app::mysql
+  include profile::foo_app::users
   include profile::foo_app::nfs_share
+  include profile::webserver::apache
+  include profile::database::mysql
 }
 ```
 
@@ -98,13 +99,21 @@ FooApp server, so when we assign **role::foo_app** to a node, it will get the
 included profile classes for an Apache web server, a MySQL DB, and an NFS
 share (probably mounts up a shared filesystem used by Apache and/or MySQL)
 
+Notice that there are some application-specific classes (users, and nfs_share)
+that are located within a `foo_app/` directory, while there are also some
+general-purpose classes for an Apache web server and MySQL server, that many
+other roles might share.  Hiera data would be used to configure these for
+the specific application, so that the same profile code could be used by
+multiple roles/applications.
+
 As you can see, we need to think a bit about how we organize our profile code,
-as we want to reduce code duplication if possible, but at the same time we
-want to maintain simplicity and readability of code.
+as we want to reduce code duplication if possible (maximize code reuse), but
+at the same time we want to maintain simplicity and readability of code.
 
 That is key, so let's restate it:
 
-We want to maintain code **simplicity** and **readability** while **reducing code duplication** where possible*
+We want to maintain code **simplicity** and **readability** while
+**reducing code duplication** and **maximizing code reuse** where possible.
 
 ### Where to put our Roles & Profiles?
 
@@ -495,6 +504,10 @@ a role class for a specific application.)
 Anyway, now that we're setup with the proper directory structure, and the
 environment.conf to set the modulepath, let's do a real example to illistrate
 how to use Roles and Profiles...
+
+We should also mention how to use inheritance, as the one place it's still
+considered okay to use is in the role class, where we inherit a more general
+or common class, and then include application-specific classes to augment it.
 
 ### TODO
 
