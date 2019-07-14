@@ -3,16 +3,23 @@
 # Find previous releases here:  https://puppetlabs.com/misc/pe-files/previous-releases
 #
 
+#
+# 2018 Releases
+#
+
+#curl -O https://s3.amazonaws.com/pe-builds/released/2018.1.8/puppet-enterprise-2018.1.8-el-7-x86_64.tar.gz
+#curl -O https://s3.amazonaws.com/pe-builds/released/2018.1.8/puppet-enterprise-2018.1.8-el-6-x86_64.tar.gz
+
 
 #
 # 2016 Releases
 #
 
-curl -O https://s3.amazonaws.com/pe-builds/released/2016.5.1/puppet-enterprise-2016.5.1-el-7-x86_64.tar.gz
-curl -O https://s3.amazonaws.com/pe-builds/released/2016.5.1/puppet-enterprise-2016.5.1-el-6-x86_64.tar.gz
+#curl -O https://s3.amazonaws.com/pe-builds/released/2016.5.2/puppet-enterprise-2016.5.2-el-7-x86_64.tar.gz
+#curl -O https://s3.amazonaws.com/pe-builds/released/2016.5.2/puppet-enterprise-2016.5.2-el-6-x86_64.tar.gz
 
-curl -O https://s3.amazonaws.com/pe-builds/released/2016.4.2/puppet-enterprise-2016.4.2-el-7-x86_64.tar.gz
-curl -O https://s3.amazonaws.com/pe-builds/released/2016.4.2/puppet-enterprise-2016.4.2-el-6-x86_64.tar.gz
+curl -O https://s3.amazonaws.com/pe-builds/released/2016.4.15/puppet-enterprise-2016.4.15-el-7-x86_64.tar.gz
+curl -O https://s3.amazonaws.com/pe-builds/released/2016.4.15/puppet-enterprise-2016.4.15-el-6-x86_64.tar.gz
 
 #curl -O https://s3.amazonaws.com/pe-builds/released/2016.4.1/puppet-enterprise-2016.4.1-el-7-x86_64.tar.gz
 #curl -O https://s3.amazonaws.com/pe-builds/released/2016.4.1/puppet-enterprise-2016.4.1-el-6-x86_64.tar.gz
